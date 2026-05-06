@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IVA Control PRO — Sinergia REA · Lic. Margarito</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   SINERGIA REA — DESIGN SYSTEM v5
+   Rosa #FF2D78 · Amarillo #FFD600
+   Azul #0057FF  · Negro #0A0A0A
+   Superficie clara para legibilidad
+══════════════════════════════════════════ */
+:root{
+  --rosa:     #FF2D78;
+  --rosa-s:   #FF6BA8;
+  --amarillo: #FFD600;
+  --negro:    #0A0A0A;
+  --azul:     #0057FF;
+  --azul-s:   #3D8BFF;
+  --blanco:   #F7F7F2;
+
+  /* Superficies — más claras para reducir fatiga visual */
+  --bg:       #F0EEE8;     /* fondo general: crema cálido */
+  --surf:     #FFFFFF;     /* cards y paneles: blanco */
+  --surf2:    #F7F5F0;     /* filas alternas: crema suave */
+  --borde:    #E2DDD6;     /* bordes suaves */
+  --txt:      #1A1714;     /* texto principal oscuro */
+  --txt2:     #6B6560;     /* texto secundario */
+  --txt3:     #9E9890;     /* texto terciario */
+
+  /* Nav sigue oscuro — es la identidad de marca */
+  --nav-bg:   #111111;
+  --gris2:    #2A2A2A;
+  --gris3:    #3A3A3A;
+
+  /* Aliases */
+  --r:var(--azul);   --rm:var(--azul-s);  --rl:rgba(0,87,255,.08);
+  --v:var(--rosa);   --vl:rgba(255,45,120,.08);
+  --a:var(--azul-s); --al:rgba(61,139,255,.1);
+  --o:var(--amarillo);--ol:rgba(255,214,0,.15);
+  --p:var(--rosa-s); --pl:rgba(255,107,168,.1);
+  --b:var(--borde);  --t:var(--txt);
+  --mono:'JetBrains Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --title:'Bebas Neue',sans-serif;
+  --shadow:0 1px 8px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);min-height:100vh}
+
+/* ── NAV (sigue oscuro — identidad de marca) ── */
+.nav{
+  background:var(--nav-bg);
+  display:flex;align-items:center;padding:0 20px;gap:2px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,.5);
+  border-top:3px solid var(--amarillo);
+  flex-wrap:wrap;min-height:48px;
+}
+.brand{
+  color:var(--blanco);font-family:var(--title);font-size:1.15rem;letter-spacing:1px;
+  padding-right:16px;border-right:1px solid var(--gris3);margin-right:6px;
+  white-space:nowrap;display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.brand span.rea{color:var(--rosa)}
+.brand span.iva{color:var(--amarillo)}
+.brand-dot{width:7px;height:7px;background:var(--amarillo);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+.nav-tabs{display:flex;flex-wrap:wrap;gap:0;overflow-x:auto}
+.tab{
+  padding:13px 12px;color:rgba(247,247,242,.5);font-size:.67rem;font-weight:700;
+  cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;
+  letter-spacing:.04em;text-transform:uppercase;font-family:var(--mono);flex-shrink:0;
+}
+.tab:hover{color:var(--blanco);background:rgba(255,255,255,.05)}
+.tab.on{color:var(--blanco);border-bottom-color:var(--amarillo)}
+.tab.asesor{color:var(--rosa-s)}
+.tab.asesor.on{border-bottom-color:var(--rosa);color:var(--rosa)}
+.yr-badge{
+  margin-left:auto;background:rgba(255,214,0,.12);color:var(--amarillo);
+  border:1px solid rgba(255,214,0,.35);border-radius:3px;
+  padding:4px 11px;font-size:.65rem;font-weight:700;font-family:var(--mono);
+  letter-spacing:.07em;white-space:nowrap;flex-shrink:0;
+}
+
+/* ── ALERT BAR ── */
+#alert-bar{background:var(--surf2);border-bottom:1px solid var(--borde);padding:0;max-height:0;overflow:hidden;transition:max-height .35s}
+#alert-bar.open{max-height:130px;padding:8px 20px}
+.alert-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.chip{
+  padding:4px 10px;border-radius:3px;font-size:.64rem;font-weight:700;
+  display:flex;align-items:center;gap:5px;font-family:var(--mono);letter-spacing:.03em;border:1px solid;
+}
+.chip.red{background:rgba(255,45,120,.1);color:var(--rosa);border-color:rgba(255,45,120,.25)}
+.chip.yellow{background:rgba(255,214,0,.15);color:#8B6F00;border-color:rgba(180,140,0,.3)}
+.chip.blue{background:rgba(0,87,255,.1);color:var(--azul);border-color:rgba(0,87,255,.25)}
+.chip.green{background:rgba(255,45,120,.08);color:var(--rosa);border-color:rgba(255,45,120,.2)}
+
+/* ── PAGES ── */
+.page{display:none;padding:18px 20px;max-width:1580px;margin:0 auto}
+.page.on{display:block}
+
+/* ── YEAR TABS ── */
+.ytabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.ytab{
+  padding:6px 16px;border-radius:4px;font-size:.68rem;font-weight:700;cursor:pointer;
+  border:1.5px solid var(--borde);background:var(--surf);color:var(--txt2);
+  transition:all .2s;font-family:var(--mono);letter-spacing:.05em;
+}
+.ytab.on{background:var(--azul);color:#fff;border-color:var(--azul);box-shadow:0 2px 8px rgba(0,87,255,.3)}
+.ytab:hover:not(.on){background:var(--surf2);color:var(--txt);border-color:var(--azul-s)}
+.btn-ny{
+  padding:6px 13px;border-radius:4px;font-size:.68rem;font-weight:700;cursor:pointer;
+  border:1.5px dashed var(--borde);background:transparent;color:var(--txt3);transition:all .2s;font-family:var(--mono);
+}
+.btn-ny:hover{border-color:var(--amarillo);color:#7A6500}
+
+/* ── CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px}
+.card{
+  background:var(--surf);border:1px solid var(--borde);padding:14px 16px;
+  border-top:3px solid var(--azul);transition:transform .15s,box-shadow .2s;
+  border-radius:6px;box-shadow:var(--shadow);
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.card.v{border-top-color:var(--rosa)}.card.a{border-top-color:var(--azul-s)}
+.card.o{border-top-color:var(--amarillo)}.card.p{border-top-color:var(--rosa-s)}
+.card-lbl{font-size:.59rem;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);font-family:var(--mono)}
+.card-val{font-family:var(--mono);font-size:1.05rem;font-weight:700;margin-top:5px;color:var(--txt)}
+.card.v .card-val{color:var(--rosa)}.card.a .card-val{color:var(--azul)}
+.card.o .card-val{color:#8B6F00}.card.p .card-val{color:var(--rosa-s)}
+.card-val.red{color:var(--rosa)}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.btn{
+  padding:7px 14px;border:none;border-radius:4px;font-family:var(--mono);
+  font-size:.67rem;font-weight:700;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:5px;letter-spacing:.03em;
+}
+.btn-r{background:var(--azul);color:#fff;box-shadow:0 2px 6px rgba(0,87,255,.3)}.btn-r:hover{background:var(--azul-s)}
+.btn-g{background:var(--rosa);color:#fff;box-shadow:0 2px 6px rgba(255,45,120,.3)}.btn-g:hover{background:var(--rosa-s)}
+.btn-o{background:var(--amarillo);color:var(--negro)}.btn-o:hover{opacity:.88}
+.btn-gh{background:var(--surf);color:var(--txt2);border:1.5px solid var(--borde)}
+.btn-gh:hover{background:var(--surf2);color:var(--txt);border-color:var(--azul-s)}
+.tip{font-size:.62rem;color:var(--txt3);margin-left:auto;font-family:var(--mono)}
+
+/* ── TABLE ── */
+.tbl-wrap{
+  background:var(--surf);border-radius:8px;border:1px solid var(--borde);
+  overflow-x:auto;margin-bottom:20px;box-shadow:var(--shadow);position:relative;
+}
+table{width:100%;border-collapse:collapse;font-size:.73rem;min-width:900px}
+th{
+  background:#1A1714;color:rgba(247,247,242,.92);
+  padding:9px 8px;font-weight:700;font-size:.6rem;
+  text-transform:uppercase;letter-spacing:.06em;text-align:center;
+  border:1px solid #2E2A26;white-space:nowrap;
+  position:sticky;top:0;z-index:2;font-family:var(--mono);
+}
+th.mes-th{position:sticky;left:0;top:0;z-index:6;background:#1A1714;border-right:2px solid var(--amarillo)}
+th.sub{background:#2A2620;font-size:.58rem;position:sticky;top:35px;z-index:2;color:rgba(247,247,242,.65)}
+th.sub.mes-sub{position:sticky;left:0;top:35px;z-index:6;background:#2A2620;border-right:2px solid var(--amarillo)}
+td{padding:6px 8px;border:1px solid var(--borde);text-align:right;vertical-align:middle;color:var(--txt)}
+tr:nth-child(odd) td{background:var(--surf2)}
+tr:nth-child(even) td{background:var(--surf)}
+tr:hover td{background:rgba(0,87,255,.05)!important;transition:background .12s}
+tr.tot td{background:#1A1714!important;color:var(--amarillo)!important;font-weight:700;font-family:var(--mono);border-top:2px solid var(--amarillo)}
+td.mes{
+  background:#1A1714!important;color:var(--blanco);font-weight:700;
+  text-align:center;white-space:nowrap;position:sticky;left:0;z-index:3;
+  min-width:82px;font-size:.7rem;border-right:2px solid var(--amarillo);
+  font-family:var(--mono);letter-spacing:.06em;
+}
+td.mes.her{background:rgba(0,87,255,.8)!important;color:#fff}
+td.inp{background:#FFFBEA!important;color:#5A4500!important;font-family:var(--mono);font-weight:700;cursor:text;border-color:#E8D57A!important}
+td.inp:focus{outline:2px solid #C8A000;outline-offset:-2px;background:#FFF5C0!important}
+td.inp:empty::before{content:"—";color:#C0B070;font-weight:400}
+td.inp[contenteditable="false"]:empty::before{content:"—";color:#C0B070;font-weight:400}
+td.folio{
+  background:#FFF0F5!important;color:#A0003A!important;
+  font-family:var(--mono);font-size:.62rem;cursor:text;
+  text-align:left;min-width:155px;white-space:normal;border-color:#F0C0D0!important;
+}
+td.folio:empty::before{content:"Folio...";color:#D8A8B8;font-size:.6rem}
+td.au{background:#EEF2FF!important;color:#1A3FAA!important;font-family:var(--mono);font-weight:700;cursor:text;border-color:#C0CCEE!important}
+.cv{color:var(--rosa);font-weight:700;font-family:var(--mono)}
+.cr{color:var(--azul);font-weight:700;font-family:var(--mono)}
+.ca{color:var(--azul);font-weight:700;font-family:var(--mono)}
+.co{color:#7A6000;font-weight:700;font-family:var(--mono)}
+.cg{color:var(--txt3);font-family:var(--mono)}
+
+/* ── TRAZABILIDAD ── */
+.traz-grid{display:grid;gap:12px}
+.tc{
+  background:var(--surf);border-radius:8px;border:1px solid var(--borde);
+  border-left:4px solid var(--rosa);padding:16px 18px;box-shadow:var(--shadow);
+}
+.tc.ago{border-left-color:var(--txt3);opacity:.7}
+.tc.par{border-left-color:#C8A000}
+.tc.her{border-left-color:var(--azul)}
+.tc-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:7px}
+.tc-mes{font-weight:700;font-size:.9rem;color:var(--txt)}
+.tc-orig{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--rosa)}
+.badge{font-size:.59rem;font-weight:700;padding:3px 9px;border-radius:20px;font-family:var(--mono);letter-spacing:.04em;border:1px solid}
+.bv{background:rgba(255,45,120,.1);color:#B0003A;border-color:rgba(255,45,120,.25)}
+.ba{background:var(--surf2);color:var(--txt3);border-color:var(--borde)}
+.bp{background:rgba(200,160,0,.12);color:#7A6000;border-color:rgba(180,140,0,.3)}
+.bh{background:rgba(0,87,255,.1);color:var(--azul);border-color:rgba(0,87,255,.25)}
+.tline{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ts{background:var(--surf2);border:1px solid var(--borde);border-radius:6px;padding:8px 11px;font-size:.67rem;min-width:130px}
+.ts-lbl{color:var(--txt3);font-size:.57rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;font-family:var(--mono)}
+.ts-val{font-family:var(--mono);font-weight:700;color:var(--rosa);font-size:.8rem}
+.ts-ref{font-size:.57rem;color:var(--txt2);margin-top:2px}
+.tarr{color:var(--txt3);font-size:.9rem}
+.trem{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:6px;padding:8px 11px;font-size:.67rem}
+.trem .val{font-family:var(--mono);font-weight:700;color:var(--rosa);font-size:.8rem}
+.trem.ago{background:var(--surf2);border-color:var(--borde)}.trem.ago .val{color:var(--txt3)}
+
+/* ── ASESOR IA ── */
+.asesor-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.asesor-wrap{grid-template-columns:1fr}}
+.asesor-panel{background:var(--surf);border-radius:8px;border:1px solid var(--borde);overflow:hidden;box-shadow:var(--shadow)}
+.asesor-panel-hdr{padding:13px 17px;font-weight:700;font-size:.76rem;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--borde);font-family:var(--mono);letter-spacing:.04em}
+.asesor-panel-hdr.red{background:rgba(255,45,120,.07);color:var(--rosa);border-bottom-color:rgba(255,45,120,.18)}
+.asesor-panel-hdr.gold{background:rgba(200,160,0,.1);color:#7A6000;border-bottom-color:rgba(180,140,0,.22)}
+.asesor-panel-hdr.green{background:rgba(255,45,120,.05);color:var(--rosa);border-bottom-color:rgba(255,45,120,.15)}
+.asesor-panel-hdr.blue{background:rgba(0,87,255,.07);color:var(--azul);border-bottom-color:rgba(0,87,255,.18)}
+.asesor-panel-body{padding:16px 17px}
+
+/* Simulador */
+.sim-input-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap}
+.sim-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}
+.sim-field label{font-size:.62rem;text-transform:uppercase;letter-spacing:.07em;color:var(--txt2);font-weight:700;font-family:var(--mono)}
+.sim-field input,.sim-field select{
+  padding:9px 12px;border:1.5px solid var(--borde);border-radius:4px;
+  font-family:var(--mono);font-size:.85rem;font-weight:700;
+  background:var(--surf2);color:var(--txt);transition:border-color .2s;width:100%;
+}
+.sim-field input:focus,.sim-field select:focus{outline:none;border-color:var(--azul);background:var(--surf)}
+.sim-run{
+  padding:10px 20px;background:var(--azul);color:#fff;border:none;border-radius:4px;
+  font-family:var(--mono);font-weight:700;font-size:.74rem;cursor:pointer;
+  align-self:flex-end;transition:all .2s;white-space:nowrap;letter-spacing:.05em;
+  box-shadow:0 2px 8px rgba(0,87,255,.3);
+}
+.sim-run:hover{background:var(--azul-s)}
+
+/* Plan de acreditamiento */
+.plan-empty{text-align:center;padding:30px 20px;color:var(--txt3);font-size:.78rem;font-family:var(--mono)}
+.plan-step{border:1px solid var(--borde);border-radius:6px;margin-bottom:8px;overflow:hidden;transition:all .2s;background:var(--surf2)}
+.plan-step:hover{border-color:var(--azul-s);box-shadow:0 2px 8px rgba(0,87,255,.1)}
+.plan-step-hdr{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.plan-step-hdr.pri{background:rgba(255,45,120,.07);border-left:3px solid var(--rosa)}
+.plan-step-hdr.sec{background:rgba(200,160,0,.1);border-left:3px solid #C8A000}
+.plan-step-hdr.ter{background:rgba(0,87,255,.07);border-left:3px solid var(--azul)}
+.plan-step-left{display:flex;flex-direction:column;gap:3px}
+.plan-step-origen{font-weight:700;font-size:.76rem;color:var(--txt)}
+.plan-step-detalle{font-size:.63rem;color:var(--txt2)}
+.plan-step-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.plan-step-monto{font-family:var(--mono);font-weight:700;font-size:.86rem;color:var(--rosa)}
+.plan-step-rem{font-family:var(--mono);font-size:.62rem;color:var(--txt3)}
+.plan-total{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:6px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.plan-total-lbl{font-weight:700;font-size:.76rem;color:var(--rosa)}
+.plan-total-val{font-family:var(--mono);font-weight:700;font-size:1rem;color:var(--rosa)}
+.plan-alerta{background:rgba(200,160,0,.1);border:1px solid rgba(180,140,0,.25);border-radius:6px;padding:10px 14px;margin-top:8px;font-size:.72rem;color:#7A6000;font-weight:700}
+.plan-ok{background:rgba(255,45,120,.06);border:1px solid rgba(255,45,120,.18);border-radius:6px;padding:10px 14px;margin-top:8px;font-size:.72rem;color:var(--rosa);font-weight:700}
+.plan-warn{background:rgba(0,87,255,.07);border:1px solid rgba(0,87,255,.2);border-radius:6px;padding:10px 14px;margin-top:8px;font-size:.72rem;color:var(--azul);font-weight:700}
+
+/* Notificaciones */
+.notif{border-radius:6px;padding:11px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;font-size:.74rem;line-height:1.55;border:1px solid}
+.notif.urgent{background:rgba(255,45,120,.07);border-color:rgba(255,45,120,.2)}
+.notif.warn{background:rgba(200,160,0,.1);border-color:rgba(180,140,0,.25)}
+.notif.info{background:rgba(0,87,255,.07);border-color:rgba(0,87,255,.2)}
+.notif.ok{background:rgba(255,45,120,.05);border-color:rgba(255,45,120,.15)}
+.notif-ico{font-size:1.15rem;flex-shrink:0;margin-top:1px}
+.notif-title{font-weight:700;margin-bottom:2px;color:var(--txt)}
+.notif-body{color:var(--txt2)}
+
+/* Saldos disponibles */
+.saldo-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);
+  border-radius:20px;padding:6px 14px;font-size:.7rem;margin:3px;
+  cursor:pointer;transition:all .2s;font-family:var(--mono);
+}
+.saldo-pill:hover{background:rgba(255,45,120,.14);border-color:var(--rosa)}
+.saldo-pill .origen{font-weight:700;color:var(--rosa)}
+.saldo-pill .monto{font-weight:700;color:#B00050}
+.saldo-pill.agotado{background:var(--surf2);border-color:var(--borde);opacity:.5;cursor:default}
+.saldo-pill.agotado .origen,.saldo-pill.agotado .monto{color:var(--txt3)}
+
+/* Historial */
+.hist-yr{background:var(--surf);border-radius:8px;border:1px solid var(--borde);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
+.hist-yr-hdr{background:#1A1714;color:var(--blanco);padding:13px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--amarillo)}
+.hist-yr-hdr h3{font-family:var(--title);font-size:1.1rem;font-weight:400;letter-spacing:1px;color:var(--amarillo)}
+.hist-row{display:flex;justify-content:space-between;padding:8px 18px;border-bottom:1px solid var(--borde);font-size:.76rem;color:var(--txt2)}
+.hist-row:last-child{border-bottom:none;font-weight:700;padding-top:11px;color:var(--txt)}
+.hist-val{font-family:var(--mono);font-weight:700}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surf);border-radius:8px;border:1px solid var(--borde);padding:26px;min-width:300px;max-width:440px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.15)}
+.modal h2{font-family:var(--title);font-size:1.4rem;letter-spacing:1px;margin-bottom:12px;color:var(--rosa)}
+.modal p{font-size:.76rem;color:var(--txt2);margin-bottom:14px;line-height:1.6}
+.modal input{
+  width:100%;padding:9px 12px;border:1.5px solid var(--borde);border-radius:4px;
+  font-family:var(--mono);font-size:.85rem;margin-bottom:12px;
+  background:var(--surf2);color:var(--txt);transition:border-color .2s;
+}
+.modal input:focus{outline:none;border-color:var(--azul)}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end}
+.info-box{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:4px;padding:10px;font-size:.76rem;color:var(--rosa);font-weight:700;margin-bottom:14px;font-family:var(--mono)}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:20px;right:20px;
+  background:#1A1714;color:var(--amarillo);
+  border:1px solid var(--amarillo);border-radius:4px;
+  padding:10px 18px;font-size:.72rem;font-weight:700;font-family:var(--mono);
+  transform:translateY(60px);opacity:0;transition:all .3s;
+  pointer-events:none;z-index:999;letter-spacing:.05em;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+}
+.toast.show{transform:translateY(0);opacity:1}
+
+.sec-ttl{
+  font-family:var(--mono);font-size:.62rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--rosa);font-weight:700;
+  margin-bottom:10px;display:flex;align-items:center;gap:10px;
+}
+.sec-ttl::after{content:'';flex:1;height:1px;background:linear-gradient(var(--rosa),transparent);max-width:300px}
+
+/* ── RESPONSIVIDAD ── */
+@media(max-width:768px){
+  .nav{padding:0 10px}
+  .brand{font-size:.9rem;padding-right:10px;margin-right:4px}
+  .tab{padding:11px 8px;font-size:.58rem;letter-spacing:.02em}
+  .yr-badge{padding:3px 8px;font-size:.6rem}
+  .page{padding:10px 12px}
+  .cards{grid-template-columns:repeat(2,1fr);gap:8px}
+  .card{padding:10px 12px}
+  .toolbar{gap:5px}
+  .btn{padding:6px 10px;font-size:.62rem}
+  .tip{display:none}
+  .tbl-wrap{border-radius:6px}
+  .asesor-wrap{grid-template-columns:1fr}
+  .tc{padding:12px 14px}
+  .ts{min-width:100px;padding:6px 8px}
+  .tline{gap:5px}
+  .hist-row{padding:7px 14px}
+}
+@media(max-width:520px){
+  .brand span.iva{display:none}
+  .tab{padding:10px 7px;font-size:.54rem}
+  .yr-badge{display:none}
+  .cards{grid-template-columns:repeat(2,1fr);gap:6px}
+  .card-val{font-size:.9rem}
+  .toolbar button:nth-child(n+5){display:none}
+  .tbl-wrap{margin-left:-12px;margin-right:-12px;border-radius:0;border-left:none;border-right:none}
+}
+
+/* Scrollbar suave */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--surf2)}
+::-webkit-scrollbar-thumb{background:var(--borde);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--rosa)}
+
+@media print{
+  .nav,.toolbar,.ytabs,.btn-ny,#alert-bar,.modal-bg{display:none!important}
+  body{background:#fff;color:#000}.page{display:block!important;padding:8px}
+  .tbl-wrap{box-shadow:none;border-color:#ddd}
+  td{color:#000!important;border-color:#eee!important;background:#fff!important}
+  td.mes{background:#1A1714!important;color:#FFD600!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  th{background:#1A1714!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{margin:12mm;size:A4 landscape}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="brand"><div class="brand-dot"></div><span class="rea">Sinergia</span>&nbsp;<span class="iva">REA</span></div>
+  <div class="nav-tabs">
+    <div class="tab on" onclick="goTab('control')">📊 Control</div>
+    <div class="tab" onclick="goTab('traz')">🔍 Trazabilidad</div>
+    <div class="tab asesor" onclick="goTab('asesor')">🤖 Asesor IA</div>
+    <div class="tab" onclick="goTab('hist')">📋 Historial</div>
+    <div class="tab" onclick="goTab('guia')">💡 Guía</div>
+  </div>
+  <div class="yr-badge" id="yr-badge">📅 2025 · 2026</div>
+</div>
+
+<!-- ALERT BAR -->
+<div id="alert-bar"><div class="alert-row" id="alert-inner"></div></div>
+
+<!-- ══ CONTROL ══ -->
+<div class="page on" id="pg-control">
+  <div style="padding:12px 0 8px">
+    <div class="ytabs" id="ytabs-ctrl"></div>
+    <div class="cards" id="cards-area"></div>
+  </div>
+  <div class="toolbar">
+    <button class="btn btn-r" onclick="recalcAll()">⟳ Recalcular</button>
+    <button class="btn btn-o" onclick="autoAcreditarYear()" style="background:var(--amarillo);color:black;box-shadow:0 2px 6px rgba(255,214,0,.3)">🪄 Auto-Acreditar</button>
+    <button class="btn btn-g" onclick="saveData()">💾 Guardar</button>
+    <button class="btn btn-o" onclick="doPDF()">📄 PDF</button>
+    <button class="btn btn-gh" onclick="doCSV()">⬇ CSV</button>
+    <button class="btn btn-gh" onclick="openCloseYearModal()">🔒 Cerrar Año</button>
+    <button class="btn btn-gh" onclick="openReopenModal()">🔓 Reabrir Año</button>
+    <span class="tip">🟡 entrada &nbsp;🩷 folio &nbsp;🩷 favor &nbsp;🔵 acreditado</span>
+  </div>
+  <div id="table-area"></div>
+</div>
+
+<!-- ══ TRAZABILIDAD ══ -->
+<div class="page" id="pg-traz">
+  <div style="padding:12px 0">
+    <div class="ytabs" id="ytabs-traz"></div>
+    <p style="font-size:.72rem;color:var(--txt2);margin-bottom:13px">Árbol de vida de cada saldo a favor: origen → aplicaciones → disponible. <span style="color:var(--azul);font-weight:700">Azul</span> = heredado.</p>
+    <div class="traz-grid" id="traz-grid"></div>
+  </div>
+</div>
+
+<!-- ══ ASESOR IA ══ -->
+<div class="page" id="pg-asesor">
+  <div style="padding:12px 0">
+    <div class="sec-ttl">🤖 Asesor Inteligente de IVA</div>
+    <p style="font-size:.74rem;color:var(--txt2);margin-bottom:16px;max-width:700px;line-height:1.6">
+      Ingresa el IVA a pagar del mes actual y el asesor te indica exactamente de qué saldo tomar, en qué orden y qué folio declarar ante el SAT.
+    </p>
+
+    <div class="asesor-wrap">
+
+      <!-- SIMULADOR -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr red">🧮 Simulador — ¿Qué remanente usar este mes?</div>
+          <div class="asesor-panel-body">
+            <div class="sim-input-row">
+              <div class="sim-field">
+                <label>Mes a declarar</label>
+                <select id="sim-mes">
+                  <option value="">— Selecciona —</option>
+                  <option>ENE 2026</option><option>FEB 2026</option><option>MAR 2026</option>
+                  <option>ABR 2026</option><option>MAY 2026</option><option>JUN 2026</option>
+                  <option>JUL 2026</option><option>AGO 2026</option><option>SEP 2026</option>
+                  <option>OCT 2026</option><option>NOV 2026</option><option>DIC 2026</option>
+                </select>
+              </div>
+              <div class="sim-field">
+                <label>IVA a pagar del mes ($)</label>
+                <input type="number" id="sim-pagar" placeholder="Ej: 350.00" min="0" step="0.01">
+              </div>
+              <button class="sim-run" onclick="runSimulator()">⚡ Calcular plan</button>
+            </div>
+            <div id="sim-result"><div class="plan-empty">👆 Ingresa el mes y el monto para obtener tu plan de acreditamiento</div></div>
+          </div>
+        </div>
+
+        <!-- SALDOS DISPONIBLES -->
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr green">💰 Saldos disponibles para acreditar</div>
+          <div class="asesor-panel-body">
+            <div id="saldos-disp"></div>
+            <div style="margin-top:10px;font-size:.68rem;color:#999">Haz clic en un saldo para usarlo como punto de partida en el simulador</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICACIONES + PREDICCION -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr gold">🔔 Notificaciones y alertas activas</div>
+          <div class="asesor-panel-body" id="notif-panel"></div>
+        </div>
+
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr blue">📊 Análisis de tu patrón de IVA</div>
+          <div class="asesor-panel-body" id="patron-panel"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ HISTORIAL ══ -->
+<div class="page" id="pg-hist">
+  <div style="padding:12px 0">
+    <div class="sec-ttl">Resumen por ejercicio fiscal</div>
+    <div id="hist-grid"></div>
+  </div>
+</div>
+
+<!-- ══ GUIA ══ -->
+<div class="page" id="pg-guia">
+  <div style="padding:12px 0;max-width:780px">
+    <div class="sec-ttl">Guía de uso y leyenda</div>
+    <div style="display:grid;gap:10px" id="guia-content"></div>
+  </div>
+</div>
+
+<!-- MODAL CERRAR AÑO -->
+<div class="modal-bg" id="modal-close">
+  <div class="modal">
+    <h2>🔒 Cerrar Año Fiscal</h2>
+    <p>El remanente final se arrastrará al nuevo ejercicio. Las celdas quedarán bloqueadas.</p>
+    <div class="info-box" id="modal-close-info"></div>
+    <div class="modal-btns">
+      <button class="btn btn-gh" onclick="closeModal('modal-close')">Cancelar</button>
+      <button class="btn btn-g" onclick="doCloseYear()">✓ Cerrar año</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REABRIR AÑO -->
+<div class="modal-bg" id="modal-reopen">
+  <div class="modal">
+    <h2>🔓 Reabrir Año Cerrado</h2>
+    <p>Esta acción desbloquea el año para edición. Requiere contraseña de confirmación.</p>
+    <input type="password" id="reopen-pwd" placeholder="Contraseña..." onkeydown="if(event.key==='Enter')doReopen()">
+    <div style="font-size:.7rem;color:#999;margin-bottom:12px">Contraseña: <strong>IVA2025</strong></div>
+    <div class="modal-btns">
+      <button class="btn btn-gh" onclick="closeModal('modal-reopen')">Cancelar</button>
+      <button class="btn btn-r" onclick="doReopen()">🔓 Reabrir</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const toCents = n => Math.round((parseFloat(n) || 0) * 100);
+const fromCents = n => +(n / 100).toFixed(2);
+
+// SEED Corregido sin aplicaciones duplicadas para que dé exactamente $1,368.54
+const SEED = {
+  years:{
+    2025:{
+      closed:true, heredado:0,
+      meses:[
+        {m:"ENE",trasl:0,      ret:0,       acred:239.99, au:0, folio:"Genera a favor"},
+        {m:"FEB",trasl:1799.10,ret:1199.38, acred:265.05, au:239.99, folio:"No.Op: — (Feb 2025)"},
+        {m:"MAR",trasl:899.55, ret:599.69,  acred:1132.99,au:0, folio:"Genera a favor"},
+        {m:"ABR",trasl:899.55, ret:599.69,  acred:156.02, au:143.84, folio:"No.Op:250410180455"},
+        {m:"MAY",trasl:899.55, ret:599.69,  acred:1458.90,au:0, folio:"Genera a favor"},
+        {m:"JUN",trasl:899.55, ret:599.69,  acred:119.69, au:180.17, folio:"No.Op:250410180455 (Jun 2025)"},
+        {m:"JUL",trasl:899.55, ret:599.69,  acred:491.86, au:0, folio:""},
+        {m:"AGO",trasl:0,      ret:0,       acred:269.29, au:0, folio:""},
+        {m:"SEP",trasl:1799.10,ret:1199.38, acred:161.07, au:438.65, folio:"No.Op:250410180455 (Sep 2025)"},
+        {m:"OCT",trasl:0,      ret:0,       acred:147.25, au:0, folio:""},
+        {m:"NOV",trasl:2698.65,ret:1799.07, acred:257.37, au:642.21, folio:"No.Op:251890029587 + 264900003799"},
+        {m:"DIC",trasl:0,      ret:0,       acred:172.70, au:0, folio:""},
+      ],
+      saldos: []
+    },
+    2026:{
+      closed:false, heredado:1368.54,
+      meses:[
+        {m:"ENE",trasl:0,ret:0,acred:0,   au:137.00,folio:"No.Op:264900003799 — saldo May 2025"},
+        {m:"FEB",trasl:0,ret:0,acred:122, au:0,     folio:""},
+        {m:"MAR",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"ABR",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"MAY",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"JUN",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"JUL",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"AGO",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"SEP",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"OCT",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"NOV",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"DIC",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+      ],
+      saldos:[]
+    }
+  },
+  activeYear:2026
+};
+
+// Nueva llave de memoria para evitar cruces con los errores anteriores
+let DB = JSON.parse(localStorage.getItem('iva_pro_v12_perfecto')||'null') || JSON.parse(JSON.stringify(SEED));
+let AY = DB.activeYear||2026;
+let ATY = AY;
+
+const $=id=>document.getElementById(id);
+const years=()=>Object.keys(DB.years).map(Number).sort();
+const fmt=(n,cls)=>{
+  if(!n||isNaN(n)||n===0) return '<span class="cg">—</span>';
+  const s='$'+Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  return cls?`<span class="${cls}">${s}</span>`:s;
+};
+const fP=n=>(!n||isNaN(n)||n===0)?'—':'$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+const gN=el=>{if(!el)return 0;const v=parseFloat((el.innerText||'').replace(/[$,\s]/g,''));return isNaN(v)?0:v;};
+
+// ── HEREDADO DINÁMICO STRICTO (CENTAVOS) ──
+function getDynamicHeredado(targetYear) {
+  let runningCents = 0;
+  years().forEach(yr => {
+    if (yr >= targetYear) return;
+    const yrData = DB.years[yr];
+    let prevCents = (yr === years()[0]) ? toCents(yrData.heredado || 0) : runningCents;
+    yrData.meses.forEach(m => {
+      const t = toCents(m.trasl), r = toCents(m.ret), a = toCents(m.acred), au = toCents(m.au);
+      const raw = t - r - a;
+      const fav = Math.max(-raw, 0);
+      const auReal = Math.min(au, prevCents + fav);
+      prevCents = prevCents + fav - auReal;
+    });
+    runningCents = prevCents;
+  });
+  if (targetYear === years()[0]) return DB.years[targetYear].heredado || 0;
+  return fromCents(runningCents);
+}
+
+// ── TRAZABILIDAD AUTOMÁTICA DESDE TABLA ──
+function getTrazabilidad() {
+  const fuentes = [];
+  const usos = [];
+  let runningCents = 0;
+
+  years().forEach((yr, index) => {
+    const yrData = DB.years[yr];
+    let prevCents = (index === 0) ? toCents(yrData.heredado || 0) : runningCents;
+    if (index === 0 && yrData.heredado > 0) {
+      fuentes.push({ mes: `Herencia de ${yr-1}`, origCents: toCents(yrData.heredado), apps: [], isHer: true, folioOrigen: 'Saldo ejercicios anteriores' });
+    }
+
+    yrData.meses.forEach(m => {
+      const t = toCents(m.trasl), r = toCents(m.ret), a = toCents(m.acred), au = toCents(m.au);
+      const raw = t - r - a;
+      const fav = Math.max(-raw, 0);
+      const auReal = Math.min(au, prevCents + fav);
+
+      if (fav > 0) fuentes.push({ mes: `${m.m} ${yr}`, origCents: fav, apps: [], isHer: false, folioOrigen: m.folio });
+      if (auReal > 0) usos.push({ mesDestino: `${m.m} ${yr}`, montoCents: auReal, folio: m.folio });
+      
+      prevCents = prevCents + fav - auReal;
+    });
+    runningCents = prevCents;
+  });
+
+  for (const u of usos) {
+    let remainingUso = u.montoCents;
+    for (const f of fuentes) {
+      if (remainingUso <= 0) break;
+      const fConsumido = f.apps.reduce((s, a) => s + a.montoCents, 0);
+      const fRem = f.origCents - fConsumido;
+      if (fRem > 0) {
+        const toApply = Math.min(fRem, remainingUso);
+        f.apps.push({ en: u.mesDestino, montoCents: toApply, folio: u.folio });
+        remainingUso -= toApply;
+      }
+    }
+  }
+
+  return fuentes.map(f => {
+    const consumido = f.apps.reduce((s, a) => s + a.montoCents, 0);
+    return {
+      id: f.mes, mes: f.mes,
+      orig: fromCents(f.origCents),
+      rem: fromCents(f.origCents - consumido),
+      isHer: f.isHer, folioOrigen: f.folioOrigen,
+      aplicaciones: f.apps.map(a => ({ en: a.en, monto: fromCents(a.montoCents), folio: a.folio }))
+    };
+  });
+}
+
+function getAllSaldosDisponibles() {
+  return getTrazabilidad().filter(s => s.rem > 0);
+}
+
+function goTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-tabs .tab').forEach(t=>t.classList.remove('on'));
+  $(`pg-${id}`).classList.add('on');
+  const tabs=['control','traz','asesor','hist','guia'];
+  document.querySelectorAll('.nav-tabs .tab')[tabs.indexOf(id)]?.classList.add('on');
+  if(id==='traz') renderTraz();
+  if(id==='hist') renderHist();
+  if(id==='asesor') renderAsesor();
+  if(id==='guia') renderGuia();
+}
+
+function renderYTabs(cid, fn){
+  const el=$(cid);if(!el)return;
+  el.innerHTML=years().map(y=>`
+    <div class="ytab ${AY===y?'on':''}" onclick="${fn}(${y})">${y} ${DB.years[y].closed?'🔒':''}</div>
+  `).join('')+`<button class="btn-ny" onclick="addYear()">+ Nuevo año</button>`;
+}
+function switchYear(y){AY=y;DB.activeYear=y;renderAll();}
+function switchTrazYear(y){ATY=y;AY=y;renderTraz();renderYTabs('ytabs-traz','switchTrazYear');}
+
+function renderAll(){
+  renderYTabs('ytabs-ctrl','switchYear');
+  renderYTabs('ytabs-traz','switchTrazYear');
+  $('yr-badge').textContent=`📅 ${years().join(' · ')}`;
+
+  const yr=DB.years[AY];
+  const locked=yr.closed;
+  const her=getDynamicHeredado(AY);
+
+  let rows='';
+  yr.meses.forEach((row,i)=>{
+    const isHer=(i===0&&her>0);
+    rows+=`<tr>
+      <td class="mes${isHer?' her':''}">${row.m}${isHer?'<br><small style="font-size:.52rem;opacity:.8">+herencia</small>':''}</td>
+      <td class="inp" contenteditable="${!locked}" id="t-${AY}-${i}" oninput="onInp(${AY},${i})">${row.trasl!=null&&row.trasl!==0?row.trasl:''}</td>
+      <td class="inp" contenteditable="${!locked}" id="r-${AY}-${i}" oninput="onInp(${AY},${i})">${row.ret!=null&&row.ret!==0?row.ret:''}</td>
+      <td class="inp" contenteditable="${!locked}" id="a-${AY}-${i}" oninput="onInp(${AY},${i})">${row.acred!=null&&row.acred!==0?row.acred:''}</td>
+      <td id="fav-${AY}-${i}">—</td>
+      <td id="pag-${AY}-${i}">—</td>
+      <td class="au" contenteditable="${!locked}" id="au-${AY}-${i}" oninput="onInp(${AY},${i})">${row.au!=null&&row.au!==0?row.au:''}</td>
+      <td id="rh-${AY}-${i}">—</td>
+      <td id="pef-${AY}-${i}">—</td>
+      <td id="rac-${AY}-${i}">—</td>
+      <td class="folio" contenteditable="${!locked}" id="f-${AY}-${i}" oninput="onInp(${AY},${i})">${row.folio||''}</td>
+    </tr>`;
+  });
+
+  let html=`<div id="banner-area"></div>`;
+
+  html+=`<div class="tbl-wrap"><table>
+    <thead>
+      <tr><th rowspan="2" class="mes-th" style="border-right:3px solid var(--o)">MES</th><th colspan="3">CIFRAS DEL PERÍODO</th><th colspan="2">RESULTADO</th><th colspan="2">ACREDITAMIENTO</th><th colspan="2">PAGO REAL</th><th rowspan="2">FOLIO SAT</th></tr>
+      <tr><th class="sub">TRASLADADO</th><th class="sub">RETENIDO</th><th class="sub">ACREDITABLE</th><th class="sub">A FAVOR</th><th class="sub">A PAGAR</th><th class="sub">ACRED. APLICADO</th><th class="sub">REM. HISTÓRICO</th><th class="sub">PAGO EFECTIVO</th><th class="sub">REM. ACUMULADO</th></tr>
+    </thead>
+    <tbody id="tbody-${AY}">${rows}</tbody>
+    <tfoot><tr class="tot"><td style="text-align:center">TOTALES ${AY}</td>
+      <td id="tot-t">—</td><td id="tot-r">—</td><td id="tot-a">—</td>
+      <td id="tot-fav">—</td><td id="tot-pag">—</td><td id="tot-au">—</td>
+      <td>—</td><td id="tot-pef">—</td><td id="tot-rac">—</td><td></td>
+    </tr></tfoot></table></div>`;
+
+  $('table-area').innerHTML=html;
+  recalcYear(AY);
+}
+
+function onInp(year,i){
+  const yr=DB.years[year];
+  const readN=id=>{const e=$(id);if(!e)return null;const v=parseFloat((e.innerText||'').replace(/[$,\s]/g,''));return isNaN(v)?0:v;};
+  const readS=id=>{const e=$(id);return e?e.innerText.trim():null;};
+  const t=readN(`t-${year}-${i}`); if(t!==null) yr.meses[i].trasl=t;
+  const r=readN(`r-${year}-${i}`); if(r!==null) yr.meses[i].ret=r;
+  const a=readN(`a-${year}-${i}`); if(a!==null) yr.meses[i].acred=a;
+  const au=readN(`au-${year}-${i}`);if(au!==null)yr.meses[i].au=au;
+  const f=readS(`f-${year}-${i}`);  if(f!==null) yr.meses[i].folio=f;
+  recalcYear(year);
+  autoSave();
+}
+
+function recalcYear(year){
+  const yr=DB.years[year];
+  let prevCents=toCents(getDynamicHeredado(year));
+  let sT=0,sR=0,sA=0,sFav=0,sPag=0,sAU=0,sPef=0;
+
+  yr.meses.forEach((row,i)=>{
+    const readN=id=>{const e=$(id);if(!e||!e.innerText.trim())return null;const v=parseFloat(e.innerText.replace(/[$,\s]/g,''));return isNaN(v)?null:v;};
+    const t = readN(`t-${year}-${i}`) ?? (row.trasl||0);
+    const r = readN(`r-${year}-${i}`) ?? (row.ret||0);
+    const a = readN(`a-${year}-${i}`) ?? (row.acred||0);
+    const au= readN(`au-${year}-${i}`)  ?? (row.au||0);
+    
+    const rawCents = toCents(t) - toCents(r) - toCents(a);
+    const favCents = Math.max(-rawCents, 0);
+    const pagCents = Math.max(rawCents, 0);
+    const auRealCents = Math.min(toCents(au), prevCents + favCents);
+    const acumCents = prevCents + favCents - auRealCents;
+    const pefCents = Math.max(pagCents - auRealCents, 0);
+    
+    const hayAct = t>0||r>0||a>0||au>0;
+
+    const set=(id,h)=>{const e=$(id);if(e)e.innerHTML=h;};
+    set(`fav-${year}-${i}`,favCents>0?fmt(fromCents(favCents),'cv'):'<span class="cg">—</span>');
+    set(`pag-${year}-${i}`,pagCents>0?fmt(fromCents(pagCents),'cr'):'<span class="cg">—</span>');
+    set(`rh-${year}-${i}`, (prevCents>0&&hayAct)?fmt(fromCents(prevCents),'co'):'<span class="cg">—</span>');
+    set(`pef-${year}-${i}`,pefCents>0?fmt(fromCents(pefCents),'cr'):'<span class="cg">—</span>');
+    set(`rac-${year}-${i}`,(acumCents>0&&(hayAct||(i===0&&getDynamicHeredado(year)>0)))?fmt(fromCents(acumCents),'cv'):'<span class="cg">—</span>');
+
+    sT+=t;sR+=r;sA+=a;
+    sFav+=fromCents(favCents);sPag+=fromCents(pagCents);
+    sAU+=au;sPef+=fromCents(pefCents);
+    prevCents=acumCents;
+  });
+  
+  yr.remanenteFinal = fromCents(prevCents);
+
+  const st=(id,v,c)=>{const e=$(id);if(e)e.innerHTML=fmt(v,c);};
+  st('tot-t',sT,'cr');st('tot-r',sR,'cr');st('tot-a',sA,'cv');
+  st('tot-fav',sFav,'cv');st('tot-pag',sPag,'cr');st('tot-au',sAU,'co');
+  st('tot-pef',sPef,'cr');st('tot-rac',yr.remanenteFinal,'cv');
+
+  renderCards(year,sT,sR,sA,sFav,sPag,sAU,sPef,yr.remanenteFinal,getDynamicHeredado(year));
+  checkAlerts(year);
+  
+  // Update linked views seamlessly
+  if($('pg-traz')?.classList.contains('on'))   renderTraz();
+  if($('pg-asesor')?.classList.contains('on')) renderAsesor();
+  if($('pg-hist')?.classList.contains('on'))   renderHist();
+}
+
+function recalcAll(){recalcYear(AY);}
+
+function autoAcreditarYear() {
+  saveToMemory();
+  const yr = DB.years[AY];
+  if(yr.closed) { toast('🔒 El año está cerrado.'); return; }
+  let aplicados = 0;
+
+  for(let i=0; i<12; i++) {
+     const m = yr.meses[i];
+     const t = toCents(m.trasl||0), r = toCents(m.ret||0), a = toCents(m.acred||0);
+     const pagCents = Math.max(t - r - a, 0);
+
+     if (pagCents > 0) {
+         const canOverride = (!m.folio || m.folio.trim() === '' || m.folio.startsWith('De '));
+         const disp = getTrazabilidad().filter(s => toCents(s.rem) > 0);
+         
+         let restante = pagCents;
+         let usarTotalCents = 0;
+         let textos = [];
+
+         for (const s of disp) {
+             if (restante <= 0) break;
+             let esValido = false;
+             if (s.isHer) {
+                 esValido = true;
+             } else {
+                 const [sMes, sAnio] = s.mes.split(' ');
+                 const sA = parseInt(sAnio);
+                 const sMIdx = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].indexOf(sMes);
+                 if (sA < AY || (sA === AY && sMIdx < i)) {
+                     esValido = true;
+                 }
+             }
+
+             if (esValido) {
+                 const dispCents = toCents(s.rem);
+                 const usar = Math.min(dispCents, restante);
+                 usarTotalCents += usar;
+                 restante -= usar;
+                 
+                 // Extraer solo la parte del número de operación si empieza con "No.Op:"
+                 let folStr = (s.folioOrigen || '').trim();
+                 if (!folStr) folStr = `Sin folio en ${s.mes}`;
+                 textos.push(`De ${s.mes}: ${folStr}`);
+
+             }
+         }
+
+         if (usarTotalCents > 0 && canOverride) {
+             m.au = fromCents(usarTotalCents);
+             m.folio = textos.join(' + ');
+             aplicados++;
+         }
+     }
+  }
+
+  if (aplicados > 0) {
+     localStorage.setItem('iva_pro_v12_perfecto', JSON.stringify(DB));
+     renderAll();
+     toast(`🪄 ¡Magia! Se auto-acreditaron ${aplicados} meses.`);
+  } else {
+     toast('No hay meses pendientes que requieran acreditamiento automático.');
+  }
+}
+
+
+function renderCards(y,t,r,a,fav,pag,au,pef,rem,her){
+  $('cards-area').innerHTML=`
+    <div class="card"><div class="card-lbl">Trasladado</div><div class="card-val red">${fP(t)}</div></div>
+    <div class="card"><div class="card-lbl">Retenido</div><div class="card-val red">${fP(r)}</div></div>
+    <div class="card"><div class="card-lbl">Acreditable</div><div class="card-val red">${fP(a)}</div></div>
+    <div class="card v"><div class="card-lbl">Saldo a Favor</div><div class="card-val">${fP(fav)}</div></div>
+    <div class="card"><div class="card-lbl">A Pagar (bruto)</div><div class="card-val red">${fP(pag)}</div></div>
+    <div class="card o"><div class="card-lbl">Acreditado</div><div class="card-val">${fP(au)}</div></div>
+    <div class="card o"><div class="card-lbl">Pagado Real</div><div class="card-val">${fP(pef)}</div></div>
+    ${her>0?`<div class="card p"><div class="card-lbl">Heredado ${y-1}</div><div class="card-val">${fP(her)}</div></div>`:''}
+    <div class="card a"><div class="card-lbl">Remanente Final</div><div class="card-val">${fP(rem)}</div></div>
+  `;
+}
+
+function checkAlerts(year){
+  const alerts=[];
+  const disp=getAllSaldosDisponibles();
+  const totalDisp=disp.reduce((s,x)=>s+x.rem,0);
+  if(totalDisp>0) alerts.push({t:'blue',msg:`💰 Tienes ${fP(totalDisp)} en remanentes disponibles para acreditar`});
+
+  const yr=DB.years[year];
+  const sinDatos=yr.meses.filter(m=>!m.trasl&&!m.acred&&!m.ret).length;
+  if(sinDatos>6) alerts.push({t:'yellow',msg:`📅 ${sinDatos} meses sin datos en ${year}`});
+
+  const bar=$('alert-bar'),inner=$('alert-inner');
+  if(alerts.length){inner.innerHTML=alerts.map(a=>`<div class="chip ${a.t}">${a.msg}</div>`).join('');bar.classList.add('open');}
+  else{bar.classList.remove('open');inner.innerHTML='';}
+}
+
+function renderAsesor(){
+  renderSaldosDisponibles();
+  renderNotificaciones();
+  renderPatron();
+}
+
+function renderSaldosDisponibles(){
+  const disp=getAllSaldosDisponibles();
+  const el=$('saldos-disp');if(!el)return;
+  if(!disp.length){el.innerHTML='<div style="color:#bbb;font-size:.78rem;padding:10px 0">No hay saldos disponibles actualmente.</div>';return;}
+  el.innerHTML=disp.map((s,i)=>`
+    <div class="saldo-pill" onclick="usarSaldo('${s.mes}',${s.rem})">
+      <span style="font-size:.9rem">${i===0?'🥇':i===1?'🥈':'🥉'}</span>
+      <span class="origen">${s.mes}</span>
+      <span class="monto">${fP(s.rem)}</span>
+      <span style="font-size:.65rem;color:#999">disponible</span>
+    </div>`).join('');
+}
+
+function usarSaldo(mes, monto){
+  $('sim-pagar').focus();
+  toast(`Saldo de ${mes} seleccionado: ${fP(monto)}`);
+}
+
+function runSimulator(){
+  const mes=$('sim-mes').value;
+  const pagar=parseFloat($('sim-pagar').value||0);
+  const res=$('sim-result');
+  if(!mes||!pagar||pagar<=0){res.innerHTML='<div class="plan-empty">⚠️ Ingresa el mes y un monto mayor a $0</div>';return;}
+
+  const disp=getAllSaldosDisponibles();
+  const totalDisp=disp.reduce((s,x)=>s+x.rem,0);
+
+  if(totalDisp<=0){
+    res.innerHTML=`<div class="plan-warn">❌ No tienes remanentes disponibles para acreditar. Deberás pagar $${pagar.toFixed(2)} íntegramente al SAT.</div>`;
+    return;
+  }
+
+  let restante=pagar;
+  const pasos=[];
+  for(const s of disp){
+    if(restante<=0) break;
+    const usar=Math.min(s.rem,restante);
+    pasos.push({origen:s.mes,folio:s.aplicaciones?.[0]?.folio||'(folio)',usar,remQueda:+(s.rem-usar).toFixed(2)});
+    restante=+(restante-usar).toFixed(2);
+  }
+
+  const cubierto=pagar-restante;
+  const colores=['pri','sec','ter','ter','ter'];
+
+  let html=pasos.map((p,i)=>`
+    <div class="plan-step">
+      <div class="plan-step-hdr ${colores[i]||'ter'}">
+        <div class="plan-step-left">
+          <div class="plan-step-origen">📦 Saldo de ${p.origen}</div>
+        </div>
+        <div class="plan-step-right">
+          <div class="plan-step-monto">−${fP(p.usar)}</div>
+          <div class="plan-step-rem">queda: ${fP(p.remQueda)}</div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  html+=`<div class="plan-total">
+    <span class="plan-total-lbl">✅ Total a acreditar</span>
+    <span class="plan-total-val">${fP(cubierto)}</span>
+  </div>`;
+
+  if(restante>0.01) html+=`<div class="plan-warn">⚠️ Remanentes insuficientes. Aún debes pagar <strong>${fP(restante)}</strong> directamente al SAT.</div>`;
+  else html+=`<div class="plan-ok">✅ El IVA de ${mes} queda completamente cubierto con tus remanentes. Pago efectivo: $0.00</div>`;
+
+  res.innerHTML=html;
+}
+
+function renderNotificaciones(){
+  const el=$('notif-panel');if(!el)return;
+  const disp=getAllSaldosDisponibles();
+  const notifs=[];
+  if(disp.length>0){
+    const total=disp.reduce((s,x)=>s+x.rem,0);
+    notifs.push({t:'info',ico:'💰',title:`${disp.length} saldo(s) disponible(s): ${fP(total)}`,body:`Orden recomendado (FIFO): ${disp.map(s=>`${s.mes} (${fP(s.rem)})`).join(' → ')}`});
+  }
+  el.innerHTML=notifs.length
+    ? notifs.map(n=>`<div class="notif ${n.t}"><div class="notif-ico">${n.ico}</div><div><div class="notif-title">${n.title}</div><div class="notif-body">${n.body}</div></div></div>`).join('')
+    : '<div style="color:#bbb;font-size:.78rem;padding:8px 0">Sin notificaciones activas. ¡Todo en orden! ✅</div>';
+}
+
+function renderPatron(){
+  const el=$('patron-panel');if(!el)return;
+  const yr=DB.years[AY];
+  const acreds=yr.meses.filter(m=>m.acred>0);
+  const pagos=yr.meses.filter(m=>{const raw=m.trasl-m.ret-m.acred;return raw>0;});
+  const favores=yr.meses.filter(m=>{const raw=m.trasl-m.ret-m.acred;return raw<0;});
+  const avg=acreds.length?acreds.reduce((s,m)=>s+m.acred,0)/acreds.length:0;
+
+  el.innerHTML=`
+    <div class="hist-row" style="border-bottom:1px solid #f0f0f0"><span>Meses con IVA acreditable</span><span class="hist-val" style="color:var(--v)">${acreds.length} de 12</span></div>
+    <div class="hist-row" style="border-bottom:1px solid #f0f0f0"><span>Meses con saldo a favor</span><span class="hist-val" style="color:var(--v)">${favores.length}</span></div>
+    <div class="hist-row" style="border-bottom:1px solid #f0f0f0"><span>Meses con IVA a pagar</span><span class="hist-val" style="color:var(--r)">${pagos.length}</span></div>
+    <div class="hist-row" style="border-bottom:none;font-weight:700"><span>💡 Recomendación</span><span class="hist-val" style="color:var(--a);font-size:.7rem;text-align:right;max-width:200px">
+      Patrón estable — usa remanentes en FIFO
+    </span></div>
+  `;
+}
+
+function renderTraz(){
+  const grid=$('traz-grid');if(!grid)return;
+  const traz=getTrazabilidad().filter(s=>s.mes.includes(ATY.toString()) || s.mes.includes(`Herencia de ${ATY-1}`));
+  if(!traz.length){grid.innerHTML='<div style="padding:20px;color:#aaa;font-size:.8rem">No hay saldos a favor registrados para este año.</div>';return;}
+
+  grid.innerHTML=traz.map(item=>{
+    const usado=item.orig-item.rem;
+    const pct=item.orig>0?Math.round(usado/item.orig*100):0;
+    const est=item.rem<=0.01?'ago':(pct>0?'par':'');
+    const badge=item.isHer?'<span class="badge bh">Heredado</span>'
+      :est==='ago'?'<span class="badge ba">Agotado</span>'
+      :est==='par'?'<span class="badge bp">Parcial</span>'
+      :'<span class="badge bv">Disponible</span>';
+
+    const steps=item.aplicaciones.map((ap,j)=>`
+      ${j>0?'<div class="tarr">→</div>':''}
+      <div class="ts"><div class="ts-lbl">Aplicado en ${ap.en}</div><div class="ts-val">${fP(ap.monto)}</div><div class="ts-ref">${ap.folio}</div></div>`).join('');
+
+    const remBox=item.rem>0.01
+      ?`<div class="tarr">→</div><div class="trem"><div class="ts-lbl">Disponible</div><div class="val">${fP(item.rem)}</div></div>`
+      :`<div class="tarr">→</div><div class="trem ago"><div class="ts-lbl">Agotado</div><div class="val">$0.00</div></div>`;
+
+    return `<div class="tc ${est} ${item.isHer?'her':''}">
+      <div class="tc-hdr">
+        <div><div class="tc-mes">${item.mes}</div><div style="font-size:.65rem;color:#999;margin-top:2px">${pct}% utilizado · ${item.aplicaciones.length} aplicación(es)</div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div class="tc-orig">${fP(item.orig)}</div>${badge}</div>
+      </div>
+      <div class="tline">
+        <div class="ts" style="border-color:var(--v);background:var(--vl)">
+          <div class="ts-lbl">Saldo original</div><div class="ts-val" style="color:var(--v)">${fP(item.orig)}</div><div class="ts-ref">Generado en ${item.mes}</div>
+        </div>
+        ${steps}${remBox}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderHist(){
+  const el=$('hist-grid');if(!el)return;
+  el.innerHTML=[...years()].reverse().map(year=>{
+    const yr=DB.years[year];
+    let sT=0,sR=0,sA=0,sFav=0,sPag=0,sAU=0,sPef=0;
+    let prevCents = toCents(getDynamicHeredado(year));
+    
+    yr.meses.forEach(m=>{
+      const t = toCents(m.trasl), r = toCents(m.ret), a = toCents(m.acred), au = toCents(m.au);
+      const raw = t - r - a;
+      const fav = Math.max(-raw, 0);
+      const pag = Math.max(raw, 0);
+      const auReal = Math.min(au, prevCents + fav);
+      const pef = Math.max(pag - auReal, 0);
+      
+      sT+=t; sR+=r; sA+=a; sFav+=fav; sPag+=pag; sAU+=auReal; sPef+=pef;
+      prevCents = prevCents + fav - auReal;
+    });
+    
+    const finalRem = fromCents(prevCents);
+
+    return `<div class="hist-yr">
+      <div class="hist-yr-hdr"><h3>Ejercicio ${year} ${yr.closed?'🔒':''}</h3><span style="font-family:var(--mono)">${fP(finalRem)} remanente</span></div>
+      <div class="hist-row"><span>IVA Trasladado</span><span class="hist-val" style="color:var(--azul-s)">${fP(fromCents(sT))}</span></div>
+      <div class="hist-row"><span>(-) IVA Retenido</span><span class="hist-val" style="color:var(--azul-s)">${fP(fromCents(sR))}</span></div>
+      <div class="hist-row"><span>(-) IVA Acreditable</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sA))}</span></div>
+      <div class="hist-row"><span>Saldo a favor generado</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sFav))}</span></div>
+      <div class="hist-row"><span>Acreditamiento aplicado</span><span class="hist-val" style="color:var(--amarillo)">${fP(fromCents(sAU))}</span></div>
+      ${getDynamicHeredado(year)>0 ? `<div class="hist-row"><span>Heredado de ${year-1}</span><span class="hist-val" style="color:var(--azul-s)">${fP(getDynamicHeredado(year))}</span></div>`:''}
+      <div class="hist-row"><span>✅ Pagado efectivamente</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sPef))}</span></div>
+      <div class="hist-row"><span>💰 Remanente final</span><span class="hist-val" style="color:var(--amarillo)">${fP(finalRem)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderGuia(){
+  const el=$('guia-content');if(!el)return;
+  const items=[
+    ['🟡','Celda amarilla','Datos de entrada — IVA Trasladado, Retenido, Acreditable y Acreditamiento aplicado'],
+    ['🩷','Celda rosa','Folio / número de operación del SAT — captura siempre que presentes'],
+    ['🩷','Rosa','Saldo a favor calculado automáticamente'],
+    ['🔵','Azul','IVA a pagar calculado'],
+    ['🔵','Azul claro','Saldo acumulado total'],
+    ['🟡','Amarillo','Acreditamiento aplicado de remanentes anteriores'],
+    ['🤖','Asesor IA','Ingresa el IVA a pagar del mes y el asesor te dice de qué saldo tomar, en qué orden y qué folio poner en el SAT'],
+    ['📦','FIFO','El asesor aplica primero el saldo más antiguo — así evitas acumular remanentes vencidos'],
+    ['🔒','Cerrar año','El remanente final se arrastra al siguiente ejercicio. Usa contraseña IVA2025 para reabrir'],
+    ['💾','Auto-guardado','Tus datos se guardan automáticamente al escribir y al cerrar la ventana'],
+  ];
+  el.innerHTML=items.map(([ico,tit,desc])=>`
+    <div style="background:var(--surf2);border-radius:6px;border:1px solid var(--borde);padding:12px 15px;display:flex;gap:11px;align-items:flex-start">
+      <div style="font-size:1.2rem;flex-shrink:0">${ico}</div>
+      <div><div style="font-weight:700;font-size:.78rem;margin-bottom:3px;color:var(--txt);font-family:var(--mono)">${tit}</div><div style="font-size:.71rem;color:var(--txt2);line-height:1.55">${desc}</div></div>
+    </div>`).join('');
+}
+
+function openCloseYearModal(){
+  const yr=DB.years[AY];
+  if(yr.closed){toast('Este año ya está cerrado 🔒');return;}
+  const rem=yr.remanenteFinal||0;
+  $('modal-close-info').textContent=`Remanente a arrastrar a ${AY+1}: ${fP(rem)}`;
+  $('modal-close').classList.add('open');
+}
+function doCloseYear(){
+  const yr=DB.years[AY];
+  yr.closed=true;
+  const next=AY+1;
+  if(!DB.years[next]){
+    DB.years[next]={closed:false,heredado:0,
+      meses:['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].map(m=>({m,trasl:0,ret:0,acred:0,au:0,folio:''})),
+      saldos:[]};
+  }
+  AY=next;DB.activeYear=next;
+  closeModal('modal-close');
+  saveData();renderAll();
+  toast(`✅ ${AY-1} cerrado y arrastrado a ${AY}`);
+}
+
+function openReopenModal(){
+  const yr=DB.years[AY];
+  if(!yr.closed){toast('Este año ya está abierto ✏️');return;}
+  $('reopen-pwd').value='';
+  $('modal-reopen').classList.add('open');
+  setTimeout(()=>$('reopen-pwd').focus(),100);
+}
+function doReopen(){
+  const pwd=$('reopen-pwd').value;
+  if(pwd!=='IVA2025'){toast('❌ Contraseña incorrecta');$('reopen-pwd').value='';return;}
+  DB.years[AY].closed=false;
+  closeModal('modal-reopen');
+  saveData();renderAll();
+  toast(`🔓 Año ${AY} reabierto para edición`);
+}
+function closeModal(id){$(id).classList.remove('open');}
+
+function addYear(){
+  const next=Math.max(...years())+1;
+  if(!confirm(`¿Crear ejercicio ${next}?`))return;
+  if(!DB.years[next]) DB.years[next]={closed:false,heredado:0,
+    meses:['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].map(m=>({m,trasl:0,ret:0,acred:0,au:0,folio:''})),
+    saldos:[]};
+  AY=next;DB.activeYear=next;saveData();renderAll();
+}
+
+let _st;
+function autoSave(){clearTimeout(_st);_st=setTimeout(saveToMemory,1500);}
+
+function saveToMemory(){
+  const yr=DB.years[AY];
+  const readN=id=>{const e=$(id);if(!e)return null;const v=parseFloat((e.innerText||'').replace(/[$,\s]/g,''));return isNaN(v)?0:v;};
+  yr.meses.forEach((_,i)=>{
+    const t=readN(`t-${AY}-${i}`); if(t!==null) yr.meses[i].trasl=t;
+    const r=readN(`r-${AY}-${i}`); if(r!==null) yr.meses[i].ret=r;
+    const a=readN(`a-${AY}-${i}`); if(a!==null) yr.meses[i].acred=a;
+    const au=readN(`au-${AY}-${i}`);if(au!==null)yr.meses[i].au=au;
+    const f=$(`f-${AY}-${i}`);if(f)yr.meses[i].folio=f.innerText.trim();
+  });
+  localStorage.setItem('iva_pro_v12_perfecto',JSON.stringify(DB));
+}
+
+function saveData(){
+  saveToMemory();
+  const yrs = years().join('-');
+  const fileName = `IVA_Control_Cliente2_${yrs}.html`;
+  const htmlOriginal = document.documentElement.outerHTML;
+  const seedStr = JSON.stringify(DB, null, 2);
+  const htmlActualizado = htmlOriginal.replace(
+    /const SEED = \{[\s\S]*?\n\};/,
+    `const SEED = ${seedStr};`
+  );
+  const blob = new Blob([htmlActualizado], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast(`💾 Guardado → ${fileName}`);
+}
+function doCSV(){toast('No soportado en esta vista. Revisa la trazabilidad en pantalla.');}
+function doPDF(){toast('📄 Preparando PDF...');setTimeout(()=>window.print(),400);}
+
+let _tt;
+function toast(msg='✓'){
+  const t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+renderAll();
+renderGuia();
+window.addEventListener('beforeunload', saveToMemory);
+
+function updateBanner(year, her, usadoTotal, remanenteFinal) {
+  const banner = $('banner-area');
+  if(!banner) return;
+  if(her <= 0) {
+      banner.innerHTML = '';
+      return;
+  }
+  
+  const remHer = +(Math.max(her - usadoTotal, 0)).toFixed(2);
+  const agotado = remHer <= 0;
+  const nuevoAcumulado = +(remanenteFinal - remHer).toFixed(2);
+  
+  banner.innerHTML = `
+    <div style="background:var(--surf);border:1.5px dashed var(--borde);border-radius:8px;padding:14px 18px;margin-bottom:16px;font-size:.76rem;color:var(--txt);font-family:var(--mono);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="color:var(--txt2)">🔗 Heredado ${year-1}: <strong style="color:var(--txt);font-size:.95rem">${fP(her)}</strong></span>
+        ${agotado 
+          ? `<span style="background:var(--rosa);color:white;padding:4px 10px;border-radius:4px;font-size:.68rem;letter-spacing:0.5px;font-weight:700;box-shadow:0 2px 5px rgba(255,45,120,.3)">⚠️ TE AGOTASTE EL IVA DE ${year-1}</span>` 
+          : `<span style="color:var(--azul);background:rgba(0,87,255,.08);border:1px solid rgba(0,87,255,.2);padding:4px 10px;border-radius:4px;font-weight:700">→ Quedan: <span style="font-size:.85rem">${fP(remHer)}</span></span>`}
+        ${nuevoAcumulado > 0 ? `<span style="color:#008000;background:rgba(0,128,0,.08);border:1px solid rgba(0,128,0,.2);padding:4px 10px;border-radius:4px;font-weight:700">➕ Generado en ${year}: <span style="font-size:.85rem">${fP(nuevoAcumulado)}</span></span>` : ''}
+      </div>
+      <div style="background:var(--surf2);padding:8px 14px;border-radius:6px;border:1px solid var(--borde);font-size:.85rem;font-weight:700;">
+        TOTAL DISPONIBLE: <span style="color:var(--rosa);font-size:1.15rem;margin-left:6px">${fP(remanenteFinal)}</span>
+      </div>
+    </div>
+  `;
+}
+
+</script>
+</body>
+</html>
