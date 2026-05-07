@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IVA Control PRO — Sinergia REA · Lic. Margarito</title>
+<title>IVA Control PRO v19 — Sinergia REA </title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 /* ══════════════════════════════════════════
    SINERGIA REA — DESIGN SYSTEM v5
@@ -153,7 +154,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--txt);min-height:10
   background:var(--surf);border-radius:8px;border:1px solid var(--borde);
   overflow-x:auto;margin-bottom:20px;box-shadow:var(--shadow);position:relative;
 }
-table{width:100%;border-collapse:collapse;font-size:.73rem;min-width:900px}
+table{width:100%;border-collapse:collapse;font-size:.73rem;min-width:1080px}
 th{
   background:#1A1714;color:rgba(247,247,242,.92);
   padding:9px 8px;font-weight:700;font-size:.6rem;
@@ -364,11 +365,231 @@ td.au{background:#EEF2FF!important;color:#1A3FAA!important;font-family:var(--mon
   .tbl-wrap{margin-left:-12px;margin-right:-12px;border-radius:0;border-left:none;border-right:none}
 }
 
-/* Scrollbar suave */
+/* ── FIFO YEAR-SPLIT CARDS ── */
+.card.her25{border-top-color:var(--rosa-s);background:linear-gradient(135deg,rgba(255,107,168,.06),var(--surf))}
+.card.her25 .card-val{color:var(--rosa)}
+.card.gen26{border-top-color:#00B86B;background:linear-gradient(135deg,rgba(0,184,107,.06),var(--surf))}
+.card.gen26 .card-val{color:#007A47}
+.card.total-disp{border-top-color:var(--amarillo);background:linear-gradient(135deg,rgba(255,214,0,.08),var(--surf))}
+.card.total-disp .card-val{color:#6A5000}
+
+/* ── FIFO DESGLOSE BANNER ── */
+.fifo-banner{
+  background:var(--surf);border:1.5px solid var(--borde);border-radius:10px;
+  padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow);
+  display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;
+}
+.fifo-bloque{
+  flex:1;min-width:160px;border-radius:8px;padding:12px 16px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.fifo-bloque.anterior{
+  background:rgba(255,107,168,.07);border:1.5px solid rgba(255,107,168,.25);
+}
+.fifo-bloque.actual{
+  background:rgba(0,184,107,.07);border:1.5px solid rgba(0,184,107,.25);
+}
+.fifo-bloque.total{
+  background:rgba(255,214,0,.1);border:1.5px solid rgba(200,160,0,.3);
+}
+.fifo-bloque-lbl{
+  font-family:var(--mono);font-size:.57rem;text-transform:uppercase;
+  letter-spacing:.09em;color:var(--txt3);font-weight:700;
+}
+.fifo-bloque-val{
+  font-family:var(--mono);font-size:1.1rem;font-weight:700;
+}
+.fifo-bloque.anterior .fifo-bloque-val{color:var(--rosa)}
+.fifo-bloque.actual .fifo-bloque-val{color:#007A47}
+.fifo-bloque.total .fifo-bloque-val{color:#6A5000}
+.fifo-bloque-sub{font-size:.62rem;color:var(--txt3);font-family:var(--mono)}
+.fifo-regla{
+  width:100%;background:rgba(0,87,255,.06);border:1px solid rgba(0,87,255,.18);
+  border-radius:6px;padding:8px 14px;font-size:.68rem;color:var(--azul);
+  font-family:var(--mono);font-weight:700;display:flex;align-items:center;gap:8px;
+}
+.fifo-arrow{font-size:.9rem;color:var(--txt3);align-self:center;flex-shrink:0}
+
+/* ── HINT DE SCROLL ── */
+.scroll-hint{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(0,87,255,.1);border:1px solid rgba(0,87,255,.25);
+  border-radius:6px;padding:8px 14px;font-size:.69rem;
+  color:var(--azul);font-family:var(--mono);font-weight:700;
+  margin-bottom:10px;animation:fadeInRow .4s ease-out;
+}
+.scroll-hint .arr{animation:bounceRight .8s infinite alternate}
+@keyframes bounceRight{from{transform:translateX(0)}to{transform:translateX(5px)}}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--surf2)}
 ::-webkit-scrollbar-thumb{background:var(--borde);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:var(--rosa)}
+
+/* ── BOTÓN REGISTRAR DECLARACIÓN ── */
+.btn-fecha{
+  text-align:center!important;min-width:130px;padding:5px 6px!important;
+  background:rgba(0,87,255,.04)!important;border-color:rgba(0,87,255,.15)!important;
+}
+.btn-reg{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:4px;font-size:.61rem;font-weight:700;
+  cursor:pointer;border:1.5px dashed var(--azul);
+  background:rgba(0,87,255,.06);color:var(--azul);
+  font-family:var(--mono);letter-spacing:.03em;
+  transition:all .2s;white-space:nowrap;
+  animation:pulseBtn 2.5s infinite;
+}
+.btn-reg:hover{
+  background:var(--azul);color:#fff;border-style:solid;
+  transform:scale(1.06);box-shadow:0 3px 12px rgba(0,87,255,.4);
+  animation:none;
+}
+@keyframes pulseBtn{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,87,255,.25)}
+  50%{box-shadow:0 0 0 5px rgba(0,87,255,0)}
+}
+.btn-reg-ok{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:4px;font-size:.61rem;font-weight:700;
+  cursor:pointer;border:1.5px solid rgba(0,184,107,.4);
+  background:rgba(0,184,107,.09);color:#007A47;
+  font-family:var(--mono);letter-spacing:.03em;
+  transition:all .2s;white-space:nowrap;
+  flex-direction:column;gap:2px;
+}
+.btn-reg-ok:hover{background:rgba(0,184,107,.16);transform:scale(1.03)}
+.btn-reg-ok .reg-fecha{font-size:.56rem;color:#00965A;font-weight:700}
+.btn-reg-ok .reg-folio{font-size:.54rem;color:var(--txt3);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Badge brillo al guardar */
+@keyframes brillar{
+  0%{box-shadow:0 0 0 0 rgba(0,184,107,.6)}
+  50%{box-shadow:0 0 0 8px rgba(0,184,107,0)}
+  100%{box-shadow:none}
+}
+.guardado-brillante{animation:brillar .7s ease-out forwards}
+
+/* Animación entrada de filas */
+@keyframes fadeInRow{
+  from{opacity:0;transform:translateY(-4px)}
+  to{opacity:1;transform:translateY(0)}
+}
+tbody tr{animation:fadeInRow .18s ease-out both}
+tbody tr:nth-child(1){animation-delay:.02s}
+tbody tr:nth-child(2){animation-delay:.04s}
+tbody tr:nth-child(3){animation-delay:.06s}
+tbody tr:nth-child(4){animation-delay:.08s}
+tbody tr:nth-child(5){animation-delay:.10s}
+tbody tr:nth-child(6){animation-delay:.12s}
+tbody tr:nth-child(7){animation-delay:.14s}
+tbody tr:nth-child(8){animation-delay:.16s}
+tbody tr:nth-child(9){animation-delay:.18s}
+tbody tr:nth-child(10){animation-delay:.20s}
+tbody tr:nth-child(11){animation-delay:.22s}
+tbody tr:nth-child(12){animation-delay:.24s}
+
+/* Tarjetas con transición suave */
+.card{transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s}
+.card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+
+/* ── COLUMNA DECLARACIÓN SAT — sticky derecha, siempre visible ── */
+th.dec-th{
+  background:#0a1628!important;color:#7AAAFF!important;
+  border-color:#1a2a4a!important;
+  position:sticky!important;right:0;z-index:5;
+  min-width:155px;border-left:2px solid rgba(0,87,255,.35)!important;
+}
+td.btn-fecha{
+  text-align:center!important;padding:5px 8px!important;
+  background:rgba(0,87,255,.03)!important;
+  border-color:rgba(0,87,255,.12)!important;
+  border-left:2px solid rgba(0,87,255,.18)!important;
+  position:sticky;right:0;z-index:2;
+  min-width:155px;
+}
+tr:nth-child(odd)  td.btn-fecha{background:rgba(0,87,255,.05)!important}
+tr:nth-child(even) td.btn-fecha{background:rgba(0,87,255,.02)!important}
+tr:hover td.btn-fecha{background:rgba(0,87,255,.1)!important}
+
+/* SweetAlert2 overrides para tema Sinergia */
+.swal2-popup.sinergia-popup{
+  background:#0E0E0E;border:1px solid #333;border-radius:12px;
+  font-family:'DM Sans',sans-serif;color:#F7F7F2;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+}
+.swal2-popup.sinergia-popup .swal2-title{
+  color:var(--amarillo);font-family:'Bebas Neue',sans-serif;
+  font-size:1.6rem;letter-spacing:1.5px;
+}
+.swal2-popup.sinergia-popup .swal2-html-container{color:#ccc;font-size:.83rem}
+.swal2-popup.sinergia-popup .swal2-input,
+.swal2-popup.sinergia-popup .swal2-select{
+  background:#1A1A1A;border:1.5px solid #333;color:#F7F7F2;
+  font-family:'JetBrains Mono',monospace;border-radius:6px;
+  transition:border-color .2s;
+}
+.swal2-popup.sinergia-popup .swal2-input:focus,
+.swal2-popup.sinergia-popup .swal2-select:focus{
+  border-color:var(--azul);box-shadow:0 0 0 3px rgba(0,87,255,.25);outline:none;
+}
+.swal2-popup.sinergia-popup .swal2-confirm{
+  background:var(--rosa)!important;font-family:'JetBrains Mono',monospace;
+  font-weight:700;font-size:.75rem;letter-spacing:.06em;border-radius:5px;
+  transition:all .2s;
+}
+.swal2-popup.sinergia-popup .swal2-confirm:hover{background:var(--rosa-s)!important;transform:scale(1.04)}
+.swal2-popup.sinergia-popup .swal2-cancel{
+  background:#333!important;color:#ccc!important;font-family:'JetBrains Mono',monospace;
+  font-weight:700;font-size:.75rem;letter-spacing:.06em;border-radius:5px;
+}
+.swal2-popup.sinergia-popup .swal2-cancel:hover{background:#444!important}
+.swal2-popup.sinergia-popup .swal2-validation-message{
+  background:#2a1010;color:var(--rosa);border:none;border-radius:6px;font-size:.75rem
+}
+
+/* Campos personalizados en el modal de declaración */
+.dec-form-field{margin-bottom:14px;text-align:left}
+.dec-form-field label{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  text-transform:uppercase;letter-spacing:.08em;color:#888;
+  font-weight:700;margin-bottom:6px;
+}
+.dec-form-field input[type="text"],
+.dec-form-field input[type="date"],
+.dec-form-field input[type="time"]{
+  width:100%;padding:9px 12px;border-radius:6px;
+  background:#1A1A1A;border:1.5px solid #333;color:#F7F7F2;
+  font-family:'JetBrains Mono',monospace;font-size:.83rem;font-weight:700;
+  transition:border-color .2s,box-shadow .2s;
+}
+.dec-form-field input:focus{
+  outline:none;border-color:var(--rosa);
+  box-shadow:0 0 0 3px rgba(255,45,120,.2)
+}
+.dec-form-field input[type="date"]::-webkit-calendar-picker-indicator,
+.dec-form-field input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(1)}
+
+.dec-form-info{
+  background:rgba(255,214,0,.07);border:1px solid rgba(255,214,0,.2);
+  border-radius:6px;padding:10px 13px;margin-bottom:14px;
+  font-size:.72rem;color:var(--amarillo);font-family:'JetBrains Mono',monospace;
+  font-weight:700;text-align:left;
+}
+.dec-periodo-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,87,255,.15);border:1px solid rgba(0,87,255,.3);
+  border-radius:20px;padding:4px 12px;font-size:.62rem;
+  color:#7AAAFF;font-family:'JetBrains Mono',monospace;font-weight:700;
+  margin-bottom:12px;
+}
+
+/* Columna declaración en trazabilidad */
+.dec-ts{
+  background:rgba(0,87,255,.07);border:1px solid rgba(0,87,255,.2);
+  border-radius:6px;padding:7px 10px;font-size:.64rem;min-width:120px;
+}
+.dec-ts .ts-lbl{color:rgba(61,139,255,.7)}
+.dec-ts .ts-val{color:var(--azul);font-size:.75rem}
 
 @media print{
   .nav,.toolbar,.ytabs,.btn-ny,#alert-bar,.modal-bg{display:none!important}
@@ -409,11 +630,12 @@ td.au{background:#EEF2FF!important;color:#1A3FAA!important;font-family:var(--mon
     <button class="btn btn-r" onclick="recalcAll()">⟳ Recalcular</button>
     <button class="btn btn-o" onclick="autoAcreditarYear()" style="background:var(--amarillo);color:black;box-shadow:0 2px 6px rgba(255,214,0,.3)">🪄 Auto-Acreditar</button>
     <button class="btn btn-g" onclick="saveData()">💾 Guardar</button>
+    <button class="btn" onclick="mostrarAyudaDeclaracion()" style="background:rgba(0,87,255,.12);color:var(--azul);border:1.5px solid rgba(0,87,255,.3);animation:pulseBtn 2.5s infinite">📅 ¿Cómo registrar declaración?</button>
     <button class="btn btn-o" onclick="doPDF()">📄 PDF</button>
     <button class="btn btn-gh" onclick="doCSV()">⬇ CSV</button>
     <button class="btn btn-gh" onclick="openCloseYearModal()">🔒 Cerrar Año</button>
     <button class="btn btn-gh" onclick="openReopenModal()">🔓 Reabrir Año</button>
-    <span class="tip">🟡 entrada &nbsp;🩷 folio &nbsp;🩷 favor &nbsp;🔵 acreditado</span>
+    <span class="tip">🟡 entrada &nbsp;🩷 folio &nbsp;🩷 favor &nbsp;🔵 acreditado &nbsp;→ desplázate ➡ para ver 📅 Declaración SAT</span>
   </div>
   <div id="table-area"></div>
 </div>
@@ -447,10 +669,6 @@ td.au{background:#EEF2FF!important;color:#1A3FAA!important;font-family:var(--mon
                 <label>Mes a declarar</label>
                 <select id="sim-mes">
                   <option value="">— Selecciona —</option>
-                  <option>ENE 2026</option><option>FEB 2026</option><option>MAR 2026</option>
-                  <option>ABR 2026</option><option>MAY 2026</option><option>JUN 2026</option>
-                  <option>JUL 2026</option><option>AGO 2026</option><option>SEP 2026</option>
-                  <option>OCT 2026</option><option>NOV 2026</option><option>DIC 2026</option>
                 </select>
               </div>
               <div class="sim-field">
@@ -545,36 +763,36 @@ const SEED = {
     2025:{
       closed:true, heredado:0,
       meses:[
-        {m:"ENE",trasl:0,      ret:0,       acred:239.99, au:0, folio:"Genera a favor"},
-        {m:"FEB",trasl:1799.10,ret:1199.38, acred:265.05, au:239.99, folio:"No.Op: — (Feb 2025)"},
-        {m:"MAR",trasl:899.55, ret:599.69,  acred:1132.99,au:0, folio:"Genera a favor"},
-        {m:"ABR",trasl:899.55, ret:599.69,  acred:156.02, au:143.84, folio:"No.Op:250410180455"},
-        {m:"MAY",trasl:899.55, ret:599.69,  acred:1458.90,au:0, folio:"Genera a favor"},
-        {m:"JUN",trasl:899.55, ret:599.69,  acred:119.69, au:180.17, folio:"No.Op:250410180455 (Jun 2025)"},
-        {m:"JUL",trasl:899.55, ret:599.69,  acred:491.86, au:0, folio:""},
-        {m:"AGO",trasl:0,      ret:0,       acred:269.29, au:0, folio:""},
-        {m:"SEP",trasl:1799.10,ret:1199.38, acred:161.07, au:438.65, folio:"No.Op:250410180455 (Sep 2025)"},
-        {m:"OCT",trasl:0,      ret:0,       acred:147.25, au:0, folio:""},
-        {m:"NOV",trasl:2698.65,ret:1799.07, acred:257.37, au:642.21, folio:"No.Op:251890029587 + 264900003799"},
-        {m:"DIC",trasl:0,      ret:0,       acred:172.70, au:0, folio:""},
+        {m:"ENE",trasl:0,      ret:0,       acred:239.99, au:0, folio:"Genera a favor",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"FEB",trasl:1799.10,ret:1199.38, acred:265.05, au:239.99, folio:"No.Op: — (Feb 2025)",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"MAR",trasl:899.55, ret:599.69,  acred:1132.99,au:0, folio:"Genera a favor",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"ABR",trasl:899.55, ret:599.69,  acred:156.02, au:143.84, folio:"No.Op:250410180455",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"MAY",trasl:899.55, ret:599.69,  acred:1458.90,au:0, folio:"Genera a favor",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"JUN",trasl:899.55, ret:599.69,  acred:119.69, au:180.17, folio:"No.Op:250410180455 (Jun 2025)",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"JUL",trasl:899.55, ret:599.69,  acred:491.86, au:0, folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"AGO",trasl:0,      ret:0,       acred:269.29, au:0, folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"SEP",trasl:1799.10,ret:1199.38, acred:161.07, au:438.65, folio:"No.Op:250410180455 (Sep 2025)",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"OCT",trasl:0,      ret:0,       acred:147.25, au:0, folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"NOV",trasl:2698.65,ret:1799.07, acred:257.37, au:642.21, folio:"No.Op:251890029587 + 264900003799",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"DIC",trasl:0,      ret:0,       acred:172.70, au:0, folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
       ],
       saldos: []
     },
     2026:{
       closed:false, heredado:1368.54,
       meses:[
-        {m:"ENE",trasl:0,ret:0,acred:0,   au:137.00,folio:"No.Op:264900003799 — saldo May 2025"},
-        {m:"FEB",trasl:0,ret:0,acred:122, au:0,     folio:""},
-        {m:"MAR",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"ABR",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"MAY",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"JUN",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"JUL",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"AGO",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"SEP",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"OCT",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"NOV",trasl:0,ret:0,acred:0,   au:0,     folio:""},
-        {m:"DIC",trasl:0,ret:0,acred:0,   au:0,     folio:""},
+        {m:"ENE",trasl:0,ret:0,acred:0,   au:137.00,folio:"No.Op:264900003799 — saldo May 2025",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"FEB",trasl:0,ret:0,acred:122, au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"MAR",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"ABR",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"MAY",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"JUN",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"JUL",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"AGO",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"SEP",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"OCT",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"NOV",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+        {m:"DIC",trasl:0,ret:0,acred:0,   au:0,     folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
       ],
       saldos:[]
     }
@@ -636,7 +854,7 @@ function getTrazabilidad() {
       const fav = Math.max(-raw, 0);
       const auReal = Math.min(au, prevCents + fav);
 
-      if (fav > 0) fuentes.push({ mes: `${m.m} ${yr}`, origCents: fav, apps: [], isHer: false, folioOrigen: m.folio });
+      if (fav > 0) fuentes.push({ mes: `${m.m} ${yr}`, origCents: fav, apps: [], isHer: false, folioOrigen: m.folio, presentadoEn: m.presentadoEn||null, noOp: m.noOp||'' });
       if (auReal > 0) usos.push({ mesDestino: `${m.m} ${yr}`, montoCents: auReal, folio: m.folio });
       
       prevCents = prevCents + fav - auReal;
@@ -665,6 +883,7 @@ function getTrazabilidad() {
       orig: fromCents(f.origCents),
       rem: fromCents(f.origCents - consumido),
       isHer: f.isHer, folioOrigen: f.folioOrigen,
+      presentadoEn: f.presentadoEn||null, noOp: f.noOp||'',
       aplicaciones: f.apps.map(a => ({ en: a.en, monto: fromCents(a.montoCents), folio: a.folio }))
     };
   });
@@ -707,6 +926,29 @@ function renderAll(){
   let rows='';
   yr.meses.forEach((row,i)=>{
     const isHer=(i===0&&her>0);
+    // Botón de declaración
+    let btnDecl='';
+    if(row.presentadoEn){
+      const d=new Date(row.presentadoEn);
+      const fStr=d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'2-digit'});
+      const hStr=d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+      const noOpStr=row.noOp?row.noOp:'—';
+      // IVA acreditable indicator
+      let acredBadge='';
+      if(row.tieneIvaAcreditable===true){
+        const coincide = row.ivaAcreditableSAT===row.ivaAcreditableComp;
+        acredBadge=`<span class="reg-folio" style="color:${coincide?'#00965A':'#FF2D78'}">💰 ${coincide?'✅':'⚠️'} $${(row.ivaAcreditableSAT||0).toLocaleString('es-MX')}</span>`;
+      } else if(row.tieneIvaAcreditable===false){
+        acredBadge=`<span class="reg-folio" style="color:#666">Sin IVA acred.</span>`;
+      }
+      btnDecl=`<button class="btn-reg-ok guardado-brillante" onclick="registrarDeclaracion(${AY},${i})" title="Editar declaración">
+        ✅ ${fStr} ${hStr}
+        <span class="reg-folio">No.Op: ${noOpStr}</span>
+        ${acredBadge}
+      </button>`;
+    } else {
+      btnDecl=`<button class="btn-reg" onclick="registrarDeclaracion(${AY},${i})">📅 Registrar</button>`;
+    }
     rows+=`<tr>
       <td class="mes${isHer?' her':''}">${row.m}${isHer?'<br><small style="font-size:.52rem;opacity:.8">+herencia</small>':''}</td>
       <td class="inp" contenteditable="${!locked}" id="t-${AY}-${i}" oninput="onInp(${AY},${i})">${row.trasl!=null&&row.trasl!==0?row.trasl:''}</td>
@@ -719,21 +961,23 @@ function renderAll(){
       <td id="pef-${AY}-${i}">—</td>
       <td id="rac-${AY}-${i}">—</td>
       <td class="folio" contenteditable="${!locked}" id="f-${AY}-${i}" oninput="onInp(${AY},${i})">${row.folio||''}</td>
+      <td class="btn-fecha">${btnDecl}</td>
     </tr>`;
   });
 
   let html=`<div id="banner-area"></div>`;
+  html+=`<div class="scroll-hint">📅 Columna <strong style="color:var(--azul)">DECLARACIÓN SAT</strong> al final de la tabla &nbsp;<span class="arr">➡</span>&nbsp; desplázate para ver y registrar presentaciones</div>`;
 
   html+=`<div class="tbl-wrap"><table>
     <thead>
-      <tr><th rowspan="2" class="mes-th" style="border-right:3px solid var(--o)">MES</th><th colspan="3">CIFRAS DEL PERÍODO</th><th colspan="2">RESULTADO</th><th colspan="2">ACREDITAMIENTO</th><th colspan="2">PAGO REAL</th><th rowspan="2">FOLIO SAT</th></tr>
+      <tr><th rowspan="2" class="mes-th" style="border-right:3px solid var(--o)">MES</th><th colspan="3">CIFRAS DEL PERÍODO</th><th colspan="2">RESULTADO</th><th colspan="2">ACREDITAMIENTO</th><th colspan="2">PAGO REAL</th><th rowspan="2">FOLIO SAT</th><th rowspan="2" class="dec-th">📅 DECLARACIÓN SAT</th></tr>
       <tr><th class="sub">TRASLADADO</th><th class="sub">RETENIDO</th><th class="sub">ACREDITABLE</th><th class="sub">A FAVOR</th><th class="sub">A PAGAR</th><th class="sub">ACRED. APLICADO</th><th class="sub">REM. HISTÓRICO</th><th class="sub">PAGO EFECTIVO</th><th class="sub">REM. ACUMULADO</th></tr>
     </thead>
     <tbody id="tbody-${AY}">${rows}</tbody>
     <tfoot><tr class="tot"><td style="text-align:center">TOTALES ${AY}</td>
       <td id="tot-t">—</td><td id="tot-r">—</td><td id="tot-a">—</td>
       <td id="tot-fav">—</td><td id="tot-pag">—</td><td id="tot-au">—</td>
-      <td>—</td><td id="tot-pef">—</td><td id="tot-rac">—</td><td></td>
+      <td>—</td><td id="tot-pef">—</td><td id="tot-rac">—</td><td></td><td></td>
     </tr></tfoot></table></div>`;
 
   $('table-area').innerHTML=html;
@@ -809,6 +1053,7 @@ function autoAcreditarYear() {
   saveToMemory();
   const yr = DB.years[AY];
   if(yr.closed) { toast('🔒 El año está cerrado.'); return; }
+  const mesesOrden = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
   let aplicados = 0;
 
   for(let i=0; i<12; i++) {
@@ -818,7 +1063,21 @@ function autoAcreditarYear() {
 
      if (pagCents > 0) {
          const canOverride = (!m.folio || m.folio.trim() === '' || m.folio.startsWith('De '));
-         const disp = getTrazabilidad().filter(s => toCents(s.rem) > 0);
+
+         // FIFO ESTRICTO: ordenar fuentes por año ASC, luego mes ASC
+         // Esto garantiza que siempre se consume primero el remanente más antiguo
+         const disp = getTrazabilidad()
+           .filter(s => toCents(s.rem) > 0)
+           .sort((a,b) => {
+             // Heredados van primero (son los más antiguos)
+             if (a.isHer && !b.isHer) return -1;
+             if (!a.isHer && b.isHer) return 1;
+             const [aMes, aAnio] = a.mes.split(' ');
+             const [bMes, bAnio] = b.mes.split(' ');
+             const yearDiff = (parseInt(aAnio)||0) - (parseInt(bAnio)||0);
+             if (yearDiff !== 0) return yearDiff;
+             return mesesOrden.indexOf(aMes) - mesesOrden.indexOf(bMes);
+           });
          
          let restante = pagCents;
          let usarTotalCents = 0;
@@ -832,7 +1091,7 @@ function autoAcreditarYear() {
              } else {
                  const [sMes, sAnio] = s.mes.split(' ');
                  const sA = parseInt(sAnio);
-                 const sMIdx = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].indexOf(sMes);
+                 const sMIdx = mesesOrden.indexOf(sMes);
                  if (sA < AY || (sA === AY && sMIdx < i)) {
                      esValido = true;
                  }
@@ -843,12 +1102,9 @@ function autoAcreditarYear() {
                  const usar = Math.min(dispCents, restante);
                  usarTotalCents += usar;
                  restante -= usar;
-                 
-                 // Extraer solo la parte del número de operación si empieza con "No.Op:"
                  let folStr = (s.folioOrigen || '').trim();
                  if (!folStr) folStr = `Sin folio en ${s.mes}`;
                  textos.push(`De ${s.mes}: ${folStr}`);
-
              }
          }
 
@@ -863,14 +1119,48 @@ function autoAcreditarYear() {
   if (aplicados > 0) {
      localStorage.setItem('iva_pro_v12_perfecto', JSON.stringify(DB));
      renderAll();
-     toast(`🪄 ¡Magia! Se auto-acreditaron ${aplicados} meses.`);
+     toast(`🪄 ¡Magia FIFO! Se auto-acreditaron ${aplicados} meses (orden: año más antiguo primero).`);
   } else {
      toast('No hay meses pendientes que requieran acreditamiento automático.');
   }
 }
 
 
+// ── FIFO: CALCULAR REMANENTES SEPARADOS POR AÑO ──
+// Lógica corregida: usa la cadena de trazabilidad completa para separar
+// qué parte del remanente total viene de años anteriores vs el actual.
+// Evita doble conteo: los saldos 2025 NO heredados (fuentes directas en 2025)
+// que alimentan 2026 también cuentan como "anterior".
+function getRemanentesPorAnio(yearActual) {
+  const fuentes = getTrazabilidad();
+  let remAnteriorCents = 0, remActualCents = 0;
+
+  for (const f of fuentes) {
+    const remCents = toCents(f.rem);
+    if (remCents <= 0) continue;
+
+    if (f.isHer) {
+      // Heredado explícito de ejercicios anteriores al primero registrado
+      remAnteriorCents += remCents;
+    } else {
+      // Fuentes normales: "ENE 2025", "MAR 2026", etc.
+      const partes = f.mes.split(' ');
+      const anioFuente = parseInt(partes[1]);
+      if (!isNaN(anioFuente)) {
+        if (anioFuente < yearActual) remAnteriorCents += remCents;
+        else if (anioFuente === yearActual) remActualCents += remCents;
+        // años futuros: ignorar (no debería ocurrir)
+      }
+    }
+  }
+  return {
+    remanenteAnterior: fromCents(remAnteriorCents),
+    remanenteActual:   fromCents(remActualCents)
+  };
+}
+
 function renderCards(y,t,r,a,fav,pag,au,pef,rem,her){
+  const {remanenteAnterior, remanenteActual} = getRemanentesPorAnio(y);
   $('cards-area').innerHTML=`
     <div class="card"><div class="card-lbl">Trasladado</div><div class="card-val red">${fP(t)}</div></div>
     <div class="card"><div class="card-lbl">Retenido</div><div class="card-val red">${fP(r)}</div></div>
@@ -879,16 +1169,27 @@ function renderCards(y,t,r,a,fav,pag,au,pef,rem,her){
     <div class="card"><div class="card-lbl">A Pagar (bruto)</div><div class="card-val red">${fP(pag)}</div></div>
     <div class="card o"><div class="card-lbl">Acreditado</div><div class="card-val">${fP(au)}</div></div>
     <div class="card o"><div class="card-lbl">Pagado Real</div><div class="card-val">${fP(pef)}</div></div>
-    ${her>0?`<div class="card p"><div class="card-lbl">Heredado ${y-1}</div><div class="card-val">${fP(her)}</div></div>`:''}
-    <div class="card a"><div class="card-lbl">Remanente Final</div><div class="card-val">${fP(rem)}</div></div>
+    ${remanenteAnterior>0.005?`<div class="card her25"><div class="card-lbl">🩷 Remanente ${y-1} <small style="font-size:.5rem">(FIFO 1°)</small></div><div class="card-val">${fP(remanenteAnterior)}</div></div>`:''}
+    ${remanenteActual>0.005?`<div class="card gen26"><div class="card-lbl">🟢 Generado ${y} <small style="font-size:.5rem">(FIFO 2°)</small></div><div class="card-val">${fP(remanenteActual)}</div></div>`:''}
+    <div class="card total-disp"><div class="card-lbl">💰 Total Disponible</div><div class="card-val">${fP(rem)}</div></div>
   `;
+  updateBanner(y, her, remanenteAnterior, remanenteActual, rem);
 }
 
 function checkAlerts(year){
   const alerts=[];
   const disp=getAllSaldosDisponibles();
   const totalDisp=disp.reduce((s,x)=>s+x.rem,0);
-  if(totalDisp>0) alerts.push({t:'blue',msg:`💰 Tienes ${fP(totalDisp)} en remanentes disponibles para acreditar`});
+  if(totalDisp>0){
+    const {remanenteAnterior, remanenteActual} = getRemanentesPorAnio(year);
+    if(remanenteAnterior>0.005 && remanenteActual>0.005){
+      alerts.push({t:'blue',msg:`💰 FIFO activo — ${year-1}: ${fP(remanenteAnterior)} (usar 1°) + ${year}: ${fP(remanenteActual)} (usar 2°) = ${fP(totalDisp)} total`});
+    } else if(remanenteAnterior>0.005){
+      alerts.push({t:'blue',msg:`💰 Remanente ${year-1}: ${fP(remanenteAnterior)} disponible para acreditar (FIFO 1°)`});
+    } else {
+      alerts.push({t:'blue',msg:`💰 Remanente ${year}: ${fP(totalDisp)} disponible para acreditar`});
+    }
+  }
 
   const yr=DB.years[year];
   const sinDatos=yr.meses.filter(m=>!m.trasl&&!m.acred&&!m.ret).length;
@@ -900,6 +1201,50 @@ function checkAlerts(year){
 }
 
 function renderAsesor(){
+  // Poblar opciones de meses dinámicamente según años en DB
+  const sel = $('sim-mes');
+  if (sel) {
+    const meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">— Selecciona —</option>';
+    years().forEach(yr => {
+      meses.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = `${m} ${yr}`;
+        opt.textContent = `${m} ${yr}`;
+        sel.appendChild(opt);
+      });
+    });
+    if (prev) sel.value = prev;
+  }
+
+  // Validación: detectar si algún mes tiene au > disponible real
+  const totalDisp = getAllSaldosDisponibles().reduce((s,x)=>s+x.rem, 0);
+  const yr = DB.years[AY];
+  let auExceso = false;
+  let prevC = toCents(getDynamicHeredado(AY));
+  yr.meses.forEach(m => {
+    const t=toCents(m.trasl),r=toCents(m.ret),a=toCents(m.acred),au=toCents(m.au);
+    const raw=t-r-a; const fav=Math.max(-raw,0);
+    const auReal=Math.min(au, prevC+fav);
+    if(toCents(m.au) > auReal+1) auExceso = true; // +1 centavo tolerancia
+    prevC = prevC + fav - auReal;
+  });
+  if (auExceso) {
+    const existingWarn = document.getElementById('au-exceso-warn');
+    if (!existingWarn) {
+      const warn = document.createElement('div');
+      warn.id = 'au-exceso-warn';
+      warn.className = 'notif warn';
+      warn.style.marginBottom = '12px';
+      warn.innerHTML = `<div class="notif-ico">⚠️</div><div><div class="notif-title">Acreditamiento manual excede el disponible</div><div class="notif-body">Uno o más meses tienen un valor en "Acred. Aplicado" mayor al saldo disponible real. Usa ⟳ Recalcular para corregir automáticamente.</div></div>`;
+      const pg = $('pg-asesor');
+      if (pg) pg.querySelector('.page > div')?.prepend(warn);
+    }
+  } else {
+    document.getElementById('au-exceso-warn')?.remove();
+  }
+
   renderSaldosDisponibles();
   renderNotificaciones();
   renderPatron();
@@ -909,13 +1254,35 @@ function renderSaldosDisponibles(){
   const disp=getAllSaldosDisponibles();
   const el=$('saldos-disp');if(!el)return;
   if(!disp.length){el.innerHTML='<div style="color:#bbb;font-size:.78rem;padding:10px 0">No hay saldos disponibles actualmente.</div>';return;}
-  el.innerHTML=disp.map((s,i)=>`
-    <div class="saldo-pill" onclick="usarSaldo('${s.mes}',${s.rem})">
+  
+  // Ordenar por FIFO: más antiguo primero
+  const mesesOrden = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const sorted = [...disp].sort((a,b) => {
+    if (a.isHer && !b.isHer) return -1;
+    if (!a.isHer && b.isHer) return 1;
+    const [aMes, aAnio] = a.mes.split(' ');
+    const [bMes, bAnio] = b.mes.split(' ');
+    const yd = (parseInt(aAnio)||0) - (parseInt(bAnio)||0);
+    if (yd !== 0) return yd;
+    return mesesOrden.indexOf(aMes) - mesesOrden.indexOf(bMes);
+  });
+
+  el.innerHTML = sorted.map((s,i)=>{
+    const partes = s.mes.split(' ');
+    const anioFuente = parseInt(partes[1]);
+    const esPrevio = s.isHer || (!isNaN(anioFuente) && anioFuente < AY);
+    const prioTag = esPrevio
+      ? `<span style="background:rgba(255,107,168,.15);color:var(--rosa);padding:1px 6px;border-radius:3px;font-size:.56rem;font-weight:700">FIFO 1°</span>`
+      : `<span style="background:rgba(0,184,107,.12);color:#007A47;padding:1px 6px;border-radius:3px;font-size:.56rem;font-weight:700">FIFO 2°</span>`;
+    return `
+    <div class="saldo-pill ${s.rem<=0?'agotado':''}" onclick="usarSaldo('${s.mes}',${s.rem})">
       <span style="font-size:.9rem">${i===0?'🥇':i===1?'🥈':'🥉'}</span>
       <span class="origen">${s.mes}</span>
+      ${prioTag}
       <span class="monto">${fP(s.rem)}</span>
       <span style="font-size:.65rem;color:#999">disponible</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function usarSaldo(mes, monto){
@@ -949,18 +1316,22 @@ function runSimulator(){
   const cubierto=pagar-restante;
   const colores=['pri','sec','ter','ter','ter'];
 
-  let html=pasos.map((p,i)=>`
+  let html=pasos.map((p,i)=>{
+    const anioOrigen = p.origen.includes(String(AY-1)) || p.origen.includes('Herencia') ? 
+      `<span style="background:rgba(255,107,168,.15);color:var(--rosa);padding:2px 6px;border-radius:3px;font-size:.58rem;margin-left:6px">FIFO 1° — ${AY-1}</span>` :
+      `<span style="background:rgba(0,184,107,.1);color:#007A47;padding:2px 6px;border-radius:3px;font-size:.58rem;margin-left:6px">FIFO 2° — ${AY}</span>`;
+    return `
     <div class="plan-step">
       <div class="plan-step-hdr ${colores[i]||'ter'}">
         <div class="plan-step-left">
-          <div class="plan-step-origen">📦 Saldo de ${p.origen}</div>
+          <div class="plan-step-origen">📦 Saldo de ${p.origen}${anioOrigen}</div>
         </div>
         <div class="plan-step-right">
           <div class="plan-step-monto">−${fP(p.usar)}</div>
           <div class="plan-step-rem">queda: ${fP(p.remQueda)}</div>
         </div>
       </div>
-    </div>`).join('');
+    </div>`}).join('');
 
   html+=`<div class="plan-total">
     <span class="plan-total-lbl">✅ Total a acreditar</span>
@@ -979,7 +1350,17 @@ function renderNotificaciones(){
   const notifs=[];
   if(disp.length>0){
     const total=disp.reduce((s,x)=>s+x.rem,0);
-    notifs.push({t:'info',ico:'💰',title:`${disp.length} saldo(s) disponible(s): ${fP(total)}`,body:`Orden recomendado (FIFO): ${disp.map(s=>`${s.mes} (${fP(s.rem)})`).join(' → ')}`});
+    const {remanenteAnterior, remanenteActual} = getRemanentesPorAnio(AY);
+    notifs.push({t:'info',ico:'💰',title:`${disp.length} saldo(s) disponible(s): ${fP(total)}`,
+      body:`Orden FIFO recomendado: ${disp.map(s=>`${s.mes} (${fP(s.rem)})`).join(' → ')}`});
+    if(remanenteAnterior>0.005){
+      notifs.push({t:'urgent',ico:'🩷',title:`Remanente ${AY-1}: ${fP(remanenteAnterior)} — ¡Usar primero!`,
+        body:`Estrategia FIFO: agota el saldo de ${AY-1} antes de tocar el de ${AY}. Así evitas perder remanentes por prelación fiscal.`});
+    }
+    if(remanenteActual>0.005){
+      notifs.push({t:'ok',ico:'🟢',title:`Generado en ${AY}: ${fP(remanenteActual)} — Se usa después`,
+        body:`Este saldo se acredita solo cuando el remanente de ${AY-1} quede en $0.00.`});
+    }
   }
   el.innerHTML=notifs.length
     ? notifs.map(n=>`<div class="notif ${n.t}"><div class="notif-ico">${n.ico}</div><div><div class="notif-title">${n.title}</div><div class="notif-body">${n.body}</div></div></div>`).join('')
@@ -1006,10 +1387,37 @@ function renderPatron(){
 
 function renderTraz(){
   const grid=$('traz-grid');if(!grid)return;
-  const traz=getTrazabilidad().filter(s=>s.mes.includes(ATY.toString()) || s.mes.includes(`Herencia de ${ATY-1}`));
+  // Mostrar todas las fuentes activas (con saldo o con aplicaciones) que afectan el año activo.
+  // Incluye fuentes de años anteriores que alimentan al año actual via FIFO.
+  const todas = getTrazabilidad();
+  const traz = todas.filter(s => {
+    // Siempre mostrar fuentes del año activo
+    if (s.mes.includes(ATY.toString())) return true;
+    // Mostrar fuentes heredadas (ejercicios históricos)
+    if (s.isHer) return true;
+    // Mostrar fuentes de años anteriores que AÚN tienen saldo disponible (alimentan este año)
+    const partes = s.mes.split(' ');
+    const anioFuente = parseInt(partes[1]);
+    if (!isNaN(anioFuente) && anioFuente < ATY && s.rem > 0.01) return true;
+    // Mostrar fuentes de años anteriores que tienen aplicaciones en el año activo
+    if (!isNaN(anioFuente) && anioFuente < ATY && s.aplicaciones.some(ap => ap.en.includes(ATY.toString()))) return true;
+    return false;
+  });
+
   if(!traz.length){grid.innerHTML='<div style="padding:20px;color:#aaa;font-size:.8rem">No hay saldos a favor registrados para este año.</div>';return;}
 
-  grid.innerHTML=traz.map(item=>{
+  // Separar en grupos: anteriores y actuales
+  const anteriores = traz.filter(s => {
+    if (s.isHer) return true;
+    const anio = parseInt((s.mes.split(' ')[1])||ATY);
+    return anio < ATY;
+  });
+  const actuales = traz.filter(s => {
+    const anio = parseInt((s.mes.split(' ')[1])||ATY);
+    return !s.isHer && anio === ATY;
+  });
+
+  const renderItem = item => {
     const usado=item.orig-item.rem;
     const pct=item.orig>0?Math.round(usado/item.orig*100):0;
     const est=item.rem<=0.01?'ago':(pct>0?'par':'');
@@ -1026,6 +1434,24 @@ function renderTraz(){
       ?`<div class="tarr">→</div><div class="trem"><div class="ts-lbl">Disponible</div><div class="val">${fP(item.rem)}</div></div>`
       :`<div class="tarr">→</div><div class="trem ago"><div class="ts-lbl">Agotado</div><div class="val">$0.00</div></div>`;
 
+    // Bloque de fecha de presentación SAT
+    let decBlock = '';
+    if(item.presentadoEn) {
+      const d = new Date(item.presentadoEn);
+      const fStr = d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+      const hStr = d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+      decBlock = `<div class="dec-ts" style="margin-top:9px">
+        <div class="ts-lbl">📅 Declarado ante el SAT</div>
+        <div class="ts-val">✅ ${fStr} a las ${hStr}</div>
+        ${item.noOp?`<div class="ts-ref">No. Op: ${item.noOp}</div>`:''}
+      </div>`;
+    } else {
+      decBlock = `<div class="dec-ts" style="margin-top:9px;opacity:.5">
+        <div class="ts-lbl">📅 Declaración SAT</div>
+        <div class="ts-val" style="color:var(--txt3);font-size:.7rem">Pendiente de registrar</div>
+      </div>`;
+    }
+
     return `<div class="tc ${est} ${item.isHer?'her':''}">
       <div class="tc-hdr">
         <div><div class="tc-mes">${item.mes}</div><div style="font-size:.65rem;color:#999;margin-top:2px">${pct}% utilizado · ${item.aplicaciones.length} aplicación(es)</div></div>
@@ -1037,8 +1463,26 @@ function renderTraz(){
         </div>
         ${steps}${remBox}
       </div>
+      ${decBlock}
     </div>`;
-  }).join('');
+  };
+
+  let html = '';
+  if (anteriores.length) {
+    html += `<div style="font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--rosa);font-weight:700;margin:8px 0 6px;display:flex;align-items:center;gap:8px">
+      🩷 Remanentes de ${ATY-1} (FIFO 1° — se consumen primero)
+      <span style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,120,.4),transparent)"></span>
+    </div>`;
+    html += anteriores.map(renderItem).join('');
+  }
+  if (actuales.length) {
+    html += `<div style="font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:#007A47;font-weight:700;margin:12px 0 6px;display:flex;align-items:center;gap:8px">
+      🟢 Generados en ${ATY} (FIFO 2° — se usan después)
+      <span style="flex:1;height:1px;background:linear-gradient(to right,rgba(0,184,107,.4),transparent)"></span>
+    </div>`;
+    html += actuales.map(renderItem).join('');
+  }
+  grid.innerHTML = html;
 }
 
 function renderHist(){
@@ -1061,17 +1505,29 @@ function renderHist(){
     });
     
     const finalRem = fromCents(prevCents);
+    const {remanenteAnterior, remanenteActual} = getRemanentesPorAnio(year);
+    const herDyn = getDynamicHeredado(year);
+    const fifoRow = (remanenteAnterior > 0.005 || remanenteActual > 0.005) ? `
+      <div class="hist-row" style="background:rgba(255,107,168,.05);border-left:3px solid var(--rosa-s)">
+        <span>🩷 Remanente ${year-1} disponible</span>
+        <span class="hist-val" style="color:var(--rosa)">${fP(remanenteAnterior)||'—'}</span>
+      </div>
+      <div class="hist-row" style="background:rgba(0,184,107,.05);border-left:3px solid #00B86B">
+        <span>🟢 Generado en ${year} disponible</span>
+        <span class="hist-val" style="color:#007A47">${fP(remanenteActual)||'—'}</span>
+      </div>` : '';
 
     return `<div class="hist-yr">
-      <div class="hist-yr-hdr"><h3>Ejercicio ${year} ${yr.closed?'🔒':''}</h3><span style="font-family:var(--mono)">${fP(finalRem)} remanente</span></div>
+      <div class="hist-yr-hdr"><h3>Ejercicio ${year} ${yr.closed?'🔒':''}</h3><span style="font-family:var(--mono)">${fP(finalRem)} remanente total</span></div>
       <div class="hist-row"><span>IVA Trasladado</span><span class="hist-val" style="color:var(--azul-s)">${fP(fromCents(sT))}</span></div>
       <div class="hist-row"><span>(-) IVA Retenido</span><span class="hist-val" style="color:var(--azul-s)">${fP(fromCents(sR))}</span></div>
       <div class="hist-row"><span>(-) IVA Acreditable</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sA))}</span></div>
       <div class="hist-row"><span>Saldo a favor generado</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sFav))}</span></div>
       <div class="hist-row"><span>Acreditamiento aplicado</span><span class="hist-val" style="color:var(--amarillo)">${fP(fromCents(sAU))}</span></div>
-      ${getDynamicHeredado(year)>0 ? `<div class="hist-row"><span>Heredado de ${year-1}</span><span class="hist-val" style="color:var(--azul-s)">${fP(getDynamicHeredado(year))}</span></div>`:''}
+      ${herDyn>0 ? `<div class="hist-row"><span>Heredado de ${year-1}</span><span class="hist-val" style="color:var(--azul-s)">${fP(herDyn)}</span></div>`:''}
       <div class="hist-row"><span>✅ Pagado efectivamente</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sPef))}</span></div>
-      <div class="hist-row"><span>💰 Remanente final</span><span class="hist-val" style="color:var(--amarillo)">${fP(finalRem)}</span></div>
+      <div class="hist-row"><span>💰 Remanente final total</span><span class="hist-val" style="color:var(--amarillo)">${fP(finalRem)}</span></div>
+      ${fifoRow}
     </div>`;
   }).join('');
 }
@@ -1085,8 +1541,11 @@ function renderGuia(){
     ['🔵','Azul','IVA a pagar calculado'],
     ['🔵','Azul claro','Saldo acumulado total'],
     ['🟡','Amarillo','Acreditamiento aplicado de remanentes anteriores'],
+    ['📦','FIFO por año','El sistema aplica PRIMERO el remanente del año anterior (ej. 2025) hasta agotarlo, y SOLO DESPUÉS usa el saldo generado en el año actual (2026). Nunca se mezclan: cada uno se acumula por separado y el total es la suma de ambos.'],
+    ['🩷','Remanente año anterior','Saldo a favor heredado del ejercicio previo — se usa con prioridad absoluta (FIFO 1°)'],
+    ['🟢','Generado año actual','Nuevo saldo a favor generado en el ejercicio en curso — se usa después de agotar el anterior (FIFO 2°)'],
     ['🤖','Asesor IA','Ingresa el IVA a pagar del mes y el asesor te dice de qué saldo tomar, en qué orden y qué folio poner en el SAT'],
-    ['📦','FIFO','El asesor aplica primero el saldo más antiguo — así evitas acumular remanentes vencidos'],
+    ['📅','Registrar Declaración','Cada mes tiene un botón azul pulsante para registrar la fecha/hora de presentación ante el SAT y el número de operación. Se puede registrar aunque no haya IVA acreditable. El botón muestra ✅ verde con la fecha cuando ya fue registrado.'],
     ['🔒','Cerrar año','El remanente final se arrastra al siguiente ejercicio. Usa contraseña IVA2025 para reabrir'],
     ['💾','Auto-guardado','Tus datos se guardan automáticamente al escribir y al cerrar la ventana'],
   ];
@@ -1100,8 +1559,13 @@ function renderGuia(){
 function openCloseYearModal(){
   const yr=DB.years[AY];
   if(yr.closed){toast('Este año ya está cerrado 🔒');return;}
-  const rem=yr.remanenteFinal||0;
-  $('modal-close-info').textContent=`Remanente a arrastrar a ${AY+1}: ${fP(rem)}`;
+  // Usar getDynamicHeredado para el remanente real recalculado
+  const rem = yr.remanenteFinal || 0;
+  const {remanenteAnterior, remanenteActual} = getRemanentesPorAnio(AY);
+  const desglose = (remanenteAnterior > 0.005 || remanenteActual > 0.005)
+    ? ` (${AY-1}: ${fP(remanenteAnterior)} + ${AY}: ${fP(remanenteActual)})`
+    : '';
+  $('modal-close-info').textContent = `Remanente a arrastrar a ${AY+1}: ${fP(rem)}${desglose}`;
   $('modal-close').classList.add('open');
 }
 function doCloseYear(){
@@ -1110,7 +1574,7 @@ function doCloseYear(){
   const next=AY+1;
   if(!DB.years[next]){
     DB.years[next]={closed:false,heredado:0,
-      meses:['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].map(m=>({m,trasl:0,ret:0,acred:0,au:0,folio:''})),
+      meses:['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].map(m=>({m,trasl:0,ret:0,acred:0,au:0,folio:'',presentadoEn:null,noOp:''})),
       saldos:[]};
   }
   AY=next;DB.activeYear=next;
@@ -1140,7 +1604,7 @@ function addYear(){
   const next=Math.max(...years())+1;
   if(!confirm(`¿Crear ejercicio ${next}?`))return;
   if(!DB.years[next]) DB.years[next]={closed:false,heredado:0,
-    meses:['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].map(m=>({m,trasl:0,ret:0,acred:0,au:0,folio:''})),
+    meses:['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].map(m=>({m,trasl:0,ret:0,acred:0,au:0,folio:'',presentadoEn:null,noOp:''})),
     saldos:[]};
   AY=next;DB.activeYear=next;saveData();renderAll();
 }
@@ -1157,6 +1621,9 @@ function saveToMemory(){
     const a=readN(`a-${AY}-${i}`); if(a!==null) yr.meses[i].acred=a;
     const au=readN(`au-${AY}-${i}`);if(au!==null)yr.meses[i].au=au;
     const f=$(`f-${AY}-${i}`);if(f)yr.meses[i].folio=f.innerText.trim();
+    // presentadoEn y noOp se conservan directamente (se actualizan en registrarDeclaracion)
+    if(!yr.meses[i].hasOwnProperty('presentadoEn')) yr.meses[i].presentadoEn=null;
+    if(!yr.meses[i].hasOwnProperty('noOp')) yr.meses[i].noOp='';
   });
   localStorage.setItem('iva_pro_v12_perfecto',JSON.stringify(DB));
 }
@@ -1188,38 +1655,336 @@ function toast(msg='✓'){
   clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2200);
 }
 
-renderAll();
-renderGuia();
-window.addEventListener('beforeunload', saveToMemory);
-
-function updateBanner(year, her, usadoTotal, remanenteFinal) {
+function updateBanner(year, her, remAnterior, remActual, remanenteFinal) {
   const banner = $('banner-area');
   if(!banner) return;
-  if(her <= 0) {
-      banner.innerHTML = '';
-      return;
+
+  // Si no hay remanentes de ningún año, limpiamos
+  if(remanenteFinal <= 0.005) {
+    banner.innerHTML = '';
+    return;
   }
-  
-  const remHer = +(Math.max(her - usadoTotal, 0)).toFixed(2);
-  const agotado = remHer <= 0;
-  const nuevoAcumulado = +(remanenteFinal - remHer).toFixed(2);
-  
+
+  const anteriorAgotado = remAnterior <= 0.005;
+
   banner.innerHTML = `
-    <div style="background:var(--surf);border:1.5px dashed var(--borde);border-radius:8px;padding:14px 18px;margin-bottom:16px;font-size:.76rem;color:var(--txt);font-family:var(--mono);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:var(--shadow)">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <span style="color:var(--txt2)">🔗 Heredado ${year-1}: <strong style="color:var(--txt);font-size:.95rem">${fP(her)}</strong></span>
-        ${agotado 
-          ? `<span style="background:var(--rosa);color:white;padding:4px 10px;border-radius:4px;font-size:.68rem;letter-spacing:0.5px;font-weight:700;box-shadow:0 2px 5px rgba(255,45,120,.3)">⚠️ TE AGOTASTE EL IVA DE ${year-1}</span>` 
-          : `<span style="color:var(--azul);background:rgba(0,87,255,.08);border:1px solid rgba(0,87,255,.2);padding:4px 10px;border-radius:4px;font-weight:700">→ Quedan: <span style="font-size:.85rem">${fP(remHer)}</span></span>`}
-        ${nuevoAcumulado > 0 ? `<span style="color:#008000;background:rgba(0,128,0,.08);border:1px solid rgba(0,128,0,.2);padding:4px 10px;border-radius:4px;font-weight:700">➕ Generado en ${year}: <span style="font-size:.85rem">${fP(nuevoAcumulado)}</span></span>` : ''}
+    <div class="fifo-banner">
+      ${remAnterior > 0.005 ? `
+      <div class="fifo-bloque anterior">
+        <div class="fifo-bloque-lbl">🩷 Remanente ${year-1} — FIFO 1° (se agota primero)</div>
+        <div class="fifo-bloque-val">${fP(remAnterior)}</div>
+        <div class="fifo-bloque-sub">Saldo a favor de ejercicios anteriores</div>
       </div>
-      <div style="background:var(--surf2);padding:8px 14px;border-radius:6px;border:1px solid var(--borde);font-size:.85rem;font-weight:700;">
-        TOTAL DISPONIBLE: <span style="color:var(--rosa);font-size:1.15rem;margin-left:6px">${fP(remanenteFinal)}</span>
+      <div class="fifo-arrow">→</div>` : `
+      <div class="fifo-bloque anterior" style="opacity:.4">
+        <div class="fifo-bloque-lbl">🩷 Remanente ${year-1}</div>
+        <div class="fifo-bloque-val" style="font-size:.82rem;color:var(--txt3)">AGOTADO ✓</div>
+        <div class="fifo-bloque-sub">Ya consumido en su totalidad</div>
+      </div>
+      <div class="fifo-arrow">→</div>`}
+
+      <div class="fifo-bloque actual">
+        <div class="fifo-bloque-lbl">🟢 Generado ${year} — FIFO 2° (se usa después)</div>
+        <div class="fifo-bloque-val">${remActual > 0.005 ? fP(remActual) : '<span style="color:var(--txt3);font-size:.82rem">Sin saldo</span>'}</div>
+        <div class="fifo-bloque-sub">Saldo a favor generado en este ejercicio</div>
+      </div>
+      <div class="fifo-arrow">=</div>
+
+      <div class="fifo-bloque total">
+        <div class="fifo-bloque-lbl">💰 TOTAL DISPONIBLE</div>
+        <div class="fifo-bloque-val">${fP(remanenteFinal)}</div>
+        <div class="fifo-bloque-sub">${fP(remAnterior)} + ${fP(remActual)} combinados</div>
+      </div>
+
+      <div class="fifo-regla" style="width:100%;margin-top:2px">
+        ⚖️ REGLA FIFO — El sistema consume primero el remanente de <strong style="margin:0 4px">${year-1}</strong> 
+        hasta agotarlo. Solo entonces usa el generado en <strong style="margin:0 4px">${year}</strong>.
+        ${anteriorAgotado ? `<span style="margin-left:auto;background:var(--rosa);color:#fff;padding:3px 10px;border-radius:4px;font-size:.63rem">✓ ${year-1} AGOTADO — usando ${year}</span>` : `<span style="margin-left:auto;background:rgba(0,87,255,.1);color:var(--azul);padding:3px 10px;border-radius:4px;font-size:.63rem">Próximo a usar: ${year-1}</span>`}
       </div>
     </div>
   `;
 }
 
+// ══════════════════════════════════════════════════════════
+//  AYUDA: CÓMO REGISTRAR DECLARACIÓN
+// ══════════════════════════════════════════════════════════
+function mostrarAyudaDeclaracion(){
+  Swal.fire({
+    title:'📅 DECLARACIÓN SAT',
+    customClass:{popup:'sinergia-popup'},
+    html:`
+      <div style="text-align:left;font-size:.8rem;color:#ccc;line-height:1.7">
+        <p style="margin-bottom:12px">El formulario está en la <strong style="color:var(--amarillo)">última columna de la tabla</strong>. Desplázate a la derecha ➡ para verla.</p>
+        <div style="background:rgba(0,87,255,.1);border:1px solid rgba(0,87,255,.25);border-radius:6px;padding:12px;margin-bottom:12px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#7AAAFF;margin-bottom:8px">COLUMNA 📅 DECLARACIÓN SAT</div>
+          <ul style="padding-left:16px;font-size:.75rem;color:#bbb;line-height:1.9">
+            <li>Haz clic en <strong style="color:var(--azul)">📅 Registrar</strong> en cualquier mes</li>
+            <li>Ingresa el <strong style="color:var(--amarillo)">Número de Operación SAT</strong></li>
+            <li>Selecciona <strong style="color:var(--amarillo)">Fecha y Hora</strong> de presentación</li>
+            <li>Guarda — el botón cambia a <strong style="color:#00B86B">✅ verde</strong></li>
+            <li>Funciona <strong>aunque no haya IVA acreditable</strong></li>
+          </ul>
+        </div>
+        <div style="background:rgba(255,214,0,.07);border:1px solid rgba(255,214,0,.2);border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:.69rem;color:var(--amarillo)">
+          💡 En Trazabilidad verás la fecha y No. Op junto a cada saldo a favor.
+        </div>
+      </div>`,
+    confirmButtonText:'✅ Entendido — ir a la tabla',
+    showCancelButton:false,
+    width:'420px'
+  }).then(()=>{
+    // Scroll automático a la tabla
+    document.querySelector('.tbl-wrap')?.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(()=>{
+      const wrap = document.querySelector('.tbl-wrap');
+      if(wrap) wrap.scrollLeft = wrap.scrollWidth;
+    }, 500);
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  REGISTRO DE PRESENTACIÓN DE DECLARACIÓN SAT — v18
+// ══════════════════════════════════════════════════════════
+const MESES_LARGOS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+async function registrarDeclaracion(year, idx) {
+  const m = DB.years[year]?.meses?.[idx];
+  if (!m) return;
+  const mesLargo = MESES_LARGOS[idx];
+  const existing = m.presentadoEn ? new Date(m.presentadoEn) : null;
+  const defFecha = existing ? existing.toISOString().slice(0,10) : new Date().toISOString().slice(0,10);
+  const defHora  = existing ? existing.toTimeString().slice(0,5)  : new Date().toTimeString().slice(0,5);
+  const defNoOp  = m.noOp || '';
+  // IVA acreditable previos
+  const defTieneAcred = m.tieneIvaAcreditable; // true | false | null
+  const defAcredSAT   = (m.ivaAcreditableSAT != null) ? m.ivaAcreditableSAT : '';
+  const defAcredComp  = (m.ivaAcreditableComp != null) ? m.ivaAcreditableComp : '';
+
+  const inpStyle  = 'width:100%;padding:9px 12px;background:#1A1A1A;border:1.5px solid #444;border-radius:6px;color:#F7F7F2;font-family:\'JetBrains Mono\',monospace;font-size:.9rem;margin-bottom:4px;transition:border-color .2s,box-shadow .2s;color-scheme:dark;letter-spacing:.1em;box-sizing:border-box';
+  const lblStyle  = 'display:block;font-family:\'JetBrains Mono\',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.09em;color:#888;font-weight:700;margin-bottom:5px;text-align:left';
+  const inpStyle2 = 'width:100%;padding:9px 12px;background:#1A1A1A;border:1.5px solid #444;border-radius:6px;color:#F7F7F2;font-family:\'JetBrains Mono\',monospace;font-size:.83rem;margin-bottom:12px;transition:border-color .2s;color-scheme:dark;box-sizing:border-box';
+  const inpEntero = 'width:100%;padding:9px 12px;background:#1A1A1A;border:1.5px solid #444;border-radius:6px;color:#FFD600;font-family:\'JetBrains Mono\',monospace;font-size:1rem;font-weight:700;margin-bottom:4px;transition:border-color .2s,box-shadow .2s;color-scheme:dark;letter-spacing:.05em;box-sizing:border-box;text-align:right';
+
+  // Helper toggle para mostrar/ocultar bloque IVA acreditable
+  const acredBlockDisplay = defTieneAcred === true ? 'block' : 'none';
+  const btnSiSel  = defTieneAcred === true  ? 'background:#00B86B;color:#fff;border-color:#00B86B' : 'background:#1A1A1A;color:#aaa;border-color:#444';
+  const btnNoSel  = defTieneAcred === false ? 'background:#FF2D78;color:#fff;border-color:#FF2D78' : 'background:#1A1A1A;color:#aaa;border-color:#444';
+
+  const { value: fv, isConfirmed } = await Swal.fire({
+    title: '📅 DECLARACIÓN SAT',
+    customClass: { popup: 'sinergia-popup' },
+    html: `
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(0,87,255,.15);border:1px solid rgba(0,87,255,.3);border-radius:20px;padding:4px 12px;font-size:.61rem;color:#7AAAFF;font-family:'JetBrains Mono',monospace;font-weight:700;margin-bottom:12px">
+        📆 Período: ${mesLargo} ${year} &nbsp;|&nbsp; Ejercicio Fiscal ${year}
+      </div>
+      <div style="background:rgba(255,214,0,.07);border:1px solid rgba(255,214,0,.2);border-radius:6px;padding:10px 13px;margin-bottom:16px;font-size:.71rem;color:var(--amarillo);font-family:'JetBrains Mono',monospace;font-weight:700;text-align:left">
+        Registra los datos de presentación ante el SAT.<br>Válido incluso si el mes no genera IVA acreditable.
+      </div>
+      <div style="text-align:left">
+
+        <label style="${lblStyle}">Número de Operación SAT &nbsp;<span style="color:#FF2D78;font-size:.58rem;letter-spacing:.04em">· EXACTAMENTE 12 DÍGITOS</span></label>
+        <div style="position:relative">
+          <input type="text" id="swal-noop" inputmode="numeric" maxlength="12"
+            placeholder="000000000000"
+            value="${defNoOp}"
+            style="${inpStyle}"
+            oninput="
+              this.value = this.value.replace(/[^0-9]/g,'').slice(0,12);
+              const n = this.value.length;
+              const ctr = document.getElementById('noop-counter');
+              const ok  = document.getElementById('noop-ok');
+              const err = document.getElementById('noop-err');
+              if(ctr) ctr.textContent = n + '/12';
+              if(n===12){ this.style.borderColor='#00B86B'; this.style.boxShadow='0 0 0 3px rgba(0,184,107,.2)'; if(ok) ok.style.display='inline'; if(err) err.style.display='none'; if(ctr) ctr.style.color='#00B86B'; }
+              else if(n>0){ this.style.borderColor='#FF2D78'; this.style.boxShadow='0 0 0 3px rgba(255,45,120,.15)'; if(ok) ok.style.display='none'; if(err){ err.style.display='inline'; err.textContent='Faltan '+(12-n)+' dígito'+(12-n===1?'':'s'); } if(ctr) ctr.style.color='#FF2D78'; }
+              else{ this.style.borderColor='#444'; this.style.boxShadow='none'; if(ok) ok.style.display='none'; if(err) err.style.display='none'; if(ctr){ ctr.textContent='0/12'; ctr.style.color='#666'; } }
+            ">
+          <span id="noop-ok" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:1.1rem">✅</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;margin-top:3px">
+          <span id="noop-err" style="display:none;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#FF2D78;font-weight:700"></span>
+          <span style="flex:1"></span>
+          <span id="noop-counter" style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#666;font-weight:700">${defNoOp.length}/12</span>
+        </div>
+
+        <label style="${lblStyle}">Fecha de Presentación</label>
+        <input type="date" id="swal-fecha" value="${defFecha}" style="${inpStyle2}">
+        <label style="${lblStyle}">Hora de Presentación</label>
+        <input type="time" id="swal-hora" value="${defHora}" style="${inpStyle2}">
+
+        <!-- ══ IVA ACREDITABLE SAT ══ -->
+        <div style="border:1px solid #333;border-radius:8px;padding:12px 14px;margin-bottom:10px;background:rgba(255,214,0,.04)">
+          <label style="${lblStyle.replace('#888','#FFD600')}">💰 ¿Este mes tuvo IVA Acreditable ante el SAT?</label>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <button type="button" id="btn-acred-si" onclick="
+              document.getElementById('btn-acred-si').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#00B86B;color:#fff;border-color:#00B86B';
+              document.getElementById('btn-acred-no').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#1A1A1A;color:#aaa;border-color:#444';
+              document.getElementById('bloque-acred').style.display='block';
+              document.getElementById('swal-tiene-acred').value='si';
+            " style="padding:7px 18px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;${btnSiSel}">✅ Sí</button>
+            <button type="button" id="btn-acred-no" onclick="
+              document.getElementById('btn-acred-no').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#FF2D78;color:#fff;border-color:#FF2D78';
+              document.getElementById('btn-acred-si').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#1A1A1A;color:#aaa;border-color:#444';
+              document.getElementById('bloque-acred').style.display='none';
+              document.getElementById('swal-tiene-acred').value='no';
+            " style="padding:7px 18px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;${btnNoSel}">❌ No</button>
+          </div>
+          <input type="hidden" id="swal-tiene-acred" value="${defTieneAcred===true?'si':defTieneAcred===false?'no':''}">
+
+          <div id="bloque-acred" style="display:${acredBlockDisplay}">
+            <label style="${lblStyle}">Monto IVA Acreditable según SAT &nbsp;<span style="color:#FFD600;font-size:.57rem">· SE REDONDEA AL GUARDAR</span></label>
+            <div style="position:relative;margin-bottom:10px">
+              <input type="text" id="swal-acred-sat" inputmode="decimal"
+                placeholder="0"
+                value="${defAcredSAT}"
+                style="${inpEntero}"
+                oninput="
+                  const sat  = Math.round(parseFloat(this.value.replace(/[^0-9.]/g,''))||0);
+                  const comp = Math.round(parseFloat(document.getElementById('swal-acred-comp')?.value.replace(/[^0-9.]/g,'')||0));
+                  const diff = document.getElementById('acred-diff');
+                  if(diff && this.value.trim()!==''){
+                    const d = sat - comp;
+                    diff.textContent = d===0?'✅ Coinciden':'⚠️ Diferencia: '+(d>0?'+':'')+d;
+                    diff.style.color = d===0?'#00B86B':'#FF2D78';
+                  } else if(diff){ diff.textContent=''; }
+                "
+                onblur="
+                  const v = parseFloat(this.value.replace(/[^0-9.]/g,'')||0);
+                  if(!isNaN(v) && this.value.trim()!=='') this.value = Math.round(v);
+                ">
+              <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#888;font-size:.7rem;font-family:'JetBrains Mono',monospace">$MXN</span>
+            </div>
+
+            <label style="${lblStyle}">Monto IVA Acreditable según tu comprobación &nbsp;<span style="color:#7AAAFF;font-size:.57rem">· SE REDONDEA AL GUARDAR</span></label>
+            <div style="position:relative;margin-bottom:6px">
+              <input type="text" id="swal-acred-comp" inputmode="decimal"
+                placeholder="0"
+                value="${defAcredComp}"
+                style="${inpEntero.replace('#FFD600','#7AAAFF')}"
+                oninput="
+                  const sat  = Math.round(parseFloat(document.getElementById('swal-acred-sat')?.value.replace(/[^0-9.]/g,'')||0));
+                  const comp = Math.round(parseFloat(this.value.replace(/[^0-9.]/g,'')||0));
+                  const diff = document.getElementById('acred-diff');
+                  if(diff && this.value.trim()!==''){
+                    const d = sat - comp;
+                    diff.textContent = d===0?'✅ Coinciden':'⚠️ Diferencia: '+(d>0?'+':'')+d;
+                    diff.style.color = d===0?'#00B86B':'#FF2D78';
+                  } else if(diff){ diff.textContent=''; }
+                "
+                onblur="
+                  const v = parseFloat(this.value.replace(/[^0-9.]/g,'')||0);
+                  if(!isNaN(v) && this.value.trim()!=='') this.value = Math.round(v);
+                ">
+              <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#888;font-size:.7rem;font-family:'JetBrains Mono',monospace">$MXN</span>
+            </div>
+
+            <div id="acred-diff" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;min-height:20px;text-align:right;padding-right:4px;color:${(defAcredSAT!==''&&defAcredComp!==''&&defAcredSAT===defAcredComp)?'#00B86B':'#FF2D78'}">
+              ${defAcredSAT!==''&&defAcredComp!==''?(defAcredSAT===defAcredComp?'✅ Coinciden':'⚠️ Diferencia: '+(defAcredSAT-defAcredComp)):''}
+            </div>
+            <div style="font-size:.6rem;color:#666;font-family:'JetBrains Mono',monospace;margin-top:4px">
+              💡 El SAT redondea a enteros. Ingresa el valor que aparece en tu acuse de declaración y el de tu propia contabilidad para verificar que cuadran.
+            </div>
+          </div>
+        </div>
+
+        ${existing ? `<div style="font-size:.65rem;color:#666;font-family:'JetBrains Mono',monospace;margin-top:4px">✏️ Editando registro: ${existing.toLocaleString('es-MX')}</div>` : ''}
+      </div>`,
+    showCancelButton: true,
+    confirmButtonText: '✅ Guardar Declaración',
+    cancelButtonText: '✖ Cancelar',
+    focusConfirm: false,
+    width: '490px',
+    didOpen: () => {
+      const inp = document.getElementById('swal-noop');
+      const ctr = document.getElementById('noop-counter');
+      if (inp && defNoOp.length > 0) {
+        if (defNoOp.length === 12) {
+          inp.style.borderColor = '#00B86B';
+          inp.style.boxShadow = '0 0 0 3px rgba(0,184,107,.2)';
+          const ok = document.getElementById('noop-ok');
+          if (ok) ok.style.display = 'inline';
+          if (ctr) { ctr.textContent = '12/12'; ctr.style.color = '#00B86B'; }
+        } else {
+          inp.style.borderColor = '#FF2D78';
+          if (ctr) { ctr.style.color = '#FF2D78'; }
+        }
+      }
+      // Initialize diff display if both values present
+      const sat  = parseInt(defAcredSAT||0);
+      const comp = parseInt(defAcredComp||0);
+      const diff = document.getElementById('acred-diff');
+      if (diff && defAcredSAT !== '' && defAcredComp !== '') {
+        const d = sat - comp;
+        diff.textContent = d===0?'✅ Coinciden':'⚠️ Diferencia: '+(d>0?'+':'')+d;
+        diff.style.color = d===0?'#00B86B':'#FF2D78';
+      }
+      inp?.focus();
+    },
+    preConfirm: () => {
+      const noop  = document.getElementById('swal-noop')?.value?.trim() || '';
+      const fecha = document.getElementById('swal-fecha')?.value || '';
+      const hora  = document.getElementById('swal-hora')?.value  || '';
+      const tieneAcredStr = document.getElementById('swal-tiene-acred')?.value || '';
+      const tieneAcred = tieneAcredStr === 'si' ? true : tieneAcredStr === 'no' ? false : null;
+      let acredSAT  = null;
+      let acredComp = null;
+      if (tieneAcred === true) {
+        acredSAT  = Math.round(parseFloat((document.getElementById('swal-acred-sat')?.value  || '0').replace(/[^0-9.]/g,'')) || 0);
+        acredComp = Math.round(parseFloat((document.getElementById('swal-acred-comp')?.value || '0').replace(/[^0-9.]/g,'')) || 0);
+        if (acredSAT <= 0) {
+          Swal.showValidationMessage('⚠️ Si hubo IVA acreditable, ingresa el monto del SAT (entero mayor a 0).');
+          return false;
+        }
+      }
+
+      if (noop.length > 0 && !/^\d{12}$/.test(noop)) {
+        const inp = document.getElementById('swal-noop');
+        if (inp) { inp.style.borderColor='#FF2D78'; inp.style.boxShadow='0 0 0 4px rgba(255,45,120,.25)'; inp.focus(); }
+        Swal.showValidationMessage(`❌ El número de operación debe tener exactamente 12 dígitos numéricos. Actualmente tiene ${noop.length}.`);
+        return false;
+      }
+      if (!fecha) { Swal.showValidationMessage('⚠️ La fecha de presentación es obligatoria.'); return false; }
+      if (!hora)  { Swal.showValidationMessage('⚠️ La hora de presentación es obligatoria.'); return false; }
+      return { noop, fecha, hora, tieneAcred, acredSAT, acredComp };
+    }
+  });
+
+  if (!isConfirmed || !fv) return;
+  const isoStr = new Date(`${fv.fecha}T${fv.hora}:00`).toISOString();
+  DB.years[year].meses[idx].presentadoEn = isoStr;
+  DB.years[year].meses[idx].noOp = fv.noop;
+  DB.years[year].meses[idx].tieneIvaAcreditable = fv.tieneAcred;
+  DB.years[year].meses[idx].ivaAcreditableSAT   = fv.acredSAT;
+  DB.years[year].meses[idx].ivaAcreditableComp  = fv.acredComp;
+  localStorage.setItem('iva_pro_v12_perfecto', JSON.stringify(DB));
+  renderAll();
+  const d = new Date(isoStr);
+  const fmtD = d.toLocaleDateString('es-MX',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  const fmtH = d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+
+  // Badge de concordancia para el toast
+  let acredInfo = '';
+  if (fv.tieneAcred === true) {
+    const coincide = fv.acredSAT === fv.acredComp;
+    acredInfo = `<br>IVA Acred: $${fv.acredSAT.toLocaleString('es-MX')} SAT / $${fv.acredComp.toLocaleString('es-MX')} comp ${coincide?'✅':'⚠️'}`;
+  } else if (fv.tieneAcred === false) {
+    acredInfo = '<br>Sin IVA acreditable este mes';
+  }
+
+  Swal.fire({
+    toast:true,position:'bottom-right',icon:'success',
+    title:'✅ Declaración registrada',
+    html:`<span style="font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.5">${mesLargo} ${year}<br>${fmtD}, ${fmtH}${fv.noop?`<br>No. Op: ${fv.noop}`:''}${acredInfo}</span>`,
+    showConfirmButton:false,timer:4500,timerProgressBar:true,
+    background:'#111',color:'#FFD600',customClass:{popup:'sinergia-popup'}
+  });
+}
+
+renderAll();
+renderGuia();
+window.addEventListener('beforeunload', saveToMemory);
+
 </script>
 </body>
 </html>
+
