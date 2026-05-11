@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IVA Control PRO v21 — Sinergia REA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+/* ══════════════════════════════════════════
+   SINERGIA REA — DESIGN SYSTEM v5 + v20
+   Rosa #FF2D78 · Amarillo #FFD600
+   Azul #0057FF  · Negro #0A0A0A
+══════════════════════════════════════════ */
+:root{
+  --rosa:     #FF2D78;
+  --rosa-s:   #FF6BA8;
+  --amarillo: #FFD600;
+  --negro:    #0A0A0A;
+  --azul:     #0057FF;
+  --azul-s:   #3D8BFF;
+  --blanco:   #F7F7F2;
+  --bg:       #F0EEE8;
+  --surf:     #FFFFFF;
+  --surf2:    #F7F5F0;
+  --borde:    #E2DDD6;
+  --txt:      #1A1714;
+  --txt2:     #6B6560;
+  --txt3:     #9E9890;
+  --nav-bg:   #111111;
+  --gris2:    #2A2A2A;
+  --gris3:    #3A3A3A;
+  --r:var(--azul);   --rm:var(--azul-s);  --rl:rgba(0,87,255,.08);
+  --v:var(--rosa);   --vl:rgba(255,45,120,.08);
+  --a:var(--azul-s); --al:rgba(61,139,255,.1);
+  --o:var(--amarillo);--ol:rgba(255,214,0,.15);
+  --p:var(--rosa-s); --pl:rgba(255,107,168,.1);
+  --b:var(--borde);  --t:var(--txt);
+  --mono:'JetBrains Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --title:'Bebas Neue',sans-serif;
+  --shadow:0 1px 8px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);min-height:100vh}
+
+/* ── NAV ── */
+.nav{
+  background:var(--nav-bg);
+  display:flex;align-items:center;padding:0 20px;gap:2px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,.5);
+  border-top:3px solid var(--amarillo);
+  flex-wrap:wrap;min-height:48px;
+}
+.brand{
+  color:var(--blanco);font-family:var(--title);font-size:1.15rem;letter-spacing:1px;
+  padding-right:16px;border-right:1px solid var(--gris3);margin-right:6px;
+  white-space:nowrap;display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.brand span.rea{color:var(--rosa)}
+.brand span.iva{color:var(--amarillo)}
+.brand-dot{width:7px;height:7px;background:var(--amarillo);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+.nav-tabs{display:flex;flex-wrap:wrap;gap:0;overflow-x:auto}
+.tab{
+  padding:13px 12px;color:rgba(247,247,242,.5);font-size:.67rem;font-weight:700;
+  cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;
+  letter-spacing:.04em;text-transform:uppercase;font-family:var(--mono);flex-shrink:0;
+}
+.tab:hover{color:var(--blanco);background:rgba(255,255,255,.05)}
+.tab.on{color:var(--blanco);border-bottom-color:var(--amarillo)}
+.tab.asesor{color:var(--rosa-s)}
+.tab.asesor.on{border-bottom-color:var(--rosa);color:var(--rosa)}
+.yr-badge{
+  background:rgba(255,214,0,.12);color:var(--amarillo);
+  border:1px solid rgba(255,214,0,.35);border-radius:3px;
+  padding:4px 11px;font-size:.65rem;font-weight:700;font-family:var(--mono);
+  letter-spacing:.07em;white-space:nowrap;flex-shrink:0;
+}
+
+/* ── CLIENTE SELECTOR (NAV) ── */
+.cliente-nav-wrap{
+  display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;
+}
+.cliente-select{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);
+  color:var(--blanco);border-radius:4px;padding:4px 10px;
+  font-family:var(--mono);font-size:.65rem;font-weight:700;
+  cursor:pointer;letter-spacing:.04em;min-width:130px;
+}
+.cliente-select option{background:#1a1a1a;color:#fff}
+.btn-cli{
+  padding:4px 9px;border-radius:4px;font-size:.6rem;font-weight:700;
+  font-family:var(--mono);cursor:pointer;border:1px solid;transition:all .15s;
+  white-space:nowrap;
+}
+.btn-cli-add{background:rgba(255,214,0,.15);color:var(--amarillo);border-color:rgba(255,214,0,.4)}
+.btn-cli-add:hover{background:rgba(255,214,0,.3)}
+.btn-cli-exp{background:rgba(0,87,255,.15);color:#7AAAFF;border-color:rgba(0,87,255,.4)}
+.btn-cli-exp:hover{background:rgba(0,87,255,.3)}
+.btn-cli-imp{background:rgba(255,45,120,.15);color:var(--rosa-s);border-color:rgba(255,45,120,.4)}
+.btn-cli-imp:hover{background:rgba(255,45,120,.3)}
+
+/* ── ALERT BAR ── */
+#alert-bar{background:var(--surf2);border-bottom:1px solid var(--borde);padding:0;max-height:0;overflow:hidden;transition:max-height .35s}
+#alert-bar.open{max-height:130px;padding:8px 20px}
+.alert-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.chip{padding:4px 10px;border-radius:3px;font-size:.64rem;font-weight:700;display:flex;align-items:center;gap:5px;font-family:var(--mono);letter-spacing:.03em;border:1px solid;}
+.chip.red{background:rgba(255,45,120,.1);color:var(--rosa);border-color:rgba(255,45,120,.25)}
+.chip.yellow{background:rgba(255,214,0,.15);color:#8B6F00;border-color:rgba(180,140,0,.3)}
+.chip.blue{background:rgba(0,87,255,.1);color:var(--azul);border-color:rgba(0,87,255,.25)}
+.chip.green{background:rgba(255,45,120,.08);color:var(--rosa);border-color:rgba(255,45,120,.2)}
+
+/* ── PAGES ── */
+.page{display:none;padding:18px 20px;max-width:1680px;margin:0 auto}
+.page.on{display:block}
+
+/* ── YEAR TABS ── */
+.ytabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.ytab{padding:6px 16px;border-radius:4px;font-size:.68rem;font-weight:700;cursor:pointer;border:1.5px solid var(--borde);background:var(--surf);color:var(--txt2);transition:all .2s;font-family:var(--mono);letter-spacing:.05em;}
+.ytab.on{background:var(--azul);color:#fff;border-color:var(--azul);box-shadow:0 2px 8px rgba(0,87,255,.3)}
+.ytab:hover:not(.on){background:var(--surf2);color:var(--txt);border-color:var(--azul-s)}
+.btn-ny{padding:6px 13px;border-radius:4px;font-size:.68rem;font-weight:700;cursor:pointer;border:1.5px dashed var(--borde);background:transparent;color:var(--txt3);transition:all .2s;font-family:var(--mono);}
+.btn-ny:hover{border-color:var(--amarillo);color:#7A6500}
+
+/* ── CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px}
+.card{background:var(--surf);border:1px solid var(--borde);padding:14px 16px;border-top:3px solid var(--azul);transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;border-radius:6px;box-shadow:var(--shadow);}
+.card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.card.v{border-top-color:var(--rosa)}.card.a{border-top-color:var(--azul-s)}
+.card.o{border-top-color:var(--amarillo)}.card.p{border-top-color:var(--rosa-s)}
+.card-lbl{font-size:.59rem;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);font-family:var(--mono)}
+.card-val{font-family:var(--mono);font-size:1.05rem;font-weight:700;margin-top:5px;color:var(--txt)}
+.card.v .card-val{color:var(--rosa)}.card.a .card-val{color:var(--azul)}
+.card.o .card-val{color:#8B6F00}.card.p .card-val{color:var(--rosa-s)}
+.card-val.red{color:var(--rosa)}
+.card.her25{border-top-color:var(--rosa-s);background:linear-gradient(135deg,rgba(255,107,168,.06),var(--surf))}
+.card.her25 .card-val{color:var(--rosa)}
+.card.gen26{border-top-color:#00B86B;background:linear-gradient(135deg,rgba(0,184,107,.06),var(--surf))}
+.card.gen26 .card-val{color:#007A47}
+.card.total-disp{border-top-color:var(--amarillo);background:linear-gradient(135deg,rgba(255,214,0,.08),var(--surf))}
+.card.total-disp .card-val{color:#6A5000}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.btn{padding:7px 14px;border:none;border-radius:4px;font-family:var(--mono);font-size:.67rem;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;letter-spacing:.03em;}
+.btn-r{background:var(--azul);color:#fff;box-shadow:0 2px 6px rgba(0,87,255,.3)}.btn-r:hover{background:var(--azul-s)}
+.btn-g{background:var(--rosa);color:#fff;box-shadow:0 2px 6px rgba(255,45,120,.3)}.btn-g:hover{background:var(--rosa-s)}
+.btn-o{background:var(--amarillo);color:var(--negro)}.btn-o:hover{opacity:.88}
+.btn-gh{background:var(--surf);color:var(--txt2);border:1.5px solid var(--borde)}
+.btn-gh:hover{background:var(--surf2);color:var(--txt);border-color:var(--azul-s)}
+.tip{font-size:.62rem;color:var(--txt3);margin-left:auto;font-family:var(--mono)}
+
+/* ── TABLE ── */
+.tbl-wrap{background:var(--surf);border-radius:8px;border:1px solid var(--borde);overflow-x:auto;margin-bottom:20px;box-shadow:var(--shadow);position:relative;}
+table{width:100%;border-collapse:collapse;font-size:.73rem;min-width:1200px}
+th{
+  background:#1A1714;color:rgba(247,247,242,.92);
+  padding:9px 8px;font-weight:700;font-size:.6rem;
+  text-transform:uppercase;letter-spacing:.06em;text-align:center;
+  border:1px solid #2E2A26;white-space:nowrap;
+  position:sticky;top:0;z-index:2;font-family:var(--mono);
+}
+th.mes-th{position:sticky;left:0;top:0;z-index:6;background:#1A1714;border-right:2px solid var(--amarillo)}
+
+/* ── DECLARACIÓN SAT — SEGUNDA COLUMNA (sticky izquierda) ── */
+th.dec-th{
+  background:#0a1628!important;color:#7AAAFF!important;
+  border-color:#1a2a4a!important;
+  position:sticky!important;left:82px;top:0;z-index:5;
+  min-width:160px;border-right:2px solid rgba(0,87,255,.45)!important;
+  border-left:none!important;
+}
+td.btn-fecha{
+  text-align:center!important;padding:5px 8px!important;
+  background:rgba(0,87,255,.04)!important;
+  border-color:rgba(0,87,255,.12)!important;
+  border-right:2px solid rgba(0,87,255,.25)!important;
+  position:sticky;left:82px;z-index:2;
+  min-width:160px;
+}
+tr:nth-child(odd)  td.btn-fecha{background:rgba(0,87,255,.06)!important}
+tr:nth-child(even) td.btn-fecha{background:rgba(0,87,255,.03)!important}
+tr:not(.row-selected):hover td.btn-fecha{background:rgba(0,87,255,.12)!important}
+
+th.sub{background:#2A2620;font-size:.58rem;position:sticky;top:35px;z-index:2;color:rgba(247,247,242,.65)}
+th.sub.mes-sub{position:sticky;left:0;top:35px;z-index:6;background:#2A2620;border-right:2px solid var(--amarillo)}
+th.sub.dec-sub{position:sticky;left:82px;top:35px;z-index:5;background:#0a1628;color:#7AAAFF!important;border-right:2px solid rgba(0,87,255,.4)!important;}
+td{padding:6px 8px;border:1px solid var(--borde);text-align:right;vertical-align:middle;color:var(--txt)}
+
+/* ── FIX UX: ROW SELECTION — eliminar blanco, mantener identidad visual ── */
+tr:nth-child(odd) td{background:var(--surf2)}
+tr:nth-child(even) td{background:var(--surf)}
+
+/* hover: SOLO si la fila NO está seleccionada */
+tr:not(.row-selected):hover td{background:rgba(0,87,255,.05)!important;transition:background .12s}
+tr:not(.row-selected):hover td.mes{background:#1A1714!important}
+tr:not(.row-selected):hover td.btn-fecha{background:rgba(0,87,255,.12)!important}
+tr:not(.row-selected):hover td.inp{background:#FFFBEA!important}
+tr:not(.row-selected):hover td.au{background:#EEF2FF!important}
+tr:not(.row-selected):hover td.folio,
+tr:not(.row-selected):hover td.folio-auto{background:#FFF0F5!important}
+
+/* Fila seleccionada al hacer clic — máxima prioridad, nunca blanco */
+tr.row-selected td{
+  background:rgba(255,45,120,.09)!important;
+  box-shadow:inset 0 0 0 1px rgba(255,45,120,.18);
+  transition:background .15s;
+}
+tr.row-selected:hover td{
+  background:rgba(255,45,120,.13)!important; /* ligeramente más intenso en hover pero sigue rosa */
+}
+tr.row-selected td:first-child{
+  border-left:3px solid var(--rosa)!important;
+}
+/* Preservar colores de columnas sticky en fila seleccionada */
+tr.row-selected td.mes,
+tr.row-selected:hover td.mes{
+  background:#1A1714!important;
+  border-left:4px solid var(--rosa)!important;
+  box-shadow:none;
+}
+tr.row-selected td.btn-fecha,
+tr.row-selected:hover td.btn-fecha{
+  background:rgba(0,87,255,.14)!important;
+  box-shadow:inset 0 0 0 1px rgba(0,87,255,.3);
+}
+/* Celdas editables en fila seleccionada: mantener su color, NO blanco */
+tr.row-selected td.inp,
+tr.row-selected:hover td.inp { background:rgba(255,251,234,.9)!important; }
+tr.row-selected td.au,
+tr.row-selected:hover td.au  { background:rgba(238,242,255,.9)!important; }
+tr.row-selected td.folio,
+tr.row-selected:hover td.folio { background:rgba(255,240,245,.9)!important; }
+tr.row-selected td.folio-auto,
+tr.row-selected:hover td.folio-auto { background:rgba(255,248,220,.9)!important; }
+/* Focus dentro de fila seleccionada: nunca blanco */
+tr.row-selected td.inp:focus,
+tr.row-selected td.au:focus {
+  background:#FFFBEA!important;
+}
+
+tr.tot td{background:#1A1714!important;color:var(--amarillo)!important;font-weight:700;font-family:var(--mono);border-top:2px solid var(--amarillo)}
+td.mes{
+  background:#1A1714!important;color:var(--blanco);font-weight:700;
+  text-align:center;white-space:nowrap;position:sticky;left:0;z-index:3;
+  min-width:82px;font-size:.7rem;border-right:2px solid var(--amarillo);
+  font-family:var(--mono);letter-spacing:.06em;
+}
+td.mes.her{background:rgba(0,87,255,.8)!important;color:#fff}
+
+/* ── CELDAS EDITABLES — preservar color al hacer focus ── */
+td.inp{background:#FFFBEA!important;color:#5A4500!important;font-family:var(--mono);font-weight:700;cursor:text;border-color:#E8D57A!important}
+td.inp:focus{
+  outline:2px solid #C8A000!important;
+  outline-offset:-2px;
+  background:#FFFBEA!important;  /* mantener amarillo, NO blanco */
+  box-shadow:inset 0 0 0 1px #C8A000;
+  color:#3A2D00!important;
+}
+td.inp:empty::before{content:"—";color:#C0B070;font-weight:400}
+td.inp[contenteditable="false"]:empty::before{content:"—";color:#C0B070;font-weight:400}
+td.folio{
+  background:#FFF0F5!important;color:#A0003A!important;
+  font-family:var(--mono);font-size:.62rem;cursor:text;
+  text-align:left;min-width:155px;white-space:normal;border-color:#F0C0D0!important;
+}
+td.folio:empty::before{content:"Folio...";color:#D8A8B8;font-size:.6rem}
+/* Folio auto-generado con información de trazabilidad real */
+td.folio-auto{
+  background:#FFF5E0!important;color:#7A4500!important;
+  font-family:var(--mono);font-size:.58rem;
+  text-align:left;min-width:155px;white-space:normal;
+  border-color:#E8C870!important;cursor:default;
+  border-left:3px solid var(--amarillo)!important;
+}
+td.au{background:#EEF2FF!important;color:#1A3FAA!important;font-family:var(--mono);font-weight:700;cursor:text;border-color:#C0CCEE!important}
+td.au:focus{
+  outline:2px solid var(--azul)!important;
+  outline-offset:-2px;
+  background:#EEF2FF!important;
+}
+
+/* Folio auto: icono FIFO y tooltip */
+td.folio-auto::before{
+  content:"⚡";
+  font-size:.55rem;
+  margin-right:3px;
+  opacity:.7;
+}
+td.folio-auto:hover{
+  background:#FFF8DC!important;
+  cursor:help;
+}
+.cv{color:var(--rosa);font-weight:700;font-family:var(--mono)}
+.cr{color:var(--azul);font-weight:700;font-family:var(--mono)}
+.ca{color:var(--azul);font-weight:700;font-family:var(--mono)}
+.co{color:#7A6000;font-weight:700;font-family:var(--mono)}
+.cg{color:var(--txt3);font-family:var(--mono)}
+
+/* ── TRAZABILIDAD ── */
+.traz-grid{display:grid;gap:12px}
+.tc{background:var(--surf);border-radius:8px;border:1px solid var(--borde);border-left:4px solid var(--rosa);padding:16px 18px;box-shadow:var(--shadow);}
+.tc.ago{border-left-color:var(--txt3);opacity:.7}
+.tc.par{border-left-color:#C8A000}
+.tc.her{border-left-color:var(--azul)}
+.tc-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:7px}
+.tc-mes{font-weight:700;font-size:.9rem;color:var(--txt)}
+.tc-orig{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--rosa)}
+.badge{font-size:.59rem;font-weight:700;padding:3px 9px;border-radius:20px;font-family:var(--mono);letter-spacing:.04em;border:1px solid}
+.bv{background:rgba(255,45,120,.1);color:#B0003A;border-color:rgba(255,45,120,.25)}
+.ba{background:var(--surf2);color:var(--txt3);border-color:var(--borde)}
+.bp{background:rgba(200,160,0,.12);color:#7A6000;border-color:rgba(180,140,0,.3)}
+.bh{background:rgba(0,87,255,.1);color:var(--azul);border-color:rgba(0,87,255,.25)}
+.tline{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ts{background:var(--surf2);border:1px solid var(--borde);border-radius:6px;padding:8px 11px;font-size:.67rem;min-width:130px}
+.ts-lbl{color:var(--txt3);font-size:.57rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;font-family:var(--mono)}
+.ts-val{font-family:var(--mono);font-weight:700;color:var(--rosa);font-size:.8rem}
+.ts-ref{font-size:.57rem;color:var(--txt2);margin-top:2px}
+.tarr{color:var(--txt3);font-size:.9rem}
+.trem{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:6px;padding:8px 11px;font-size:.67rem}
+.trem .val{font-family:var(--mono);font-weight:700;color:var(--rosa);font-size:.8rem}
+.trem.ago{background:var(--surf2);border-color:var(--borde)}.trem.ago .val{color:var(--txt3)}
+
+/* ── ASESOR IA v20 — CONVERSACIONAL CON AVATAR ── */
+.asesor-chat-wrap{
+  display:grid;grid-template-columns:320px 1fr;gap:16px;
+  max-width:1400px;
+}
+@media(max-width:900px){.asesor-chat-wrap{grid-template-columns:1fr}}
+
+/* Panel avatar + conversación */
+.avatar-panel{
+  background:var(--surf);border-radius:12px;border:1px solid var(--borde);
+  box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+  max-height:680px;
+}
+.avatar-header{
+  background:linear-gradient(135deg,#0a1628,#111);
+  padding:20px 18px 16px;
+  border-bottom:2px solid var(--amarillo);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.avatar-selector{
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+}
+.avatar-opt{
+  width:48px;height:48px;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;font-size:1.8rem;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.07);transition:all .2s;
+}
+.avatar-opt:hover{border-color:var(--amarillo);transform:scale(1.15)}
+.avatar-opt.active{border-color:var(--rosa);background:rgba(255,45,120,.15);box-shadow:0 0 12px rgba(255,45,120,.4)}
+.avatar-main-display{
+  font-size:3.5rem;
+  animation:avatarBounce 3s ease-in-out infinite;
+  filter:drop-shadow(0 4px 12px rgba(255,214,0,.3));
+  cursor:pointer;
+  transition:font-size .2s;
+}
+.avatar-main-display:hover{font-size:4rem}
+@keyframes avatarBounce{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-8px) rotate(2deg)}
+}
+.avatar-name{
+  font-family:var(--title);font-size:1.1rem;letter-spacing:2px;
+  color:var(--amarillo);text-align:center;
+}
+
+/* Chat messages */
+.chat-messages{
+  flex:1;overflow-y:auto;padding:14px 16px;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--bg);
+  scrollbar-width:thin;
+}
+.chat-msg{display:flex;gap:9px;align-items:flex-start;animation:msgIn .3s ease-out}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.bot{flex-direction:row}
+.chat-msg.user{flex-direction:row-reverse}
+.chat-avatar-sm{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+  background:rgba(255,45,120,.12);border:1px solid rgba(255,45,120,.25);
+}
+.chat-bubble{
+  max-width:78%;border-radius:12px;padding:10px 13px;
+  font-size:.74rem;line-height:1.6;
+}
+.chat-msg.bot .chat-bubble{
+  background:var(--surf);border:1px solid var(--borde);
+  color:var(--txt);border-top-left-radius:2px;
+}
+.chat-msg.user .chat-bubble{
+  background:var(--azul);color:#fff;
+  border-top-right-radius:2px;
+  font-family:var(--mono);font-size:.68rem;
+}
+.chat-bubble strong{color:var(--rosa)}
+.chat-bubble .plan-mini{
+  margin-top:8px;padding:8px 10px;border-radius:6px;
+  background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);
+  font-family:var(--mono);font-size:.65rem;
+}
+.chat-bubble .alerta-mini{
+  margin-top:6px;padding:7px 10px;border-radius:6px;
+  background:rgba(200,160,0,.1);border:1px solid rgba(180,140,0,.25);
+  font-size:.65rem;color:#7A6000;cursor:pointer;
+  transition:background .2s;display:flex;align-items:center;gap:6px;
+}
+.chat-bubble .alerta-mini:hover{background:rgba(200,160,0,.2)}
+.chat-input-wrap{
+  padding:10px 14px;border-top:1px solid var(--borde);
+  display:flex;gap:8px;align-items:center;background:var(--surf);
+}
+.chat-mes-select{
+  flex:1;padding:8px 10px;border:1.5px solid var(--borde);border-radius:6px;
+  font-family:var(--mono);font-size:.72rem;background:var(--surf2);color:var(--txt);
+}
+.chat-mes-select:focus{outline:none;border-color:var(--azul)}
+.chat-send{
+  padding:8px 14px;background:var(--rosa);color:#fff;border:none;
+  border-radius:6px;font-family:var(--mono);font-size:.7rem;font-weight:700;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.chat-send:hover{background:var(--rosa-s);transform:scale(1.04)}
+
+/* Panel derecho: simulador + notificaciones */
+.asesor-right{display:flex;flex-direction:column;gap:14px}
+.asesor-panel{background:var(--surf);border-radius:8px;border:1px solid var(--borde);overflow:hidden;box-shadow:var(--shadow)}
+.asesor-panel-hdr{padding:13px 17px;font-weight:700;font-size:.76rem;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--borde);font-family:var(--mono);letter-spacing:.04em}
+.asesor-panel-hdr.red{background:rgba(255,45,120,.07);color:var(--rosa);border-bottom-color:rgba(255,45,120,.18)}
+.asesor-panel-hdr.gold{background:rgba(200,160,0,.1);color:#7A6000;border-bottom-color:rgba(180,140,0,.22)}
+.asesor-panel-hdr.green{background:rgba(255,45,120,.05);color:var(--rosa);border-bottom-color:rgba(255,45,120,.15)}
+.asesor-panel-hdr.blue{background:rgba(0,87,255,.07);color:var(--azul);border-bottom-color:rgba(0,87,255,.18)}
+.asesor-panel-body{padding:16px 17px}
+.sim-input-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap}
+.sim-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}
+.sim-field label{font-size:.62rem;text-transform:uppercase;letter-spacing:.07em;color:var(--txt2);font-weight:700;font-family:var(--mono)}
+.sim-field input,.sim-field select{padding:9px 12px;border:1.5px solid var(--borde);border-radius:4px;font-family:var(--mono);font-size:.85rem;font-weight:700;background:var(--surf2);color:var(--txt);transition:border-color .2s;width:100%;}
+.sim-field input:focus,.sim-field select:focus{outline:none;border-color:var(--azul);background:var(--surf)}
+.sim-run{padding:10px 20px;background:var(--azul);color:#fff;border:none;border-radius:4px;font-family:var(--mono);font-weight:700;font-size:.74rem;cursor:pointer;align-self:flex-end;transition:all .2s;white-space:nowrap;letter-spacing:.05em;box-shadow:0 2px 8px rgba(0,87,255,.3);}
+.sim-run:hover{background:var(--azul-s)}
+.plan-empty{text-align:center;padding:30px 20px;color:var(--txt3);font-size:.78rem;font-family:var(--mono)}
+.plan-step{border:1px solid var(--borde);border-radius:6px;margin-bottom:8px;overflow:hidden;transition:all .2s;background:var(--surf2)}
+.plan-step:hover{border-color:var(--azul-s);box-shadow:0 2px 8px rgba(0,87,255,.1)}
+.plan-step-hdr{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.plan-step-hdr.pri{background:rgba(255,45,120,.07);border-left:3px solid var(--rosa)}
+.plan-step-hdr.sec{background:rgba(200,160,0,.1);border-left:3px solid #C8A000}
+.plan-step-hdr.ter{background:rgba(0,87,255,.07);border-left:3px solid var(--azul)}
+.plan-step-left{display:flex;flex-direction:column;gap:3px}
+.plan-step-origen{font-weight:700;font-size:.76rem;color:var(--txt)}
+.plan-step-detalle{font-size:.63rem;color:var(--txt2)}
+.plan-step-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.plan-step-monto{font-family:var(--mono);font-weight:700;font-size:.86rem;color:var(--rosa)}
+.plan-step-rem{font-family:var(--mono);font-size:.62rem;color:var(--txt3)}
+.plan-total{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:6px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.plan-total-lbl{font-weight:700;font-size:.76rem;color:var(--rosa)}
+.plan-total-val{font-family:var(--mono);font-weight:700;font-size:1rem;color:var(--rosa)}
+.plan-alerta{background:rgba(200,160,0,.1);border:1px solid rgba(180,140,0,.25);border-radius:6px;padding:10px 14px;margin-top:8px;font-size:.72rem;color:#7A6000;font-weight:700}
+.plan-ok{background:rgba(255,45,120,.06);border:1px solid rgba(255,45,120,.18);border-radius:6px;padding:10px 14px;margin-top:8px;font-size:.72rem;color:var(--rosa);font-weight:700}
+.plan-warn{background:rgba(0,87,255,.07);border:1px solid rgba(0,87,255,.2);border-radius:6px;padding:10px 14px;margin-top:8px;font-size:.72rem;color:var(--azul);font-weight:700}
+.notif{border-radius:6px;padding:11px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;font-size:.74rem;line-height:1.55;border:1px solid}
+.notif.urgent{background:rgba(255,45,120,.07);border-color:rgba(255,45,120,.2)}
+.notif.warn{background:rgba(200,160,0,.1);border-color:rgba(180,140,0,.25)}
+.notif.info{background:rgba(0,87,255,.07);border-color:rgba(0,87,255,.2)}
+.notif.ok{background:rgba(255,45,120,.05);border-color:rgba(255,45,120,.15)}
+.notif-ico{font-size:1.15rem;flex-shrink:0;margin-top:1px}
+.notif-title{font-weight:700;margin-bottom:2px;color:var(--txt)}
+.notif-body{color:var(--txt2)}
+.saldo-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:20px;padding:6px 14px;font-size:.7rem;margin:3px;cursor:pointer;transition:all .2s;font-family:var(--mono);}
+.saldo-pill:hover{background:rgba(255,45,120,.14);border-color:var(--rosa)}
+.saldo-pill .origen{font-weight:700;color:var(--rosa)}
+.saldo-pill .monto{font-weight:700;color:#B00050}
+.saldo-pill.agotado{background:var(--surf2);border-color:var(--borde);opacity:.5;cursor:default}
+.saldo-pill.agotado .origen,.saldo-pill.agotado .monto{color:var(--txt3)}
+
+/* ── HISTORIAL ── */
+.hist-yr{background:var(--surf);border-radius:8px;border:1px solid var(--borde);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
+.hist-yr-hdr{background:#1A1714;color:var(--blanco);padding:13px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--amarillo)}
+.hist-yr-hdr h3{font-family:var(--title);font-size:1.1rem;font-weight:400;letter-spacing:1px;color:var(--amarillo)}
+.hist-row{display:flex;justify-content:space-between;padding:8px 18px;border-bottom:1px solid var(--borde);font-size:.76rem;color:var(--txt2)}
+.hist-row:last-child{border-bottom:none;font-weight:700;padding-top:11px;color:var(--txt)}
+.hist-val{font-family:var(--mono);font-weight:700}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surf);border-radius:8px;border:1px solid var(--borde);padding:26px;min-width:300px;max-width:440px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.15)}
+.modal h2{font-family:var(--title);font-size:1.4rem;letter-spacing:1px;margin-bottom:12px;color:var(--rosa)}
+.modal p{font-size:.76rem;color:var(--txt2);margin-bottom:14px;line-height:1.6}
+.modal input{width:100%;padding:9px 12px;border:1.5px solid var(--borde);border-radius:4px;font-family:var(--mono);font-size:.85rem;margin-bottom:12px;background:var(--surf2);color:var(--txt);transition:border-color .2s;}
+.modal input:focus{outline:none;border-color:var(--azul)}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end}
+.info-box{background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);border-radius:4px;padding:10px;font-size:.76rem;color:var(--rosa);font-weight:700;margin-bottom:14px;font-family:var(--mono)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;background:#1A1714;color:var(--amarillo);border:1px solid var(--amarillo);border-radius:4px;padding:10px 18px;font-size:.72rem;font-weight:700;font-family:var(--mono);transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;z-index:999;letter-spacing:.05em;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.toast.show{transform:translateY(0);opacity:1}
+
+.sec-ttl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--rosa);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.sec-ttl::after{content:'';flex:1;height:1px;background:linear-gradient(var(--rosa),transparent);max-width:300px}
+
+/* ── FIFO BANNER ── */
+.fifo-banner{background:var(--surf);border:1.5px solid var(--borde);border-radius:10px;padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow);display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;}
+.fifo-bloque{flex:1;min-width:160px;border-radius:8px;padding:12px 16px;display:flex;flex-direction:column;gap:4px;}
+.fifo-bloque.anterior{background:rgba(255,107,168,.07);border:1.5px solid rgba(255,107,168,.25);}
+.fifo-bloque.actual{background:rgba(0,184,107,.07);border:1.5px solid rgba(0,184,107,.25);}
+.fifo-bloque.total{background:rgba(255,214,0,.1);border:1.5px solid rgba(200,160,0,.3);}
+.fifo-bloque-lbl{font-family:var(--mono);font-size:.57rem;text-transform:uppercase;letter-spacing:.09em;color:var(--txt3);font-weight:700;}
+.fifo-bloque-val{font-family:var(--mono);font-size:1.1rem;font-weight:700;}
+.fifo-bloque.anterior .fifo-bloque-val{color:var(--rosa)}
+.fifo-bloque.actual .fifo-bloque-val{color:#007A47}
+.fifo-bloque.total .fifo-bloque-val{color:#6A5000}
+.fifo-bloque-sub{font-size:.62rem;color:var(--txt3);font-family:var(--mono)}
+.fifo-regla{width:100%;background:rgba(0,87,255,.06);border:1px solid rgba(0,87,255,.18);border-radius:6px;padding:8px 14px;font-size:.68rem;color:var(--azul);font-family:var(--mono);font-weight:700;display:flex;align-items:center;gap:8px;}
+.fifo-arrow{font-size:.9rem;color:var(--txt3);align-self:center;flex-shrink:0}
+
+/* ── SCROLL HINT ── */
+.scroll-hint{display:none} /* ya no necesario — columna está 2da */
+
+/* ── BOTONES DECLARACIÓN ── */
+.btn-reg{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:4px;font-size:.61rem;font-weight:700;cursor:pointer;border:1.5px dashed var(--azul);background:rgba(0,87,255,.06);color:var(--azul);font-family:var(--mono);letter-spacing:.03em;transition:all .2s;white-space:nowrap;animation:pulseBtn 2.5s infinite;}
+.btn-reg:hover{background:var(--azul);color:#fff;border-style:solid;transform:scale(1.06);box-shadow:0 3px 12px rgba(0,87,255,.4);animation:none;}
+@keyframes pulseBtn{0%,100%{box-shadow:0 0 0 0 rgba(0,87,255,.25)}50%{box-shadow:0 0 0 5px rgba(0,87,255,0)}}
+.btn-reg-ok{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:4px;font-size:.61rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(0,184,107,.4);background:rgba(0,184,107,.09);color:#007A47;font-family:var(--mono);letter-spacing:.03em;transition:all .2s;white-space:nowrap;flex-direction:column;gap:2px;}
+.btn-reg-ok:hover{background:rgba(0,184,107,.16);transform:scale(1.03)}
+.btn-reg-ok .reg-fecha{font-size:.56rem;color:#00965A;font-weight:700}
+.btn-reg-ok .reg-folio{font-size:.54rem;color:var(--txt3);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@keyframes brillar{0%{box-shadow:0 0 0 0 rgba(0,184,107,.6)}50%{box-shadow:0 0 0 8px rgba(0,184,107,0)}100%{box-shadow:none}}
+.guardado-brillante{animation:brillar .7s ease-out forwards}
+
+/* ── PERÍODO GRANDE EN MODAL — Req.5 ── */
+.dec-periodo-grande{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.3rem;letter-spacing:2px;
+  color:var(--amarillo);
+  padding:10px 14px;
+  background:rgba(255,214,0,.1);
+  border-left:4px solid var(--amarillo);
+  border-radius:0 6px 6px 0;
+  margin-bottom:14px;
+  text-shadow:0 0 20px rgba(255,214,0,.3);
+}
+.dec-ts{background:rgba(0,87,255,.07);border:1px solid rgba(0,87,255,.2);border-radius:6px;padding:7px 10px;font-size:.64rem;min-width:120px;}
+.dec-ts .ts-lbl{color:rgba(61,139,255,.7)}
+.dec-ts .ts-val{color:var(--azul);font-size:.75rem}
+
+/* Animación filas */
+@keyframes fadeInRow{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+tbody tr{animation:fadeInRow .18s ease-out both}
+tbody tr:nth-child(1){animation-delay:.02s}tbody tr:nth-child(2){animation-delay:.04s}
+tbody tr:nth-child(3){animation-delay:.06s}tbody tr:nth-child(4){animation-delay:.08s}
+tbody tr:nth-child(5){animation-delay:.10s}tbody tr:nth-child(6){animation-delay:.12s}
+tbody tr:nth-child(7){animation-delay:.14s}tbody tr:nth-child(8){animation-delay:.16s}
+tbody tr:nth-child(9){animation-delay:.18s}tbody tr:nth-child(10){animation-delay:.20s}
+tbody tr:nth-child(11){animation-delay:.22s}tbody tr:nth-child(12){animation-delay:.24s}
+
+/* SweetAlert2 overrides */
+.swal2-popup.sinergia-popup{background:#0E0E0E;border:1px solid #333;border-radius:12px;font-family:'DM Sans',sans-serif;color:#F7F7F2;box-shadow:0 24px 80px rgba(0,0,0,.6);}
+.swal2-popup.sinergia-popup .swal2-title{color:var(--amarillo);font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1.5px;}
+.swal2-popup.sinergia-popup .swal2-html-container{color:#ccc;font-size:.83rem}
+.swal2-popup.sinergia-popup .swal2-input,.swal2-popup.sinergia-popup .swal2-select{background:#1A1A1A;border:1.5px solid #333;color:#F7F7F2;font-family:'JetBrains Mono',monospace;border-radius:6px;transition:border-color .2s;}
+.swal2-popup.sinergia-popup .swal2-input:focus,.swal2-popup.sinergia-popup .swal2-select:focus{border-color:var(--azul);box-shadow:0 0 0 3px rgba(0,87,255,.25);outline:none;}
+.swal2-popup.sinergia-popup .swal2-confirm{background:var(--rosa)!important;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.75rem;letter-spacing:.06em;border-radius:5px;transition:all .2s;}
+.swal2-popup.sinergia-popup .swal2-confirm:hover{background:var(--rosa-s)!important;transform:scale(1.04)}
+.swal2-popup.sinergia-popup .swal2-cancel{background:#333!important;color:#ccc!important;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.75rem;letter-spacing:.06em;border-radius:5px;}
+.swal2-popup.sinergia-popup .swal2-cancel:hover{background:#444!important}
+.swal2-popup.sinergia-popup .swal2-validation-message{background:#2a1010;color:var(--rosa);border:none;border-radius:6px;font-size:.75rem}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--surf2)}
+::-webkit-scrollbar-thumb{background:var(--borde);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--rosa)}
+
+@media(max-width:768px){
+  .nav{padding:0 10px}
+  .brand{font-size:.9rem;padding-right:10px;margin-right:4px}
+  .tab{padding:11px 8px;font-size:.58rem}
+  .page{padding:10px 12px}
+  .cards{grid-template-columns:repeat(2,1fr);gap:8px}
+  .toolbar{gap:5px}
+  .btn{padding:6px 10px;font-size:.62rem}
+  .tip{display:none}
+  .asesor-chat-wrap{grid-template-columns:1fr}
+  .cliente-nav-wrap .btn-cli{font-size:.55rem;padding:3px 7px}
+}
+@media print{
+  .nav,.toolbar,.ytabs,.btn-ny,#alert-bar,.modal-bg{display:none!important}
+  body{background:#fff;color:#000}.page{display:block!important;padding:8px}
+  .tbl-wrap{box-shadow:none;border-color:#ddd}
+  td{color:#000!important;border-color:#eee!important;background:#fff!important}
+  td.mes{background:#1A1714!important;color:#FFD600!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  th{background:#1A1714!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{margin:12mm;size:A4 landscape}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="brand"><div class="brand-dot"></div><span class="rea">Sinergia</span>&nbsp;<span class="iva">REA</span></div>
+  <div class="nav-tabs">
+    <div class="tab on" onclick="goTab('control')">📊 Control</div>
+    <div class="tab" onclick="goTab('traz')">🔍 Trazabilidad</div>
+    <div class="tab asesor" onclick="goTab('asesor')">🤖 Asesor IA</div>
+    <div class="tab" onclick="goTab('hist')">📋 Historial</div>
+    <div class="tab" onclick="goTab('guia')">💡 Guía</div>
+  </div>
+  <!-- Multi-cliente controles -->
+  <div class="cliente-nav-wrap">
+    <select class="cliente-select" id="clienteSelect" onchange="cambiarCliente(this.value)" title="Cliente activo"></select>
+    <button class="btn-cli btn-cli-add" onclick="nuevoCliente()" title="Nuevo cliente">+ Cliente</button>
+    <button class="btn-cli btn-cli-exp" onclick="exportarJSON()" title="Exportar datos del cliente como JSON">⬇ JSON</button>
+    <button class="btn-cli btn-cli-imp" onclick="document.getElementById('importFile').click()" title="Importar JSON de cliente">⬆ JSON</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importarJSON(event)">
+    <div class="yr-badge" id="yr-badge">📅 2025</div>
+  </div>
+</div>
+
+<!-- ALERT BAR -->
+<div id="alert-bar"><div class="alert-row" id="alert-inner"></div></div>
+
+<!-- ══ CONTROL ══ -->
+<div class="page on" id="pg-control">
+  <div style="padding:12px 0 8px">
+    <div class="ytabs" id="ytabs-ctrl"></div>
+    <div class="cards" id="cards-area"></div>
+  </div>
+  <div class="toolbar">
+    <button class="btn btn-r" onclick="recalcAll()">⟳ Recalcular</button>
+    <button class="btn btn-o" onclick="autoAcreditarYear()" style="background:var(--amarillo);color:black;box-shadow:0 2px 6px rgba(255,214,0,.3)">🪄 Auto-Acreditar</button>
+    <button class="btn btn-g" onclick="saveData()">💾 Guardar HTML</button>
+    <button class="btn" onclick="mostrarAyudaDeclaracion()" style="background:rgba(0,87,255,.12);color:var(--azul);border:1.5px solid rgba(0,87,255,.3);animation:pulseBtn 2.5s infinite">📅 ¿Cómo registrar?</button>
+    <button class="btn btn-o" onclick="doPDF()">📄 PDF</button>
+    <button class="btn btn-gh" onclick="doCSV()">⬇ CSV</button>
+    <button class="btn btn-gh" onclick="openCloseYearModal()">🔒 Cerrar Año</button>
+    <button class="btn btn-gh" onclick="openReopenModal()">🔓 Reabrir Año</button>
+    <span class="tip">🟡 entrada &nbsp;🩷 folio &nbsp;🩷 favor &nbsp;🔵 acreditado</span>
+  </div>
+  <div id="table-area"></div>
+</div>
+
+<!-- ══ TRAZABILIDAD ══ -->
+<div class="page" id="pg-traz">
+  <div style="padding:12px 0">
+    <div class="ytabs" id="ytabs-traz"></div>
+    <p style="font-size:.72rem;color:var(--txt2);margin-bottom:13px">Árbol de vida de cada saldo a favor: origen → aplicaciones → disponible. <span style="color:var(--azul);font-weight:700">Azul</span> = heredado.</p>
+    <div class="traz-grid" id="traz-grid"></div>
+  </div>
+</div>
+
+<!-- ══ ASESOR IA v20 ══ -->
+<div class="page" id="pg-asesor">
+  <div style="padding:12px 0">
+    <div class="sec-ttl">🤖 Asesor Inteligente de IVA — v20</div>
+    <div class="asesor-chat-wrap">
+
+      <!-- PANEL AVATAR + CHAT -->
+      <div class="avatar-panel">
+        <div class="avatar-header">
+          <div style="font-family:var(--mono);font-size:.57rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,214,0,.6);margin-bottom:4px">Elige tu asistente</div>
+          <div class="avatar-selector" id="avatarSelector">
+            <div class="avatar-opt active" onclick="setAvatar('📎','Clippy')" title="Clippy">📎</div>
+            <div class="avatar-opt" onclick="setAvatar('🧙','Merlín')" title="Merlín el Mago">🧙</div>
+            <div class="avatar-opt" onclick="setAvatar('🐶','Rocky')" title="Rocky el Perro">🐶</div>
+            <div class="avatar-opt" onclick="setAvatar('🐱','Mittens')" title="Mittens el Gato">🐱</div>
+            <div class="avatar-opt" onclick="setAvatar('🤖','TAXBOT')" title="Taxbot">🤖</div>
+            <div class="avatar-opt" onclick="setAvatar('🦉','Sabia')" title="La Lechuza Sabia">🦉</div>
+          </div>
+          <div class="avatar-main-display" id="avatarDisplay" onclick="avatarWiggle()">📎</div>
+          <div class="avatar-name" id="avatarName">CLIPPY</div>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-wrap">
+          <select class="chat-mes-select" id="chatMesSelect">
+            <option value="">— Selecciona un mes —</option>
+          </select>
+          <button class="chat-send" onclick="sendChatMes()">Consultar ▶</button>
+        </div>
+      </div>
+
+      <!-- PANEL DERECHO -->
+      <div class="asesor-right">
+        <!-- SIMULADOR -->
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr red">🧮 Simulador — Plan de acreditamiento</div>
+          <div class="asesor-panel-body">
+            <div class="sim-input-row">
+              <div class="sim-field">
+                <label>Mes a simular</label>
+                <select id="sim-mes"><option value="">— Selecciona —</option></select>
+              </div>
+              <div class="sim-field">
+                <label>IVA a pagar ($)</label>
+                <input type="number" id="sim-pagar" placeholder="Ej: 350.00" min="0" step="0.01">
+              </div>
+              <button class="sim-run" onclick="runSimulator()">⚡ Calcular plan</button>
+            </div>
+            <div id="sim-result"><div class="plan-empty">👆 Selecciona un mes para calcular tu plan de acreditamiento</div></div>
+          </div>
+        </div>
+
+        <!-- SALDOS DISPONIBLES -->
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr green">💰 Saldos disponibles (FIFO)</div>
+          <div class="asesor-panel-body">
+            <div id="saldos-disp"></div>
+            <div style="margin-top:10px;font-size:.68rem;color:#999">Haz clic en un saldo para usarlo en el simulador</div>
+          </div>
+        </div>
+
+        <!-- NOTIFICACIONES -->
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr gold">🔔 Alertas activas</div>
+          <div class="asesor-panel-body" id="notif-panel"></div>
+        </div>
+
+        <!-- PATRÓN -->
+        <div class="asesor-panel">
+          <div class="asesor-panel-hdr blue">📊 Análisis del período</div>
+          <div class="asesor-panel-body" id="patron-panel"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ HISTORIAL ══ -->
+<div class="page" id="pg-hist">
+  <div style="padding:12px 0">
+    <div class="sec-ttl">Resumen por ejercicio fiscal — <span id="hist-cliente-label" style="color:var(--amarillo)"></span></div>
+    <div id="hist-grid"></div>
+  </div>
+</div>
+
+<!-- ══ GUIA ══ -->
+<div class="page" id="pg-guia">
+  <div style="padding:12px 0;max-width:780px">
+    <div class="sec-ttl">Guía de uso y leyenda</div>
+    <div style="display:grid;gap:10px" id="guia-content"></div>
+  </div>
+</div>
+
+<!-- MODAL CERRAR AÑO -->
+<div class="modal-bg" id="modal-close">
+  <div class="modal">
+    <h2>🔒 Cerrar Año Fiscal</h2>
+    <p>El remanente final se arrastrará al nuevo ejercicio. Las celdas quedarán bloqueadas.</p>
+    <div class="info-box" id="modal-close-info"></div>
+    <div class="modal-btns">
+      <button class="btn btn-gh" onclick="closeModal('modal-close')">Cancelar</button>
+      <button class="btn btn-g" onclick="doCloseYear()">✓ Cerrar año</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REABRIR AÑO -->
+<div class="modal-bg" id="modal-reopen">
+  <div class="modal">
+    <h2>🔓 Reabrir Año Cerrado</h2>
+    <p>Esta acción desbloquea el año para edición. Requiere contraseña de confirmación.</p>
+    <input type="password" id="reopen-pwd" placeholder="Contraseña..." onkeydown="if(event.key==='Enter')doReopen()">
+    <div style="font-size:.7rem;color:#999;margin-bottom:12px">Contraseña: <strong>IVA2025</strong></div>
+    <div class="modal-btns">
+      <button class="btn btn-gh" onclick="closeModal('modal-reopen')">Cancelar</button>
+      <button class="btn btn-r" onclick="doReopen()">🔓 Reabrir</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  IVA CONTROL PRO v20 — MULTI-CLIENTE + ASESOR IA v20
+//  Preservación absoluta de datos SAT garantizada
+// ══════════════════════════════════════════════════════════
+const toCents = n => Math.round((parseFloat(n) || 0) * 100);
+const fromCents = n => +(n / 100).toFixed(2);
+
+// SEED de datos base (un ejercicio de ejemplo)
+const SEED_YEAR_DATA = () => ({
+  closed: false, heredado: 0,
+  meses: ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'].map(m => ({
+    m, trasl:0, ret:0, acred:0, au:0, folio:'',
+    presentadoEn:null, noOp:'',
+    tieneIvaAcreditable:null, ivaAcreditableSAT:null, ivaAcreditableComp:null
+  })),
+  saldos:[]
+});
+
+const SEED_2025 = {
+  closed:true, heredado:0,
+  meses:[
+    {m:"ENE",trasl:0,      ret:0,       acred:239.99, au:0,      folio:"Genera a favor",presentadoEn:"2025-03-06T11:59:00.000Z",noOp:"259748099259",tieneIvaAcreditable:false,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"FEB",trasl:1799.10,ret:1199.38, acred:265.05, au:239.99, folio:"No.Op: — (Feb 2025)",presentadoEn:"2025-03-25T10:52:00.000Z",noOp:"",tieneIvaAcreditable:false,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"MAR",trasl:899.55, ret:599.69,  acred:1132.99,au:0,      folio:"Genera a favor",presentadoEn:"2025-04-25T20:26:00.000Z",noOp:"250410180455",tieneIvaAcreditable:true,ivaAcreditableSAT:833,ivaAcreditableComp:833},
+    {m:"ABR",trasl:899.55, ret:599.69,  acred:156.02, au:143.84, folio:"No.Op:250410180455",presentadoEn:"2025-06-10T10:57:00.000Z",noOp:"252888086544",tieneIvaAcreditable:false,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"MAY",trasl:899.55, ret:599.69,  acred:1458.90,au:0,      folio:"Genera a favor",presentadoEn:"2025-06-17T16:48:00.000Z",noOp:"253120013076",tieneIvaAcreditable:true,ivaAcreditableSAT:1159,ivaAcreditableComp:1159},
+    {m:"JUN",trasl:899.55, ret:599.69,  acred:119.69, au:180.17, folio:"No.Op:250410180455 (Jun 2025)",presentadoEn:"2025-07-23T14:35:00.000Z",noOp:"251468049685",tieneIvaAcreditable:false,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"JUL",trasl:899.55, ret:599.69,  acred:491.86, au:0,      folio:"",presentadoEn:"2025-08-19T13:54:00.000Z",noOp:"251860073138",tieneIvaAcreditable:true,ivaAcreditableSAT:192,ivaAcreditableComp:192},
+    {m:"AGO",trasl:0,      ret:0,       acred:269.29, au:0,      folio:"",presentadoEn:"2025-09-23T10:53:00.000Z",noOp:"251410181831",tieneIvaAcreditable:true,ivaAcreditableSAT:269,ivaAcreditableComp:269},
+    {m:"SEP",trasl:1799.10,ret:1199.38, acred:161.07, au:438.65, folio:"No.Op:250410180455 (Sep 2025)",presentadoEn:"2025-10-17T10:22:00.000Z",noOp:"251630112661",tieneIvaAcreditable:false,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"OCT",trasl:0,      ret:0,       acred:147.25, au:0,      folio:"",presentadoEn:"2025-11-24T16:48:00.000Z",noOp:"253710010857",tieneIvaAcreditable:true,ivaAcreditableSAT:147,ivaAcreditableComp:147},
+    {m:"NOV",trasl:2698.65,ret:1799.07, acred:257.37, au:642.21, folio:"No.Op:251890029587 + 264900003799",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"DIC",trasl:0,      ret:0,       acred:172.70, au:0,      folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+  ],
+  saldos:[]
+};
+
+const SEED_2026 = {
+  closed:false, heredado:1368.54,
+  meses:[
+    {m:"ENE",trasl:910.34,ret:606.89,acred:166.49,au:137,folio:"No.Op:264900003799 — saldo May 2025",presentadoEn:"2026-02-19T12:46:00.000Z",noOp:"264900003799",tieneIvaAcreditable:false,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"FEB",trasl:0,ret:0,acred:122.39,au:0,folio:"",presentadoEn:"2026-03-09T11:58:00.000Z",noOp:"269870084939",tieneIvaAcreditable:true,ivaAcreditableSAT:122,ivaAcreditableComp:122},
+    {m:"MAR",trasl:910.34,ret:606.89,acred:264.15,au:39.3,folio:"",presentadoEn:"2026-05-07T12:43:00.000Z",noOp:"262290141549",tieneIvaAcreditable:false,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    {m:"ABR",trasl:1820.68,ret:1213.78,acred:147.13,au:459.77,folio:"",presentadoEn:null,noOp:"",tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null},
+    ...[4,5,6,7,8,9,10,11].map(idx => ({
+      m:['MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'][idx-4],
+      trasl:0,ret:0,acred:0,au:0,folio:'',
+      presentadoEn:null,noOp:'',tieneIvaAcreditable:null,ivaAcreditableSAT:null,ivaAcreditableComp:null
+    }))
+  ],
+  saldos:[]
+};
+
+// ── ESTRUCTURA MULTI-CLIENTE ──
+const MC_KEY = 'iva_pro_v20_multicliente';
+const LEGACY_KEY = 'iva_pro_v12_perfecto';
+
+function initMC() {
+  // 1. Intentar cargar estructura v20
+  let mc = null;
+  try { mc = JSON.parse(localStorage.getItem(MC_KEY) || 'null'); } catch(e){}
+  if (mc && mc.clientes && mc.datos) return mc;
+
+  // 2. Migrar datos legacy v19 si existen
+  let legacy = null;
+  try { legacy = JSON.parse(localStorage.getItem(LEGACY_KEY) || 'null'); } catch(e){}
+  if (legacy && legacy.years) {
+    const mc2 = {
+      clienteActivo: 'Cliente 1',
+      clientes: ['Cliente 1'],
+      datos: { 'Cliente 1': { years: legacy.years, activeYear: legacy.activeYear || 2026 } }
+    };
+    localStorage.setItem(MC_KEY, JSON.stringify(mc2));
+    return mc2;
+  }
+
+  // 3. Datos de ejemplo frescos
+  const mc3 = {
+    clienteActivo: 'Empresa Ejemplo',
+    clientes: ['Empresa Ejemplo'],
+    datos: {
+      'Empresa Ejemplo': {
+        years: { 2025: JSON.parse(JSON.stringify(SEED_2025)), 2026: JSON.parse(JSON.stringify(SEED_2026)) },
+        activeYear: 2026
+      }
+    }
+  };
+  localStorage.setItem(MC_KEY, JSON.stringify(mc3));
+  return mc3;
+}
+
+let MC = initMC();
+
+// DB y AY apuntan siempre al cliente activo
+function getClienteData() { return MC.datos[MC.clienteActivo]; }
+function getDB() { return getClienteData(); }
+let AY = getClienteData().activeYear || 2026;
+let ATY = AY;
+
+const $ = id => document.getElementById(id);
+const years = () => Object.keys(getDB().years).map(Number).sort();
+const fmt = (n,cls) => {
+  if(!n||isNaN(n)||n===0) return '<span class="cg">—</span>';
+  const s='$'+Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  return cls?`<span class="${cls}">${s}</span>`:s;
+};
+const fP = n => (!n||isNaN(n)||n===0)?'—':'$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+const gN = el => {if(!el)return 0;const v=parseFloat((el.innerText||'').replace(/[$,\s]/g,''));return isNaN(v)?0:v;};
+
+// ── MULTI-CLIENTE FUNCIONES ──
+function renderClienteSelect() {
+  const sel = $('clienteSelect');
+  if (!sel) return;
+  sel.innerHTML = MC.clientes.map(c =>
+    `<option value="${c}" ${c===MC.clienteActivo?'selected':''}>${c}</option>`
+  ).join('');
+}
+
+function cambiarCliente(nombre) {
+  saveToMemory(); // guardar estado del cliente actual primero
+  if (!MC.datos[nombre]) return;
+  MC.clienteActivo = nombre;
+  AY = MC.datos[nombre].activeYear || years()[0] || 2026;
+  ATY = AY;
+  localStorage.setItem(MC_KEY, JSON.stringify(MC));
+  renderAll();
+  renderClienteSelect();
+  toast(`👤 Cliente: ${nombre}`);
+}
+
+async function nuevoCliente() {
+  const { value: nombre, isConfirmed } = await Swal.fire({
+    title: '👤 NUEVO CLIENTE',
+    customClass: { popup: 'sinergia-popup' },
+    input: 'text',
+    inputPlaceholder: 'Nombre del cliente o empresa...',
+    showCancelButton: true,
+    confirmButtonText: '✓ Crear',
+    cancelButtonText: 'Cancelar',
+    inputValidator: v => {
+      if (!v || !v.trim()) return 'Ingresa un nombre válido';
+      if (MC.clientes.includes(v.trim())) return 'Ya existe un cliente con ese nombre';
+    }
+  });
+  if (!isConfirmed || !nombre) return;
+  const n = nombre.trim();
+  MC.clientes.push(n);
+  MC.datos[n] = {
+    years: { [new Date().getFullYear()]: SEED_YEAR_DATA() },
+    activeYear: new Date().getFullYear()
+  };
+  MC.clienteActivo = n;
+  AY = new Date().getFullYear();
+  ATY = AY;
+  localStorage.setItem(MC_KEY, JSON.stringify(MC));
+  renderClienteSelect();
+  renderAll();
+  toast(`✅ Cliente "${n}" creado`);
+}
+
+function exportarJSON() {
+  saveToMemory();
+  const data = {
+    version: 'IVA-PRO-v20',
+    cliente: MC.clienteActivo,
+    exportado: new Date().toISOString(),
+    datos: MC.datos[MC.clienteActivo]
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `iva_${MC.clienteActivo.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast(`📤 JSON exportado: ${MC.clienteActivo}`);
+}
+
+function importarJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    let data;
+    try { data = JSON.parse(e.target.result); } catch(err) { toast('❌ Archivo JSON inválido'); return; }
+
+    // Detectar si es formato v20 (tiene .datos) o formato legacy (tiene .years directo)
+    let clienteNombre, clienteDatos;
+    if (data.version && data.datos && data.cliente) {
+      // Formato v20
+      clienteNombre = data.cliente;
+      clienteDatos = data.datos;
+    } else if (data.years) {
+      // Formato legacy
+      clienteNombre = file.name.replace('.json','').replace('iva_','').replace(/_\d{4}-\d{2}-\d{2}/,'') || 'Importado';
+      clienteDatos = { years: data.years, activeYear: data.activeYear || Object.keys(data.years).map(Number).sort().pop() };
+    } else {
+      toast('❌ Formato de JSON no reconocido'); return;
+    }
+
+    // Validar que los campos SAT no se pierdan al importar
+    Object.values(clienteDatos.years || {}).forEach(yr => {
+      (yr.meses || []).forEach(m => {
+        if (!m.hasOwnProperty('presentadoEn')) m.presentadoEn = null;
+        if (!m.hasOwnProperty('noOp')) m.noOp = '';
+        if (!m.hasOwnProperty('tieneIvaAcreditable')) m.tieneIvaAcreditable = null;
+        if (!m.hasOwnProperty('ivaAcreditableSAT')) m.ivaAcreditableSAT = null;
+        if (!m.hasOwnProperty('ivaAcreditableComp')) m.ivaAcreditableComp = null;
+      });
+    });
+
+    const { isConfirmed } = await Swal.fire({
+      title: '📥 IMPORTAR CLIENTE',
+      customClass: { popup: 'sinergia-popup' },
+      html: `<div style="text-align:left;font-size:.8rem;color:#ccc">
+        <p>Cliente detectado: <strong style="color:var(--amarillo)">${clienteNombre}</strong></p>
+        <p style="margin-top:8px">¿Deseas reemplazar los datos de este cliente (si ya existe) o crear uno nuevo?</p>
+      </div>`,
+      confirmButtonText: '✓ Importar',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar'
+    });
+    if (!isConfirmed) { event.target.value = ''; return; }
+
+    if (!MC.clientes.includes(clienteNombre)) MC.clientes.push(clienteNombre);
+    MC.datos[clienteNombre] = clienteDatos;
+    MC.clienteActivo = clienteNombre;
+    AY = clienteDatos.activeYear || Object.keys(clienteDatos.years).map(Number).sort().pop();
+    ATY = AY;
+    localStorage.setItem(MC_KEY, JSON.stringify(MC));
+    renderClienteSelect();
+    renderAll();
+    toast(`✅ "${clienteNombre}" importado correctamente`);
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ── HEREDADO DINÁMICO ESTRICTO (CENTAVOS) ──
+function getDynamicHeredado(targetYear) {
+  const db = getDB();
+  let runningCents = 0;
+  years().forEach(yr => {
+    if (yr >= targetYear) return;
+    const yrData = db.years[yr];
+    let prevCents = (yr === years()[0]) ? toCents(yrData.heredado || 0) : runningCents;
+    yrData.meses.forEach(m => {
+      const t = toCents(m.trasl), r = toCents(m.ret), a = toCents(m.acred), au = toCents(m.au);
+      const raw = t - r - a;
+      const fav = Math.max(-raw, 0);
+      const auReal = Math.min(au, prevCents + fav);
+      prevCents = prevCents + fav - auReal;
+    });
+    runningCents = prevCents;
+  });
+  if (targetYear === years()[0]) return getDB().years[targetYear].heredado || 0;
+  return fromCents(runningCents);
+}
+
+// ── TRAZABILIDAD AUTOMÁTICA ──
+function getTrazabilidad() {
+  const db = getDB();
+  const fuentes = [];
+  const usos = [];
+  let runningCents = 0;
+
+  years().forEach((yr, index) => {
+    const yrData = db.years[yr];
+    let prevCents = (index === 0) ? toCents(yrData.heredado || 0) : runningCents;
+    if (index === 0 && yrData.heredado > 0) {
+      fuentes.push({ mes: `Herencia de ${yr-1}`, origCents: toCents(yrData.heredado), apps: [], isHer: true, folioOrigen: 'Saldo ejercicios anteriores' });
+    }
+    yrData.meses.forEach(m => {
+      const t = toCents(m.trasl), r = toCents(m.ret), a = toCents(m.acred), au = toCents(m.au);
+      const raw = t - r - a;
+      const fav = Math.max(-raw, 0);
+      const auReal = Math.min(au, prevCents + fav);
+      if (fav > 0) fuentes.push({ mes: `${m.m} ${yr}`, origCents: fav, apps: [], isHer: false, folioOrigen: m.folio, presentadoEn: m.presentadoEn||null, noOp: m.noOp||'' });
+      if (auReal > 0) usos.push({ mesDestino: `${m.m} ${yr}`, montoCents: auReal, folio: m.folio });
+      prevCents = prevCents + fav - auReal;
+    });
+    runningCents = prevCents;
+  });
+
+  for (const u of usos) {
+    let remainingUso = u.montoCents;
+    for (const f of fuentes) {
+      if (remainingUso <= 0) break;
+      const fConsumido = f.apps.reduce((s, a) => s + a.montoCents, 0);
+      const fRem = f.origCents - fConsumido;
+      if (fRem > 0) {
+        const toApply = Math.min(fRem, remainingUso);
+        f.apps.push({ en: u.mesDestino, montoCents: toApply, folio: u.folio });
+        remainingUso -= toApply;
+      }
+    }
+  }
+
+  return fuentes.map(f => {
+    const consumido = f.apps.reduce((s, a) => s + a.montoCents, 0);
+    return {
+      id: f.mes, mes: f.mes,
+      orig: fromCents(f.origCents),
+      rem: fromCents(f.origCents - consumido),
+      isHer: f.isHer, folioOrigen: f.folioOrigen,
+      presentadoEn: f.presentadoEn||null, noOp: f.noOp||'',
+      aplicaciones: f.apps.map(a => ({ en: a.en, monto: fromCents(a.montoCents), folio: a.folio }))
+    };
+  });
+}
+
+function getAllSaldosDisponibles() {
+  return getTrazabilidad().filter(s => s.rem > 0);
+}
+
+function goTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-tabs .tab').forEach(t => t.classList.remove('on'));
+  $(`pg-${id}`).classList.add('on');
+  const tabs = ['control','traz','asesor','hist','guia'];
+  document.querySelectorAll('.nav-tabs .tab')[tabs.indexOf(id)]?.classList.add('on');
+  if (id==='traz') renderTraz();
+  if (id==='hist') renderHist();
+  if (id==='asesor') renderAsesor();
+  if (id==='guia') renderGuia();
+}
+
+function renderYTabs(cid, fn) {
+  const el = $(cid); if (!el) return;
+  el.innerHTML = years().map(y =>
+    `<div class="ytab ${AY===y?'on':''}" onclick="${fn}(${y})">${y} ${getDB().years[y].closed?'🔒':''}</div>`
+  ).join('') + `<button class="btn-ny" onclick="addYear()">+ Nuevo año</button>`;
+}
+
+function switchYear(y) { AY=y; getDB().activeYear=y; renderAll(); }
+function switchTrazYear(y) { ATY=y; AY=y; renderTraz(); renderYTabs('ytabs-traz','switchTrazYear'); }
+
+// ── HELPER: Calcular remanentes disponibles justo ANTES de un mes específico ──
+function getRemantesAntesDe(targetYear, targetMesIdx) {
+  const db = getDB();
+  const mesesOrden = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+  // remMap: key="MES ANIO" (o "__her__"), val={origCents, usedCents, noOp}
+  const remMap = {};
+
+  // Registrar heredado del primer año como fuente inicial
+  const firstYr = years()[0];
+  if (firstYr) {
+    const her = toCents(db.years[firstYr].heredado || 0);
+    if (her > 0) remMap['__her__'] = { origCents: her, usedCents: 0, noOp: '' };
+  }
+
+  const ordenarFuentes = () => Object.keys(remMap).sort((a, b) => {
+    if (a==='__her__') return -1;
+    if (b==='__her__') return 1;
+    const [aMes, aAnio] = a.split(' ');
+    const [bMes, bAnio] = b.split(' ');
+    const yd = (parseInt(aAnio)||0) - (parseInt(bAnio)||0);
+    if (yd !== 0) return yd;
+    return mesesOrden.indexOf(aMes) - mesesOrden.indexOf(bMes);
+  });
+
+  years().forEach(yr => {
+    const yrData = db.years[yr];
+    yrData.meses.forEach((m, mIdx) => {
+      // Parar cuando llegamos al mes objetivo
+      if (yr === targetYear && mIdx >= targetMesIdx) return;
+      if (yr > targetYear) return;
+
+      const t = toCents(m.trasl), r = toCents(m.ret), a = toCents(m.acred), au = toCents(m.au);
+      const raw = t - r - a;
+      const fav = Math.max(-raw, 0);
+      const mesKey = `${m.m} ${yr}`;
+
+      // Registrar saldo a favor generado este mes
+      if (fav > 0) {
+        remMap[mesKey] = { origCents: fav, usedCents: 0, noOp: m.noOp||'' };
+      }
+
+      // Aplicar acreditamiento en orden FIFO
+      if (au > 0) {
+        let totalDisp = ordenarFuentes().reduce((s, fk) => s + Math.max(remMap[fk].origCents - remMap[fk].usedCents, 0), 0);
+        let restanteAU = Math.min(au, totalDisp);
+        for (const fk of ordenarFuentes()) {
+          if (restanteAU <= 0) break;
+          const disp = remMap[fk].origCents - remMap[fk].usedCents;
+          if (disp <= 0) continue;
+          const usar = Math.min(disp, restanteAU);
+          remMap[fk].usedCents += usar;
+          restanteAU -= usar;
+        }
+      }
+    });
+  });
+
+  return remMap;
+}
+
+// ── HELPER: Construir texto de folio trazable usando noOp reales ──
+function buildFolioAutoText(year, mesIdx) {
+  const db = getDB();
+  const yr = db.years[year];
+  const m = yr.meses[mesIdx];
+  if (!m.au || m.au <= 0) return '';
+
+  const mesesOrden = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+  // Obtener remanentes disponibles JUSTO ANTES de este mes
+  const remMap = getRemantesAntesDe(year, mesIdx);
+
+  let restante = toCents(m.au);
+  const fuentes = [];
+
+  // Ordenar fuentes FIFO: heredado primero, luego cronológico
+  const ordenFuentes = Object.keys(remMap).sort((a, b) => {
+    if (a==='__her__') return -1;
+    if (b==='__her__') return 1;
+    const [aMes, aAnio] = a.split(' ');
+    const [bMes, bAnio] = b.split(' ');
+    const yd = (parseInt(aAnio)||0) - (parseInt(bAnio)||0);
+    if (yd !== 0) return yd;
+    return mesesOrden.indexOf(aMes) - mesesOrden.indexOf(bMes);
+  });
+
+  for (const fk of ordenFuentes) {
+    if (restante <= 0) break;
+    const disp = remMap[fk].origCents - remMap[fk].usedCents;
+    if (disp <= 0) continue;
+    const usar = Math.min(disp, restante);
+
+    const montoStr = '$' + (usar/100).toFixed(2);
+    let noOpReal = remMap[fk].noOp || '';
+    let textoFuente;
+
+    if (fk === '__her__') {
+      textoFuente = `Herencia [${montoStr}]`;
+    } else if (noOpReal) {
+      textoFuente = `No.Op:${noOpReal} (${fk}) [${montoStr}]`;
+    } else {
+      textoFuente = `De ${fk} [${montoStr}]`;
+    }
+    fuentes.push(textoFuente);
+    restante -= usar;
+  }
+
+  return fuentes.join(' + ');
+}
+
+// ── RENDER ALL — columna Declaración SAT como 2da columna ──
+function renderAll() {
+  const db = getDB();
+  renderYTabs('ytabs-ctrl','switchYear');
+  renderYTabs('ytabs-traz','switchTrazYear');
+  $('yr-badge').textContent = `📅 ${years().join(' · ')}`;
+  renderClienteSelect();
+
+  const yr = db.years[AY];
+  const locked = yr.closed;
+  const her = getDynamicHeredado(AY);
+
+  let rows = '';
+  yr.meses.forEach((row, i) => {
+    const isHer = (i===0 && her>0);
+
+    // ── Botón declaración SAT ──
+    let btnDecl = '';
+    if (row.presentadoEn) {
+      const d = new Date(row.presentadoEn);
+      const fStr = d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'2-digit'});
+      const hStr = d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+      const noOpStr = row.noOp ? row.noOp : '—';
+      let acredBadge = '';
+      if (row.tieneIvaAcreditable === true) {
+        const coincide = row.ivaAcreditableSAT === row.ivaAcreditableComp;
+        acredBadge = `<span class="reg-folio" style="color:${coincide?'#00965A':'#FF2D78'}">💰 ${coincide?'✅':'⚠️'} $${(row.ivaAcreditableSAT||0).toLocaleString('es-MX')}</span>`;
+      } else if (row.tieneIvaAcreditable === false) {
+        acredBadge = `<span class="reg-folio" style="color:#666">Sin IVA acred.</span>`;
+      }
+      btnDecl = `<button class="btn-reg-ok guardado-brillante" onclick="registrarDeclaracion(${AY},${i})" title="Editar declaración">
+        ✅ ${fStr} ${hStr}
+        <span class="reg-folio">No.Op: ${noOpStr}</span>
+        ${acredBadge}
+      </button>`;
+    } else {
+      btnDecl = `<button class="btn-reg" onclick="registrarDeclaracion(${AY},${i})">📅 Registrar</button>`;
+    }
+
+    // ── Celda folio: auto-generado desde trazabilidad FIFO con noOp reales ──
+    const tieneAU = (row.au > 0);
+    const folioManual = (row.folio || '').trim();
+    const folioAutoTxt = tieneAU ? buildFolioAutoText(AY, i) : '';
+    // Si folio fue editado manualmente (no sigue patrón auto), respetarlo
+    const folioEsAuto = !folioManual || folioManual.startsWith('De ') || folioManual.startsWith('No.Op:') || folioManual.startsWith('Sin folio');
+    const folioMostrar = (folioEsAuto && folioAutoTxt) ? folioAutoTxt : folioManual;
+    const folioClass = (folioEsAuto && folioAutoTxt) ? 'folio-auto' : 'folio';
+    const folioEditable = !locked && !(folioEsAuto && folioAutoTxt);
+    const folioTitle = (folioEsAuto && folioAutoTxt) ? 'Auto-generado desde trazabilidad FIFO. Haz clic en el botón 📅 Registrar para editar datos SAT.' : '';
+
+    // ── Fila: MES | DECLARACIÓN SAT | TRASLADADO | RETENIDO | ACREDITABLE | ... ──
+    rows += `<tr onclick="selectRow(this)">
+      <td class="mes${isHer?' her':''}">${row.m}${isHer?'<br><small style="font-size:.52rem;opacity:.8">+herencia</small>':''}</td>
+      <td class="btn-fecha">${btnDecl}</td>
+      <td class="inp" contenteditable="${!locked}" id="t-${AY}-${i}" oninput="onInp(${AY},${i})">${row.trasl!=null&&row.trasl!==0?row.trasl:''}</td>
+      <td class="inp" contenteditable="${!locked}" id="r-${AY}-${i}" oninput="onInp(${AY},${i})">${row.ret!=null&&row.ret!==0?row.ret:''}</td>
+      <td class="inp" contenteditable="${!locked}" id="a-${AY}-${i}" oninput="onInp(${AY},${i})">${row.acred!=null&&row.acred!==0?row.acred:''}</td>
+      <td id="fav-${AY}-${i}">—</td>
+      <td id="pag-${AY}-${i}">—</td>
+      <td class="au" contenteditable="${!locked}" id="au-${AY}-${i}" oninput="onInp(${AY},${i})">${row.au!=null&&row.au!==0?row.au:''}</td>
+      <td id="rh-${AY}-${i}">—</td>
+      <td id="pef-${AY}-${i}">—</td>
+      <td id="rac-${AY}-${i}">—</td>
+      <td class="${folioClass}" contenteditable="${folioEditable}" id="f-${AY}-${i}" oninput="onInp(${AY},${i})" title="${folioTitle}">${folioMostrar}</td>
+    </tr>`;
+  });
+
+  let html = `<div id="banner-area"></div>`;
+
+  html += `<div class="tbl-wrap"><table>
+    <thead>
+      <tr>
+        <th rowspan="2" class="mes-th" style="border-right:3px solid var(--o)">MES</th>
+        <th rowspan="2" class="dec-th">📅 DECLARACIÓN SAT</th>
+        <th colspan="3">CIFRAS DEL PERÍODO</th>
+        <th colspan="2">RESULTADO</th>
+        <th colspan="2">ACREDITAMIENTO</th>
+        <th colspan="2">PAGO REAL</th>
+        <th rowspan="2">FOLIO SAT</th>
+      </tr>
+      <tr>
+        <th class="sub">TRASLADADO</th>
+        <th class="sub">RETENIDO</th>
+        <th class="sub">ACREDITABLE</th>
+        <th class="sub">A FAVOR</th>
+        <th class="sub">A PAGAR</th>
+        <th class="sub">ACRED. APLICADO</th>
+        <th class="sub">REM. HISTÓRICO</th>
+        <th class="sub">PAGO EFECTIVO</th>
+        <th class="sub">REM. ACUMULADO</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-${AY}">${rows}</tbody>
+    <tfoot><tr class="tot">
+      <td style="text-align:center">TOTALES ${AY}</td>
+      <td></td>
+      <td id="tot-t">—</td><td id="tot-r">—</td><td id="tot-a">—</td>
+      <td id="tot-fav">—</td><td id="tot-pag">—</td><td id="tot-au">—</td>
+      <td>—</td><td id="tot-pef">—</td><td id="tot-rac">—</td><td></td>
+    </tr></tfoot>
+  </table></div>`;
+
+  $('table-area').innerHTML = html;
+  recalcYear(AY);
+}
+
+// ── SELECCIÓN DE FILA — fix UX blanco ──
+function selectRow(tr) {
+  document.querySelectorAll('tbody tr.row-selected').forEach(r => r.classList.remove('row-selected'));
+  tr.classList.add('row-selected');
+}
+
+function onInp(year, i) {
+  const yr = getDB().years[year];
+  const readN = id => { const e=$(id); if(!e) return null; const v=parseFloat((e.innerText||'').replace(/[$,\s]/g,'')); return isNaN(v)?0:v; };
+  const readS = id => { const e=$(id); return e ? e.innerText.trim() : null; };
+  const t = readN(`t-${year}-${i}`); if(t!==null) yr.meses[i].trasl=t;
+  const r = readN(`r-${year}-${i}`); if(r!==null) yr.meses[i].ret=r;
+  const a = readN(`a-${year}-${i}`); if(a!==null) yr.meses[i].acred=a;
+  const au= readN(`au-${year}-${i}`);if(au!==null)yr.meses[i].au=au;
+  const f = readS(`f-${year}-${i}`); if(f!==null) yr.meses[i].folio=f;
+  // PRESERVACIÓN ABSOLUTA: presentadoEn, noOp y campos SAT NO se tocan aquí
+  recalcYear(year);
+  autoSave();
+}
+
+function recalcYear(year) {
+  const db = getDB();
+  const yr = db.years[year];
+  let prevCents = toCents(getDynamicHeredado(year));
+  let sT=0, sR=0, sA=0, sFav=0, sPag=0, sAU=0, sPef=0;
+
+  yr.meses.forEach((row, i) => {
+    const readN = id => { const e=$(id); if(!e||!e.innerText.trim()) return null; const v=parseFloat(e.innerText.replace(/[$,\s]/g,'')); return isNaN(v)?null:v; };
+    const t  = readN(`t-${year}-${i}`)  ?? (row.trasl||0);
+    const r  = readN(`r-${year}-${i}`)  ?? (row.ret||0);
+    const a  = readN(`a-${year}-${i}`)  ?? (row.acred||0);
+    const au = readN(`au-${year}-${i}`) ?? (row.au||0);
+
+    const rawCents  = toCents(t) - toCents(r) - toCents(a);
+    const favCents  = Math.max(-rawCents, 0);
+    const pagCents  = Math.max(rawCents, 0);
+    const auRealCents = Math.min(toCents(au), prevCents + favCents);
+    const acumCents = prevCents + favCents - auRealCents;
+    const pefCents  = Math.max(pagCents - auRealCents, 0);
+    const hayAct = t>0||r>0||a>0||au>0;
+
+    const set = (id, h) => { const e=$(id); if(e) e.innerHTML=h; };
+    set(`fav-${year}-${i}`, favCents>0 ? fmt(fromCents(favCents),'cv') : '<span class="cg">—</span>');
+    set(`pag-${year}-${i}`, pagCents>0 ? fmt(fromCents(pagCents),'cr') : '<span class="cg">—</span>');
+    set(`rh-${year}-${i}`,  (prevCents>0&&hayAct) ? fmt(fromCents(prevCents),'co') : '<span class="cg">—</span>');
+    set(`pef-${year}-${i}`, pefCents>0 ? fmt(fromCents(pefCents),'cr') : '<span class="cg">—</span>');
+    set(`rac-${year}-${i}`, (acumCents>0&&(hayAct||(i===0&&getDynamicHeredado(year)>0))) ? fmt(fromCents(acumCents),'cv') : '<span class="cg">—</span>');
+
+    sT+=t; sR+=r; sA+=a;
+    sFav+=fromCents(favCents); sPag+=fromCents(pagCents);
+    sAU+=au; sPef+=fromCents(pefCents);
+    prevCents = acumCents;
+  });
+
+  yr.remanenteFinal = fromCents(prevCents);
+
+  const st = (id,v,c) => { const e=$(id); if(e) e.innerHTML=fmt(v,c); };
+  st('tot-t',sT,'cr'); st('tot-r',sR,'cr'); st('tot-a',sA,'cv');
+  st('tot-fav',sFav,'cv'); st('tot-pag',sPag,'cr'); st('tot-au',sAU,'co');
+  st('tot-pef',sPef,'cr'); st('tot-rac',yr.remanenteFinal,'cv');
+
+  renderCards(year,sT,sR,sA,sFav,sPag,sAU,sPef,yr.remanenteFinal,getDynamicHeredado(year));
+  checkAlerts(year);
+
+  if ($('pg-traz')?.classList.contains('on'))   renderTraz();
+  if ($('pg-asesor')?.classList.contains('on')) renderAsesor();
+  if ($('pg-hist')?.classList.contains('on'))   renderHist();
+}
+
+function recalcAll() { recalcYear(AY); }
+
+function autoAcreditarYear() {
+  saveToMemory();
+  const db = getDB();
+  const yr = db.years[AY];
+  if (yr.closed) { toast('🔒 El año está cerrado.'); return; }
+  const mesesOrden = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  let aplicados = 0;
+
+  for (let i=0; i<12; i++) {
+    const m = yr.meses[i];
+    const t = toCents(m.trasl||0), r = toCents(m.ret||0), a = toCents(m.acred||0);
+    const pagCents = Math.max(t - r - a, 0);
+    if (pagCents > 0) {
+      const canOverride = (!m.folio || m.folio.trim()==='' || m.folio.startsWith('De '));
+      const disp = getTrazabilidad()
+        .filter(s => toCents(s.rem) > 0)
+        .sort((a,b) => {
+          if (a.isHer && !b.isHer) return -1;
+          if (!a.isHer && b.isHer) return 1;
+          const [aMes, aAnio] = a.mes.split(' ');
+          const [bMes, bAnio] = b.mes.split(' ');
+          const yearDiff = (parseInt(aAnio)||0) - (parseInt(bAnio)||0);
+          if (yearDiff !== 0) return yearDiff;
+          return mesesOrden.indexOf(aMes) - mesesOrden.indexOf(bMes);
+        });
+
+      let restante = pagCents;
+      let usarTotalCents = 0;
+      let textos = [];
+
+      for (const s of disp) {
+        if (restante <= 0) break;
+        let esValido = false;
+        if (s.isHer) { esValido = true; }
+        else {
+          const [sMes, sAnio] = s.mes.split(' ');
+          const sA = parseInt(sAnio);
+          const sMIdx = mesesOrden.indexOf(sMes);
+          if (sA < AY || (sA === AY && sMIdx < i)) esValido = true;
+        }
+        if (esValido) {
+          const dispCents = toCents(s.rem);
+          const usar = Math.min(dispCents, restante);
+          usarTotalCents += usar;
+          restante -= usar;
+          let folStr = (s.folioOrigen || '').trim();
+          if (!folStr) folStr = `Sin folio en ${s.mes}`;
+          textos.push(`De ${s.mes}: ${folStr}`);
+        }
+      }
+
+      if (usarTotalCents > 0 && canOverride) {
+        m.au = fromCents(usarTotalCents);
+        m.folio = textos.join(' + ');
+        // PRESERVACIÓN: presentadoEn, noOp y campos SAT NO se modifican
+        aplicados++;
+      }
+    }
+  }
+
+  if (aplicados > 0) {
+    localStorage.setItem(MC_KEY, JSON.stringify(MC));
+    renderAll();
+    toast(`🪄 ¡Magia FIFO! ${aplicados} meses auto-acreditados.`);
+  } else {
+    toast('No hay meses pendientes de acreditamiento.');
+  }
+}
+
+function getRemanentesPorAnio(yearActual) {
+  const fuentes = getTrazabilidad();
+  let remAnteriorCents = 0, remActualCents = 0;
+  for (const f of fuentes) {
+    const remCents = toCents(f.rem);
+    if (remCents <= 0) continue;
+    if (f.isHer) { remAnteriorCents += remCents; }
+    else {
+      const anioFuente = parseInt((f.mes.split(' ')[1])||yearActual);
+      if (!isNaN(anioFuente)) {
+        if (anioFuente < yearActual) remAnteriorCents += remCents;
+        else if (anioFuente === yearActual) remActualCents += remCents;
+      }
+    }
+  }
+  return { remanenteAnterior: fromCents(remAnteriorCents), remanenteActual: fromCents(remActualCents) };
+}
+
+function renderCards(y,t,r,a,fav,pag,au,pef,rem,her) {
+  const { remanenteAnterior, remanenteActual } = getRemanentesPorAnio(y);
+  $('cards-area').innerHTML = `
+    <div class="card"><div class="card-lbl">Trasladado</div><div class="card-val red">${fP(t)}</div></div>
+    <div class="card"><div class="card-lbl">Retenido</div><div class="card-val red">${fP(r)}</div></div>
+    <div class="card"><div class="card-lbl">Acreditable</div><div class="card-val red">${fP(a)}</div></div>
+    <div class="card v"><div class="card-lbl">Saldo a Favor</div><div class="card-val">${fP(fav)}</div></div>
+    <div class="card"><div class="card-lbl">A Pagar (bruto)</div><div class="card-val red">${fP(pag)}</div></div>
+    <div class="card o"><div class="card-lbl">Acreditado</div><div class="card-val">${fP(au)}</div></div>
+    <div class="card o"><div class="card-lbl">Pagado Real</div><div class="card-val">${fP(pef)}</div></div>
+    ${remanenteAnterior>0.005?`<div class="card her25"><div class="card-lbl">🩷 Remanente ${y-1} <small style="font-size:.5rem">(FIFO 1°)</small></div><div class="card-val">${fP(remanenteAnterior)}</div></div>`:''}
+    ${remanenteActual>0.005?`<div class="card gen26"><div class="card-lbl">🟢 Generado ${y} <small style="font-size:.5rem">(FIFO 2°)</small></div><div class="card-val">${fP(remanenteActual)}</div></div>`:''}
+    <div class="card total-disp"><div class="card-lbl">💰 Total Disponible</div><div class="card-val">${fP(rem)}</div></div>
+  `;
+  updateBanner(y, her, remanenteAnterior, remanenteActual, rem);
+}
+
+function checkAlerts(year) {
+  const alerts = [];
+  const disp = getAllSaldosDisponibles();
+  const totalDisp = disp.reduce((s,x) => s+x.rem, 0);
+  if (totalDisp > 0) {
+    const { remanenteAnterior, remanenteActual } = getRemanentesPorAnio(year);
+    if (remanenteAnterior>0.005 && remanenteActual>0.005) {
+      alerts.push({t:'blue',msg:`💰 FIFO activo — ${year-1}: ${fP(remanenteAnterior)} (1°) + ${year}: ${fP(remanenteActual)} (2°) = ${fP(totalDisp)}`});
+    } else if (remanenteAnterior>0.005) {
+      alerts.push({t:'blue',msg:`💰 Remanente ${year-1}: ${fP(remanenteAnterior)} disponible (FIFO 1°)`});
+    } else {
+      alerts.push({t:'blue',msg:`💰 Remanente ${year}: ${fP(totalDisp)} disponible`});
+    }
+  }
+  const db = getDB();
+  const sinDatos = db.years[year].meses.filter(m=>!m.trasl&&!m.acred&&!m.ret).length;
+  if (sinDatos > 6) alerts.push({t:'yellow',msg:`📅 ${sinDatos} meses sin datos en ${year}`});
+  const bar=$('alert-bar'), inner=$('alert-inner');
+  if (alerts.length) { inner.innerHTML=alerts.map(a=>`<div class="chip ${a.t}">${a.msg}</div>`).join(''); bar.classList.add('open'); }
+  else { bar.classList.remove('open'); inner.innerHTML=''; }
+}
+
+// ══════════════════════════════════════════════════════════
+//  ASESOR IA v20 — CONVERSACIONAL CON AVATAR CLIPPY-STYLE
+// ══════════════════════════════════════════════════════════
+let avatarEmoji = '📎';
+let avatarNombre = 'Clippy';
+let chatIniciado = false;
+
+const AVATARES = {
+  '📎':'Clippy','🧙':'Merlín','🐶':'Rocky','🐱':'Mittens','🤖':'TAXBOT','🦉':'Sabia'
+};
+
+function setAvatar(emoji, nombre) {
+  avatarEmoji = emoji;
+  avatarNombre = nombre;
+  $('avatarDisplay').textContent = emoji;
+  $('avatarName').textContent = nombre.toUpperCase();
+  document.querySelectorAll('.avatar-opt').forEach(o => {
+    o.classList.toggle('active', o.textContent.trim() === emoji);
+  });
+  if (chatIniciado) {
+    addBotMsg(`¡Ahora soy ${nombre}! Sigues en buenas manos. 😊`);
+  }
+}
+
+function avatarWiggle() {
+  const el = $('avatarDisplay');
+  el.style.animation = 'none';
+  setTimeout(() => { el.style.animation = ''; }, 50);
+  addBotMsg(getRandomQuip());
+}
+
+function getRandomQuip() {
+  const quips = [
+    '¡Hola! ¿Necesitas ayuda con algún mes? 📅',
+    '¿Sabías que el FIFO prioriza los saldos más antiguos? ¡Te ahorra impuestos! 💡',
+    `Recuerda: siempre usa primero el remanente de ${AY-1} antes que el de ${AY}.`,
+    '¿Ya registraste tu declaración del mes pasado? ¡No olvides el número de operación! ✅',
+    'Si tienes dudas sobre el acreditamiento, selecciona un mes y te ayudo. 🧮',
+  ];
+  return quips[Math.floor(Math.random() * quips.length)];
+}
+
+function addBotMsg(html) {
+  const msgs = $('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot';
+  div.innerHTML = `
+    <div class="chat-avatar-sm">${avatarEmoji}</div>
+    <div class="chat-bubble">${html}</div>
+  `;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addUserMsg(texto) {
+  const msgs = $('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg user';
+  div.innerHTML = `<div class="chat-bubble">${texto}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function renderAsesor() {
+  // Poblar select de meses en el chat y en el simulador
+  const meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  [['chatMesSelect', true], ['sim-mes', false]].forEach(([selId, addBlank]) => {
+    const sel = $(selId);
+    if (!sel) return;
+    const prev = sel.value;
+    sel.innerHTML = `<option value="">— Selecciona —</option>`;
+    years().forEach(yr => {
+      meses.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = `${m} ${yr}`;
+        opt.textContent = `${m} ${yr}`;
+        sel.appendChild(opt);
+      });
+    });
+    if (prev) sel.value = prev;
+  });
+
+  // Saludo inicial del asistente
+  if (!chatIniciado) {
+    chatIniciado = true;
+    $('chatMessages').innerHTML = '';
+    setTimeout(() => {
+      addBotMsg(`¡Hola! Soy <strong>${avatarNombre}</strong>, tu asesor fiscal de IVA. 👋`);
+    }, 200);
+    setTimeout(() => {
+      addBotMsg(`Estoy aquí para ayudarte a declarar de forma óptima. <strong>¿Para qué mes necesitas ayuda?</strong> Selecciónalo abajo y presiona "Consultar".`);
+    }, 700);
+    // Alertas proactivas
+    setTimeout(() => renderAlertasProactivas(), 1400);
+  }
+
+  renderSaldosDisponibles();
+  renderNotificaciones();
+  renderPatron();
+}
+
+function renderAlertasProactivas() {
+  const db = getDB();
+  const meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const yr = db.years[AY];
+  if (!yr) return;
+
+  // Detectar meses con saldo a favor sin declaración registrada
+  let sinDeclararConFavor = [];
+  let prevCents = toCents(getDynamicHeredado(AY));
+  yr.meses.forEach((m, i) => {
+    const t=toCents(m.trasl), r=toCents(m.ret), a=toCents(m.acred), au=toCents(m.au);
+    const raw=t-r-a; const fav=Math.max(-raw,0); const pag=Math.max(raw,0);
+    const auReal=Math.min(au, prevCents+fav);
+    prevCents=prevCents+fav-auReal;
+    if (fav > 0 && !m.presentadoEn) sinDeclararConFavor.push(m.m);
+  });
+
+  // Detectar folios con longitud incorrecta
+  let foliosBad = [];
+  yr.meses.forEach(m => {
+    if (m.noOp && m.noOp.length > 0 && m.noOp.length !== 12) foliosBad.push(m.m);
+  });
+
+  const { remanenteAnterior, remanenteActual } = getRemanentesPorAnio(AY);
+
+  if (remanenteAnterior > 0.005) {
+    setTimeout(() => {
+      addBotMsg(`⚠️ <strong>Alerta FIFO:</strong> Tienes <strong>${fP(remanenteAnterior)}</strong> de remanente de ${AY-1} que debes usar PRIMERO antes que cualquier saldo de ${AY}. <div class="alerta-mini" onclick="goTab('control');toast('Revisa la tabla de control')">👆 Ir a la tabla de control</div>`);
+    }, 200);
+  }
+
+  if (sinDeclararConFavor.length > 0) {
+    setTimeout(() => {
+      addBotMsg(`📅 Los meses <strong>${sinDeclararConFavor.join(', ')}</strong> tienen saldo a favor pero aún no tienen declaración SAT registrada. <div class="alerta-mini" onclick="goTab('control')">📋 Ir a registrar declaraciones</div>`);
+    }, 600);
+  }
+
+  if (foliosBad.length > 0) {
+    setTimeout(() => {
+      addBotMsg(`⚠️ <strong>Cuidado:</strong> Los meses <strong>${foliosBad.join(', ')}</strong> tienen un número de operación SAT que no tiene 12 dígitos. Verifica que sea correcto.`);
+    }, 1000);
+  }
+
+  if (sinDeclararConFavor.length === 0 && foliosBad.length === 0 && remanenteAnterior <= 0.005) {
+    setTimeout(() => {
+      addBotMsg(`✅ <strong>¡Todo en orden!</strong> No hay alertas activas para ${AY}. Puedes consultar cualquier mes usando el selector de abajo.`);
+    }, 200);
+  }
+}
+
+function sendChatMes() {
+  const sel = $('chatMesSelect');
+  const mesVal = sel.value;
+  if (!mesVal) { addBotMsg('Por favor selecciona un mes del combo. 😊'); return; }
+  addUserMsg(`📅 Consulta: <strong>${mesVal}</strong>`);
+  setTimeout(() => analizarMesConIA(mesVal), 400);
+}
+
+function analizarMesConIA(mesVal) {
+  const meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const partes = mesVal.split(' ');
+  const mesAbr = partes[0];
+  const anio = parseInt(partes[1]);
+  const db = getDB();
+  const yr = db.years[anio];
+  if (!yr) { addBotMsg('No encontré datos para ese año. ¿Está creado el ejercicio?'); return; }
+  const idx = meses.indexOf(mesAbr);
+  const m = yr.meses[idx];
+  if (!m) { addBotMsg('No encontré ese mes. Intenta con otro.'); return; }
+
+  const t=m.trasl||0, r=m.ret||0, a=m.acred||0, au=m.au||0;
+  const raw = t - r - a;
+  const fav = Math.max(-raw, 0);
+  const pag = Math.max(raw, 0);
+
+  // Estado de la declaración
+  let declInfo = '';
+  if (m.presentadoEn) {
+    const d = new Date(m.presentadoEn);
+    declInfo = `<br>✅ Declaración registrada: <strong>${d.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'})}</strong>`;
+    if (m.noOp) declInfo += ` · No.Op: <strong>${m.noOp}</strong>`;
+  } else {
+    declInfo = `<br>⚠️ <strong>Aún no registras la declaración</strong> ante el SAT para este mes.`;
+  }
+
+  // Plan de acreditamiento si hay algo a pagar
+  let planHtml = '';
+  if (pag > 0.005) {
+    const disp = getAllSaldosDisponibles();
+    let restante = pag;
+    const pasos = [];
+    for (const s of disp) {
+      if (restante <= 0) break;
+      const usar = Math.min(s.rem, restante);
+      pasos.push({ origen: s.mes, usar, rem: +(s.rem - usar).toFixed(2) });
+      restante = +(restante - usar).toFixed(2);
+    }
+    if (pasos.length > 0) {
+      planHtml = `<div class="plan-mini">📋 <strong>Plan de acreditamiento FIFO:</strong><br>`;
+      pasos.forEach((p, i) => {
+        planHtml += `${i+1}. Usa <strong>${fP(p.usar)}</strong> del saldo de ${p.origen}${p.rem > 0 ? ` (queda ${fP(p.rem)})` : ' (se agota)'}<br>`;
+      });
+      if (restante > 0.01) planHtml += `⚠️ Aún deberás pagar <strong>${fP(restante)}</strong> al SAT directamente.`;
+      else planHtml += `✅ El IVA queda completamente cubierto con remanentes.`;
+      planHtml += `</div>`;
+    } else {
+      planHtml = `<div class="plan-mini">⚠️ No hay saldos a favor disponibles. Deberás pagar <strong>${fP(pag)}</strong> directamente al SAT.</div>`;
+    }
+  }
+
+  let msg = `<strong>📊 Análisis de ${mesVal}:</strong><br>`;
+  if (t > 0 || r > 0 || a > 0) {
+    msg += `Trasladado: ${fP(t)} · Retenido: ${fP(r)} · Acreditable: ${fP(a)}<br>`;
+  } else {
+    msg += `Sin cifras capturadas para este mes.<br>`;
+  }
+  if (fav > 0) msg += `<span style="color:var(--rosa)">✅ Saldo a FAVOR: <strong>${fP(fav)}</strong></span><br>`;
+  if (pag > 0) msg += `<span style="color:#3D8BFF">💳 A PAGAR: <strong>${fP(pag)}</strong></span><br>`;
+  if (pag === 0 && fav === 0) msg += `Mes sin movimiento (cero).<br>`;
+  msg += declInfo;
+  msg += planHtml;
+
+  if (!m.presentadoEn) {
+    msg += `<div class="alerta-mini" onclick="registrarDeclaracion(${anio},${idx});goTab('control')">📅 Registrar declaración de ${mesVal}</div>`;
+  }
+
+  addBotMsg(msg);
+}
+
+function renderSaldosDisponibles() {
+  const disp = getAllSaldosDisponibles();
+  const el = $('saldos-disp'); if (!el) return;
+  if (!disp.length) { el.innerHTML='<div style="color:#bbb;font-size:.78rem;padding:10px 0">No hay saldos disponibles actualmente.</div>'; return; }
+  const mesesOrden = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const sorted = [...disp].sort((a,b) => {
+    if (a.isHer && !b.isHer) return -1; if (!a.isHer && b.isHer) return 1;
+    const [aMes, aAnio] = a.mes.split(' '); const [bMes, bAnio] = b.mes.split(' ');
+    const yd = (parseInt(aAnio)||0) - (parseInt(bAnio)||0);
+    if (yd !== 0) return yd;
+    return mesesOrden.indexOf(aMes) - mesesOrden.indexOf(bMes);
+  });
+  el.innerHTML = sorted.map((s,i) => {
+    const anioFuente = parseInt((s.mes.split(' ')[1])||AY);
+    const esPrevio = s.isHer || (!isNaN(anioFuente) && anioFuente < AY);
+    const prioTag = esPrevio
+      ? `<span style="background:rgba(255,107,168,.15);color:var(--rosa);padding:1px 6px;border-radius:3px;font-size:.56rem;font-weight:700">FIFO 1°</span>`
+      : `<span style="background:rgba(0,184,107,.12);color:#007A47;padding:1px 6px;border-radius:3px;font-size:.56rem;font-weight:700">FIFO 2°</span>`;
+    return `<div class="saldo-pill ${s.rem<=0?'agotado':''}" onclick="usarSaldo('${s.mes}',${s.rem})">
+      <span style="font-size:.9rem">${i===0?'🥇':i===1?'🥈':'🥉'}</span>
+      <span class="origen">${s.mes}</span>${prioTag}
+      <span class="monto">${fP(s.rem)}</span>
+      <span style="font-size:.65rem;color:#999">disponible</span>
+    </div>`;
+  }).join('');
+}
+
+function usarSaldo(mes, monto) {
+  const sel = $('sim-mes');
+  if (sel) { for (let o of sel.options) { if (o.value === mes) { sel.value = mes; break; } } }
+  $('sim-pagar').focus();
+  toast(`Saldo de ${mes} seleccionado: ${fP(monto)}`);
+}
+
+function runSimulator() {
+  const mes = $('sim-mes').value;
+  const pagar = parseFloat($('sim-pagar').value||0);
+  const res = $('sim-result');
+  if (!mes || !pagar || pagar<=0) { res.innerHTML='<div class="plan-empty">⚠️ Ingresa el mes y un monto mayor a $0</div>'; return; }
+  const disp = getAllSaldosDisponibles();
+  const totalDisp = disp.reduce((s,x) => s+x.rem, 0);
+  if (totalDisp <= 0) { res.innerHTML=`<div class="plan-warn">❌ Sin remanentes disponibles. Deberás pagar ${fP(pagar)} íntegramente al SAT.</div>`; return; }
+  let restante = pagar;
+  const pasos = [];
+  for (const s of disp) {
+    if (restante <= 0) break;
+    const usar = Math.min(s.rem, restante);
+    pasos.push({ origen:s.mes, usar, remQueda:+(s.rem-usar).toFixed(2) });
+    restante = +(restante - usar).toFixed(2);
+  }
+  const cubierto = pagar - restante;
+  const colores = ['pri','sec','ter','ter','ter'];
+  let html = pasos.map((p,i) => {
+    const anioOrigen = p.origen.includes(String(AY-1)) || p.origen.includes('Herencia')
+      ? `<span style="background:rgba(255,107,168,.15);color:var(--rosa);padding:2px 6px;border-radius:3px;font-size:.58rem;margin-left:6px">FIFO 1° — ${AY-1}</span>`
+      : `<span style="background:rgba(0,184,107,.1);color:#007A47;padding:2px 6px;border-radius:3px;font-size:.58rem;margin-left:6px">FIFO 2° — ${AY}</span>`;
+    return `<div class="plan-step"><div class="plan-step-hdr ${colores[i]||'ter'}">
+      <div class="plan-step-left"><div class="plan-step-origen">📦 Saldo de ${p.origen}${anioOrigen}</div></div>
+      <div class="plan-step-right"><div class="plan-step-monto">−${fP(p.usar)}</div><div class="plan-step-rem">queda: ${fP(p.remQueda)}</div></div>
+    </div></div>`;
+  }).join('');
+  html += `<div class="plan-total"><span class="plan-total-lbl">✅ Total a acreditar</span><span class="plan-total-val">${fP(cubierto)}</span></div>`;
+  if (restante > 0.01) html += `<div class="plan-warn">⚠️ Remanentes insuficientes. Aún debes pagar <strong>${fP(restante)}</strong> al SAT.</div>`;
+  else html += `<div class="plan-ok">✅ ${mes} completamente cubierto con remanentes. Pago efectivo: $0.00</div>`;
+  res.innerHTML = html;
+}
+
+function renderNotificaciones() {
+  const el = $('notif-panel'); if (!el) return;
+  const disp = getAllSaldosDisponibles();
+  const notifs = [];
+  if (disp.length > 0) {
+    const total = disp.reduce((s,x) => s+x.rem, 0);
+    const { remanenteAnterior, remanenteActual } = getRemanentesPorAnio(AY);
+    notifs.push({t:'info',ico:'💰',title:`${disp.length} saldo(s) disponible(s): ${fP(total)}`,
+      body:`Orden FIFO: ${disp.map(s=>`${s.mes} (${fP(s.rem)})`).join(' → ')}`});
+    if (remanenteAnterior>0.005) notifs.push({t:'urgent',ico:'🩷',title:`Remanente ${AY-1}: ${fP(remanenteAnterior)} — ¡Usar primero!`,body:`Estrategia FIFO: agota el ${AY-1} antes de tocar el ${AY}.`});
+    if (remanenteActual>0.005) notifs.push({t:'ok',ico:'🟢',title:`Generado en ${AY}: ${fP(remanenteActual)} — Se usa después`,body:`Se acredita solo cuando el remanente de ${AY-1} quede en $0.00.`});
+  }
+  el.innerHTML = notifs.length
+    ? notifs.map(n=>`<div class="notif ${n.t}"><div class="notif-ico">${n.ico}</div><div><div class="notif-title">${n.title}</div><div class="notif-body">${n.body}</div></div></div>`).join('')
+    : '<div style="color:#bbb;font-size:.78rem;padding:8px 0">Sin notificaciones activas. ¡Todo en orden! ✅</div>';
+}
+
+function renderPatron() {
+  const el = $('patron-panel'); if (!el) return;
+  const db = getDB();
+  const yr = db.years[AY];
+  const acreds = yr.meses.filter(m => m.acred>0);
+  const pagos = yr.meses.filter(m => { const raw=m.trasl-m.ret-m.acred; return raw>0; });
+  const favores = yr.meses.filter(m => { const raw=m.trasl-m.ret-m.acred; return raw<0; });
+  const declarados = yr.meses.filter(m => m.presentadoEn);
+  el.innerHTML = `
+    <div class="hist-row" style="border-bottom:1px solid #f0f0f0"><span>Meses con IVA acreditable</span><span class="hist-val" style="color:var(--v)">${acreds.length} de 12</span></div>
+    <div class="hist-row" style="border-bottom:1px solid #f0f0f0"><span>Meses con saldo a favor</span><span class="hist-val" style="color:var(--v)">${favores.length}</span></div>
+    <div class="hist-row" style="border-bottom:1px solid #f0f0f0"><span>Meses con IVA a pagar</span><span class="hist-val" style="color:var(--r)">${pagos.length}</span></div>
+    <div class="hist-row" style="border-bottom:1px solid #f0f0f0"><span>📅 Declaraciones registradas</span><span class="hist-val" style="color:var(--azul)">${declarados.length} de 12</span></div>
+    <div class="hist-row" style="border-bottom:none;font-weight:700"><span>💡 Recomendación</span><span class="hist-val" style="color:var(--a);font-size:.7rem;text-align:right;max-width:200px">Patrón estable — usa remanentes en FIFO</span></div>
+  `;
+}
+
+// ── TRAZABILIDAD ──
+function renderTraz() {
+  const grid = $('traz-grid'); if (!grid) return;
+  const todas = getTrazabilidad();
+  const traz = todas.filter(s => {
+    if (s.mes.includes(ATY.toString())) return true;
+    if (s.isHer) return true;
+    const anioFuente = parseInt((s.mes.split(' ')[1])||ATY);
+    if (!isNaN(anioFuente) && anioFuente < ATY && s.rem > 0.01) return true;
+    if (!isNaN(anioFuente) && anioFuente < ATY && s.aplicaciones.some(ap => ap.en.includes(ATY.toString()))) return true;
+    return false;
+  });
+  if (!traz.length) { grid.innerHTML='<div style="padding:20px;color:#aaa;font-size:.8rem">No hay saldos a favor para este año.</div>'; return; }
+
+  const anteriores = traz.filter(s => { if (s.isHer) return true; const a=parseInt((s.mes.split(' ')[1])||ATY); return a < ATY; });
+  const actuales   = traz.filter(s => { const a=parseInt((s.mes.split(' ')[1])||ATY); return !s.isHer && a === ATY; });
+
+  const mesesOrden_r = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+  const renderItem = item => {
+    const usado = item.orig - item.rem;
+    const pct = item.orig>0 ? Math.round(usado/item.orig*100) : 0;
+    const est = item.rem<=0.01 ? 'ago' : (pct>0 ? 'par' : '');
+    const badge = item.isHer ? '<span class="badge bh">Heredado</span>'
+      : est==='ago' ? '<span class="badge ba">Agotado</span>'
+      : est==='par' ? '<span class="badge bp">Parcial</span>'
+      : '<span class="badge bv">Disponible</span>';
+
+    // Steps con noOp real del mes de destino
+    const steps = item.aplicaciones.map((ap,j) => {
+      const partes = ap.en.split(' ');
+      const apMes = partes[0], apAnio = parseInt(partes[1]);
+      const apIdx = mesesOrden_r.indexOf(apMes);
+      const apMesData = getDB().years[apAnio]?.meses?.[apIdx];
+      const apNoOp = apMesData?.noOp || '';
+      // Mostrar noOp real si existe; si no, omitir "Sin folio"
+      const apRef = apNoOp
+        ? `<span style="color:var(--azul);font-weight:700">No.Op: ${apNoOp}</span>`
+        : `<span style="color:#888;font-style:italic">Sin No. Op registrado</span>`;
+      return `${j>0?'<div class="tarr">→</div>':''}
+      <div class="ts"><div class="ts-lbl">Aplicado en ${ap.en}</div><div class="ts-val">${fP(ap.monto)}</div><div class="ts-ref">${apRef}</div></div>`;
+    }).join('');
+
+    const remBox = item.rem>0.01
+      ? `<div class="tarr">→</div><div class="trem"><div class="ts-lbl">Disponible</div><div class="val">${fP(item.rem)}</div></div>`
+      : `<div class="tarr">→</div><div class="trem ago"><div class="ts-lbl">Agotado</div><div class="val">$0.00</div></div>`;
+
+    // Bloque declaración SAT con noOp real
+    let decBlock = '';
+    if (item.presentadoEn) {
+      const d = new Date(item.presentadoEn);
+      const fStr = d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+      const hStr = d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+      decBlock = `<div class="dec-ts" style="margin-top:9px">
+        <div class="ts-lbl">📅 Declarado ante el SAT</div>
+        <div class="ts-val">✅ ${fStr} a las ${hStr}</div>
+        ${item.noOp
+          ? `<div class="ts-ref" style="color:var(--azul);font-weight:700;font-size:.72rem">📋 No. Op: ${item.noOp}</div>`
+          : '<div class="ts-ref" style="color:#888;font-style:italic">Sin número de operación</div>'
+        }
+      </div>`;
+    } else if (!item.isHer) {
+      decBlock = `<div class="dec-ts" style="margin-top:9px">
+        <div class="ts-lbl">📅 Declaración SAT</div>
+        <div class="ts-val" style="color:#CC7700;font-size:.72rem">⚠️ Pendiente — registra con el botón 📅 en Control</div>
+      </div>`;
+    }
+
+    // Folio origen: preferir noOp real del mes generador
+    let folioOrigenDisplay = '';
+    if (!item.isHer) {
+      const [srcMes, srcAnio] = item.mes.split(' ');
+      const srcA = parseInt(srcAnio), srcI = mesesOrden_r.indexOf(srcMes);
+      const srcNoOp = getDB().years[srcA]?.meses?.[srcI]?.noOp || '';
+      if (srcNoOp) {
+        folioOrigenDisplay = `<div style="font-size:.62rem;color:var(--azul);font-family:var(--mono);margin-top:4px;font-weight:700">📋 No.Op declaración: ${srcNoOp}</div>`;
+      } else if (item.folioOrigen && !item.folioOrigen.startsWith('Sin folio') && !item.folioOrigen.startsWith('De ') && item.folioOrigen !== '') {
+        folioOrigenDisplay = `<div style="font-size:.6rem;color:var(--txt3);font-family:var(--mono);margin-top:3px">${item.folioOrigen}</div>`;
+      } else {
+        folioOrigenDisplay = `<div style="font-size:.6rem;color:#888;font-family:var(--mono);margin-top:3px;font-style:italic">Registra la declaración para ver el No.Op</div>`;
+      }
+    }
+
+    return `<div class="tc ${est} ${item.isHer?'her':''}">
+      <div class="tc-hdr">
+        <div><div class="tc-mes">${item.mes}</div><div style="font-size:.65rem;color:#999;margin-top:2px">${pct}% utilizado · ${item.aplicaciones.length} aplicación(es)</div></div>
+        <div style="display:flex;align-items:center;gap:9px"><div class="tc-orig">${fP(item.orig)}</div>${badge}</div>
+      </div>
+      <div class="tline">
+        <div class="ts" style="border-color:var(--v);background:var(--vl)">
+          <div class="ts-lbl">Saldo original</div><div class="ts-val" style="color:var(--v)">${fP(item.orig)}</div>
+          <div class="ts-ref">Generado en ${item.mes}</div>
+          ${folioOrigenDisplay}
+        </div>
+        ${steps}${remBox}
+      </div>
+      ${decBlock}
+    </div>`;
+  };
+
+  let html = '';
+  if (anteriores.length) {
+    html += `<div style="font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--rosa);font-weight:700;margin:8px 0 6px;display:flex;align-items:center;gap:8px">
+      🩷 Remanentes de ${ATY-1} (FIFO 1° — se consumen primero)
+      <span style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,45,120,.4),transparent)"></span>
+    </div>` + anteriores.map(renderItem).join('');
+  }
+  if (actuales.length) {
+    html += `<div style="font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:#007A47;font-weight:700;margin:12px 0 6px;display:flex;align-items:center;gap:8px">
+      🟢 Generados en ${ATY} (FIFO 2° — se usan después)
+      <span style="flex:1;height:1px;background:linear-gradient(to right,rgba(0,184,107,.4),transparent)"></span>
+    </div>` + actuales.map(renderItem).join('');
+  }
+  grid.innerHTML = html;
+}
+
+// ── HISTORIAL ──
+function renderHist() {
+  const el = $('hist-grid'); if (!el) return;
+  const lbl = $('hist-cliente-label');
+  if (lbl) lbl.textContent = MC.clienteActivo;
+  el.innerHTML = [...years()].reverse().map(year => {
+    const db = getDB();
+    const yr = db.years[year];
+    let sT=0,sR=0,sA=0,sFav=0,sPag=0,sAU=0,sPef=0;
+    let prevCents = toCents(getDynamicHeredado(year));
+    yr.meses.forEach(m => {
+      const t=toCents(m.trasl),r=toCents(m.ret),a=toCents(m.acred),au=toCents(m.au);
+      const raw=t-r-a; const fav=Math.max(-raw,0); const pag=Math.max(raw,0);
+      const auReal=Math.min(au,prevCents+fav); const pef=Math.max(pag-auReal,0);
+      sT+=t;sR+=r;sA+=a;sFav+=fav;sPag+=pag;sAU+=auReal;sPef+=pef;
+      prevCents=prevCents+fav-auReal;
+    });
+    const finalRem = fromCents(prevCents);
+    const {remanenteAnterior,remanenteActual} = getRemanentesPorAnio(year);
+    const herDyn = getDynamicHeredado(year);
+    const declarados = yr.meses.filter(m => m.presentadoEn).length;
+    const fifoRow = (remanenteAnterior>0.005||remanenteActual>0.005)?`
+      <div class="hist-row" style="background:rgba(255,107,168,.05);border-left:3px solid var(--rosa-s)"><span>🩷 Remanente ${year-1} disponible</span><span class="hist-val" style="color:var(--rosa)">${fP(remanenteAnterior)||'—'}</span></div>
+      <div class="hist-row" style="background:rgba(0,184,107,.05);border-left:3px solid #00B86B"><span>🟢 Generado en ${year} disponible</span><span class="hist-val" style="color:#007A47">${fP(remanenteActual)||'—'}</span></div>`:'';
+    return `<div class="hist-yr">
+      <div class="hist-yr-hdr"><h3>Ejercicio ${year} ${yr.closed?'🔒':''}</h3><span style="font-family:var(--mono)">${fP(finalRem)} remanente total</span></div>
+      <div class="hist-row"><span>IVA Trasladado</span><span class="hist-val" style="color:var(--azul-s)">${fP(fromCents(sT))}</span></div>
+      <div class="hist-row"><span>(-) IVA Retenido</span><span class="hist-val" style="color:var(--azul-s)">${fP(fromCents(sR))}</span></div>
+      <div class="hist-row"><span>(-) IVA Acreditable</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sA))}</span></div>
+      <div class="hist-row"><span>Saldo a favor generado</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sFav))}</span></div>
+      <div class="hist-row"><span>Acreditamiento aplicado</span><span class="hist-val" style="color:var(--amarillo)">${fP(fromCents(sAU))}</span></div>
+      ${herDyn>0?`<div class="hist-row"><span>Heredado de ${year-1}</span><span class="hist-val" style="color:var(--azul-s)">${fP(herDyn)}</span></div>`:''}
+      <div class="hist-row"><span>✅ Pagado efectivamente</span><span class="hist-val" style="color:var(--rosa)">${fP(fromCents(sPef))}</span></div>
+      <div class="hist-row"><span>📅 Declaraciones registradas SAT</span><span class="hist-val" style="color:var(--azul)">${declarados} de 12</span></div>
+      <div class="hist-row"><span>💰 Remanente final total</span><span class="hist-val" style="color:var(--amarillo)">${fP(finalRem)}</span></div>
+      ${fifoRow}
+    </div>`;
+  }).join('');
+}
+
+function renderGuia() {
+  const el = $('guia-content'); if (!el) return;
+  const items = [
+    ['🟡','Celda amarilla','Datos de entrada — IVA Trasladado, Retenido, Acreditable y Acreditamiento aplicado'],
+    ['🩷','Celda rosa','Folio / número de operación del SAT — captura siempre que presentes'],
+    ['📅','Declaración SAT (2ª col.)','La columna de declaración ahora está junto a MES para acceso inmediato sin desplazarse'],
+    ['🩷','Rosa','Saldo a favor calculado automáticamente'],
+    ['🔵','Azul','IVA a pagar calculado'],
+    ['🔵','Azul claro','Saldo acumulado total'],
+    ['🟡','Amarillo','Acreditamiento aplicado de remanentes anteriores'],
+    ['📦','FIFO por año','El sistema aplica PRIMERO el remanente del año anterior hasta agotarlo, y SOLO DESPUÉS usa el saldo del año actual.'],
+    ['🩷','Remanente año anterior','Saldo a favor heredado del ejercicio previo — se usa con prioridad absoluta (FIFO 1°)'],
+    ['🟢','Generado año actual','Nuevo saldo a favor generado en el ejercicio en curso — se usa después de agotar el anterior (FIFO 2°)'],
+    ['🤖','Asesor IA v20','Asistente conversacional con avatar seleccionable. Analiza cada mes, detecta alertas y te guía paso a paso.'],
+    ['👤','Multi-cliente','Puedes tener varios clientes. Usa el selector de la barra superior. Exporta/Importa JSON por cliente.'],
+    ['📅','Registrar Declaración','Botón junto a MES — registra fecha, hora, No. Op. SAT y montos de IVA acreditable. Los datos NUNCA se pierden.'],
+    ['🔒','Cerrar año','El remanente final se arrastra al siguiente ejercicio. Usa contraseña IVA2025 para reabrir'],
+    ['💾','Guardar','Guarda como HTML autocontenido. También puedes exportar/importar JSON por cliente desde la barra superior.'],
+  ];
+  el.innerHTML = items.map(([ico,tit,desc]) => `
+    <div style="background:var(--surf2);border-radius:6px;border:1px solid var(--borde);padding:12px 15px;display:flex;gap:11px;align-items:flex-start">
+      <div style="font-size:1.2rem;flex-shrink:0">${ico}</div>
+      <div><div style="font-weight:700;font-size:.78rem;margin-bottom:3px;color:var(--txt);font-family:var(--mono)">${tit}</div><div style="font-size:.71rem;color:var(--txt2);line-height:1.55">${desc}</div></div>
+    </div>`).join('');
+}
+
+// ── MODALES AÑO ──
+function openCloseYearModal() {
+  const db = getDB();
+  const yr = db.years[AY];
+  if (yr.closed) { toast('Este año ya está cerrado 🔒'); return; }
+  const rem = yr.remanenteFinal || 0;
+  const {remanenteAnterior, remanenteActual} = getRemanentesPorAnio(AY);
+  const desglose = (remanenteAnterior>0.005||remanenteActual>0.005)
+    ? ` (${AY-1}: ${fP(remanenteAnterior)} + ${AY}: ${fP(remanenteActual)})`:'';
+  $('modal-close-info').textContent = `Remanente a arrastrar a ${AY+1}: ${fP(rem)}${desglose}`;
+  $('modal-close').classList.add('open');
+}
+
+function doCloseYear() {
+  const db = getDB();
+  const yr = db.years[AY];
+  yr.closed = true;
+  const next = AY + 1;
+  if (!db.years[next]) {
+    db.years[next] = SEED_YEAR_DATA();
+    db.years[next].heredado = 0;
+  }
+  AY = next; db.activeYear = next;
+  closeModal('modal-close');
+  saveData(); renderAll();
+  toast(`✅ ${AY-1} cerrado y arrastrado a ${AY}`);
+}
+
+function openReopenModal() {
+  const db = getDB();
+  if (!db.years[AY].closed) { toast('Este año ya está abierto ✏️'); return; }
+  $('reopen-pwd').value = '';
+  $('modal-reopen').classList.add('open');
+  setTimeout(() => $('reopen-pwd').focus(), 100);
+}
+
+function doReopen() {
+  const pwd = $('reopen-pwd').value;
+  if (pwd !== 'IVA2025') { toast('❌ Contraseña incorrecta'); $('reopen-pwd').value=''; return; }
+  getDB().years[AY].closed = false;
+  closeModal('modal-reopen');
+  saveData(); renderAll();
+  toast(`🔓 Año ${AY} reabierto para edición`);
+}
+
+function closeModal(id) { $(id).classList.remove('open'); }
+
+function addYear() {
+  const next = Math.max(...years()) + 1;
+  if (!confirm(`¿Crear ejercicio ${next}?`)) return;
+  if (!getDB().years[next]) {
+    getDB().years[next] = SEED_YEAR_DATA();
+  }
+  AY = next; getDB().activeYear = next; saveData(); renderAll();
+}
+
+// ── PERSISTENCIA ──
+let _st;
+function autoSave() { clearTimeout(_st); _st = setTimeout(saveToMemory, 1500); }
+
+function saveToMemory() {
+  const db = getDB();
+  const yr = db.years[AY];
+  const readN = id => { const e=$(id); if(!e) return null; const v=parseFloat((e.innerText||'').replace(/[$,\s]/g,'')); return isNaN(v)?0:v; };
+  yr.meses.forEach((_, i) => {
+    const t  = readN(`t-${AY}-${i}`);  if(t!==null)  yr.meses[i].trasl=t;
+    const r  = readN(`r-${AY}-${i}`);  if(r!==null)  yr.meses[i].ret=r;
+    const a  = readN(`a-${AY}-${i}`);  if(a!==null)  yr.meses[i].acred=a;
+    const au = readN(`au-${AY}-${i}`); if(au!==null) yr.meses[i].au=au;
+    const f  = $(`f-${AY}-${i}`);      if(f) yr.meses[i].folio=f.innerText.trim();
+    // PRESERVACIÓN ABSOLUTA — estos campos NUNCA se sobreescriben aquí:
+    if (!yr.meses[i].hasOwnProperty('presentadoEn')) yr.meses[i].presentadoEn = null;
+    if (!yr.meses[i].hasOwnProperty('noOp')) yr.meses[i].noOp = '';
+    if (!yr.meses[i].hasOwnProperty('tieneIvaAcreditable')) yr.meses[i].tieneIvaAcreditable = null;
+    if (!yr.meses[i].hasOwnProperty('ivaAcreditableSAT')) yr.meses[i].ivaAcreditableSAT = null;
+    if (!yr.meses[i].hasOwnProperty('ivaAcreditableComp')) yr.meses[i].ivaAcreditableComp = null;
+  });
+  db.activeYear = AY;
+  MC.datos[MC.clienteActivo] = db;
+  localStorage.setItem(MC_KEY, JSON.stringify(MC));
+}
+
+function saveData() {
+  saveToMemory();
+  const yrs = years().join('-');
+  const clienteSlug = MC.clienteActivo.replace(/\s+/g,'_');
+  const fileName = `IVA_Control_${clienteSlug}_${yrs}_v20.html`;
+  const htmlOriginal = document.documentElement.outerHTML;
+  // Inyectar MC actual como datos embebidos en el SEED de lectura
+  const mcStr = JSON.stringify(MC, null, 2);
+  const htmlActualizado = htmlOriginal.replace(
+    /let MC = initMC\(\);/,
+    `// DATOS EMBEBIDOS AL EXPORTAR\nlocalStorage.setItem('${MC_KEY}', JSON.stringify(${mcStr}));\nlet MC = initMC();`
+  );
+  const blob = new Blob([htmlActualizado], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast(`💾 Guardado → ${fileName}`);
+}
+
+function doCSV() { toast('Usa la exportación JSON para portabilidad completa de datos.'); }
+function doPDF() { toast('📄 Preparando PDF...'); setTimeout(() => window.print(), 400); }
+
+let _tt;
+function toast(msg='✓') {
+  const t = $('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+function updateBanner(year, her, remAnterior, remActual, remanenteFinal) {
+  const banner = $('banner-area');
+  if (!banner) return;
+  if (remanenteFinal <= 0.005) { banner.innerHTML=''; return; }
+  const anteriorAgotado = remAnterior <= 0.005;
+  banner.innerHTML = `<div class="fifo-banner">
+    ${remAnterior>0.005?`
+    <div class="fifo-bloque anterior">
+      <div class="fifo-bloque-lbl">🩷 Remanente ${year-1} — FIFO 1°</div>
+      <div class="fifo-bloque-val">${fP(remAnterior)}</div>
+      <div class="fifo-bloque-sub">Saldo a favor de ejercicios anteriores</div>
+    </div>
+    <div class="fifo-arrow">→</div>`:`
+    <div class="fifo-bloque anterior" style="opacity:.4">
+      <div class="fifo-bloque-lbl">🩷 Remanente ${year-1}</div>
+      <div class="fifo-bloque-val" style="font-size:.82rem;color:var(--txt3)">AGOTADO ✓</div>
+      <div class="fifo-bloque-sub">Ya consumido</div>
+    </div>
+    <div class="fifo-arrow">→</div>`}
+    <div class="fifo-bloque actual">
+      <div class="fifo-bloque-lbl">🟢 Generado ${year} — FIFO 2°</div>
+      <div class="fifo-bloque-val">${remActual>0.005?fP(remActual):'<span style="color:var(--txt3);font-size:.82rem">Sin saldo</span>'}</div>
+      <div class="fifo-bloque-sub">Saldo generado en este ejercicio</div>
+    </div>
+    <div class="fifo-arrow">=</div>
+    <div class="fifo-bloque total">
+      <div class="fifo-bloque-lbl">💰 TOTAL DISPONIBLE</div>
+      <div class="fifo-bloque-val">${fP(remanenteFinal)}</div>
+      <div class="fifo-bloque-sub">${fP(remAnterior)} + ${fP(remActual)}</div>
+    </div>
+    <div class="fifo-regla" style="width:100%;margin-top:2px">
+      ⚖️ FIFO — Primero consume <strong style="margin:0 4px">${year-1}</strong>, luego <strong style="margin:0 4px">${year}</strong>
+      ${anteriorAgotado?`<span style="margin-left:auto;background:var(--rosa);color:#fff;padding:3px 10px;border-radius:4px;font-size:.63rem">✓ ${year-1} AGOTADO</span>`:`<span style="margin-left:auto;background:rgba(0,87,255,.1);color:var(--azul);padding:3px 10px;border-radius:4px;font-size:.63rem">Próximo: ${year-1}</span>`}
+    </div>
+  </div>`;
+}
+
+// ── AYUDA ──
+function mostrarAyudaDeclaracion() {
+  Swal.fire({
+    title: '📅 DECLARACIÓN SAT',
+    customClass: { popup: 'sinergia-popup' },
+    html: `<div style="text-align:left;font-size:.8rem;color:#ccc;line-height:1.7">
+      <p style="margin-bottom:12px">La columna <strong style="color:var(--amarillo)">DECLARACIÓN SAT</strong> está ahora <strong style="color:#7AAAFF">junto a la columna MES</strong> — siempre visible al frente.</p>
+      <div style="background:rgba(0,87,255,.1);border:1px solid rgba(0,87,255,.25);border-radius:6px;padding:12px;margin-bottom:12px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#7AAAFF;margin-bottom:8px">CÓMO REGISTRAR</div>
+        <ul style="padding-left:16px;font-size:.75rem;color:#bbb;line-height:1.9">
+          <li>Haz clic en <strong style="color:var(--azul)">📅 Registrar</strong> en cualquier mes</li>
+          <li>Ingresa el <strong style="color:var(--amarillo)">Número de Operación SAT (12 dígitos)</strong></li>
+          <li>Selecciona <strong style="color:var(--amarillo)">Fecha y Hora</strong> de presentación</li>
+          <li>El botón cambia a <strong style="color:#00B86B">✅ verde</strong> al guardar</li>
+          <li>Los datos <strong>NUNCA se pierden</strong> al recalcular o cambiar año</li>
+        </ul>
+      </div>
+      <div style="background:rgba(255,214,0,.07);border:1px solid rgba(255,214,0,.2);border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:.69rem;color:var(--amarillo)">
+        💡 En Trazabilidad verás la fecha y No. Op junto a cada saldo a favor.
+      </div>
+    </div>`,
+    confirmButtonText: '✅ Entendido',
+    showCancelButton: false,
+    width: '440px'
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  REGISTRO DE DECLARACIÓN SAT — Preservación absoluta
+// ══════════════════════════════════════════════════════════
+const MESES_LARGOS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+async function registrarDeclaracion(year, idx) {
+  const db = getDB();
+  const m = db.years[year]?.meses?.[idx];
+  if (!m) return;
+  const mesLargo = MESES_LARGOS[idx];
+  const existing = m.presentadoEn ? new Date(m.presentadoEn) : null;
+  const defFecha = existing ? existing.toISOString().slice(0,10) : new Date().toISOString().slice(0,10);
+  const defHora  = existing ? existing.toTimeString().slice(0,5)  : new Date().toTimeString().slice(0,5);
+  const defNoOp  = m.noOp || '';
+  const defTieneAcred  = m.tieneIvaAcreditable;
+  const defAcredSAT    = (m.ivaAcreditableSAT != null) ? m.ivaAcreditableSAT : '';
+  const defAcredComp   = (m.ivaAcreditableComp != null) ? m.ivaAcreditableComp : '';
+
+  const inpStyle  = 'width:100%;padding:9px 12px;background:#1A1A1A;border:1.5px solid #444;border-radius:6px;color:#F7F7F2;font-family:\'JetBrains Mono\',monospace;font-size:.9rem;margin-bottom:4px;transition:border-color .2s,box-shadow .2s;color-scheme:dark;letter-spacing:.1em;box-sizing:border-box';
+  const lblStyle  = 'display:block;font-family:\'JetBrains Mono\',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.09em;color:#888;font-weight:700;margin-bottom:5px;text-align:left';
+  const inpStyle2 = 'width:100%;padding:9px 12px;background:#1A1A1A;border:1.5px solid #444;border-radius:6px;color:#F7F7F2;font-family:\'JetBrains Mono\',monospace;font-size:.83rem;margin-bottom:12px;transition:border-color .2s;color-scheme:dark;box-sizing:border-box';
+  const inpEntero = 'width:100%;padding:9px 12px;background:#1A1A1A;border:1.5px solid #444;border-radius:6px;color:#FFD600;font-family:\'JetBrains Mono\',monospace;font-size:1rem;font-weight:700;margin-bottom:4px;transition:border-color .2s,box-shadow .2s;color-scheme:dark;letter-spacing:.05em;box-sizing:border-box;text-align:right';
+  const acredBlockDisplay = defTieneAcred === true ? 'block' : 'none';
+  const btnSiSel  = defTieneAcred === true  ? 'background:#00B86B;color:#fff;border-color:#00B86B' : 'background:#1A1A1A;color:#aaa;border-color:#444';
+  const btnNoSel  = defTieneAcred === false ? 'background:#FF2D78;color:#fff;border-color:#FF2D78' : 'background:#1A1A1A;color:#aaa;border-color:#444';
+
+  const { value: fv, isConfirmed } = await Swal.fire({
+    title: '📅 DECLARACIÓN SAT',
+    customClass: { popup: 'sinergia-popup' },
+    html: `
+      <!-- PERÍODO GRANDE — Requerimiento 5 -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--amarillo);padding:10px 14px;background:rgba(255,214,0,.1);border-left:4px solid var(--amarillo);border-radius:0 6px 6px 0;margin-bottom:14px;text-align:left;text-shadow:0 0 20px rgba(255,214,0,.3);display:flex;align-items:center;gap:8px">
+        📆 ${mesLargo} ${year} &nbsp;|&nbsp; Ejercicio Fiscal ${year}
+      </div>
+      <div style="background:rgba(255,214,0,.07);border:1px solid rgba(255,214,0,.2);border-radius:6px;padding:10px 13px;margin-bottom:16px;font-size:.71rem;color:var(--amarillo);font-family:'JetBrains Mono',monospace;font-weight:700;text-align:left">
+        Registra los datos de presentación ante el SAT.<br>Válido incluso si el mes no genera IVA acreditable.
+      </div>
+      <div style="text-align:left">
+        <label style="${lblStyle}">Número de Operación SAT &nbsp;<span style="color:#FF2D78;font-size:.58rem">· EXACTAMENTE 12 DÍGITOS</span></label>
+        <div style="position:relative">
+          <input type="text" id="swal-noop" inputmode="numeric" maxlength="12"
+            placeholder="000000000000" value="${defNoOp}" style="${inpStyle}"
+            oninput="
+              this.value=this.value.replace(/[^0-9]/g,'').slice(0,12);
+              const n=this.value.length;
+              const ctr=document.getElementById('noop-counter');
+              const ok=document.getElementById('noop-ok');
+              const err=document.getElementById('noop-err');
+              if(n===12){this.style.borderColor='#00B86B';this.style.boxShadow='0 0 0 3px rgba(0,184,107,.2)';if(ok)ok.style.display='inline';if(err)err.style.display='none';if(ctr){ctr.textContent='12/12';ctr.style.color='#00B86B';}}
+              else if(n>0){this.style.borderColor='#FF2D78';this.style.boxShadow='0 0 0 3px rgba(255,45,120,.15)';if(ok)ok.style.display='none';if(err){err.style.display='inline';err.textContent='Faltan '+(12-n)+' dígito'+(12-n===1?'':'s');}if(ctr)ctr.style.color='#FF2D78';}
+              else{this.style.borderColor='#444';this.style.boxShadow='none';if(ok)ok.style.display='none';if(err)err.style.display='none';if(ctr){ctr.textContent='0/12';ctr.style.color='#666';}}
+            ">
+          <span id="noop-ok" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:1.1rem">✅</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;margin-top:3px">
+          <span id="noop-err" style="display:none;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#FF2D78;font-weight:700"></span>
+          <span style="flex:1"></span>
+          <span id="noop-counter" style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#666;font-weight:700">${defNoOp.length}/12</span>
+        </div>
+        <label style="${lblStyle}">Fecha de Presentación</label>
+        <input type="date" id="swal-fecha" value="${defFecha}" style="${inpStyle2}">
+        <label style="${lblStyle}">Hora de Presentación</label>
+        <input type="time" id="swal-hora" value="${defHora}" style="${inpStyle2}">
+        <div style="border:1px solid #333;border-radius:8px;padding:12px 14px;margin-bottom:10px;background:rgba(255,214,0,.04)">
+          <label style="${lblStyle.replace('#888','#FFD600')}">💰 ¿Este mes tuvo IVA Acreditable ante el SAT?</label>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <button type="button" id="btn-acred-si" onclick="
+              document.getElementById('btn-acred-si').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#00B86B;color:#fff;border-color:#00B86B';
+              document.getElementById('btn-acred-no').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#1A1A1A;color:#aaa;border-color:#444';
+              document.getElementById('bloque-acred').style.display='block';
+              document.getElementById('swal-tiene-acred').value='si';
+            " style="padding:7px 18px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;${btnSiSel}">✅ Sí</button>
+            <button type="button" id="btn-acred-no" onclick="
+              document.getElementById('btn-acred-no').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#FF2D78;color:#fff;border-color:#FF2D78';
+              document.getElementById('btn-acred-si').style.cssText='padding:7px 18px;border-radius:5px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;background:#1A1A1A;color:#aaa;border-color:#444';
+              document.getElementById('bloque-acred').style.display='none';
+              document.getElementById('swal-tiene-acred').value='no';
+            " style="padding:7px 18px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.72rem;cursor:pointer;border:1.5px solid;${btnNoSel}">❌ No</button>
+          </div>
+          <input type="hidden" id="swal-tiene-acred" value="${defTieneAcred===true?'si':defTieneAcred===false?'no':''}">
+          <div id="bloque-acred" style="display:${acredBlockDisplay}">
+            <label style="${lblStyle}">Monto IVA Acreditable según SAT <span style="color:#FFD600;font-size:.57rem">· SE REDONDEA</span></label>
+            <div style="position:relative;margin-bottom:10px">
+              <input type="text" id="swal-acred-sat" inputmode="decimal" placeholder="0" value="${defAcredSAT}" style="${inpEntero}"
+                oninput="const sat=Math.round(parseFloat(this.value.replace(/[^0-9.]/g,'')||0));const comp=Math.round(parseFloat(document.getElementById('swal-acred-comp')?.value.replace(/[^0-9.]/g,'')||0));const diff=document.getElementById('acred-diff');if(diff&&this.value.trim()!==''){const d=sat-comp;diff.textContent=d===0?'✅ Coinciden':'⚠️ Diferencia: '+(d>0?'+':'')+d;diff.style.color=d===0?'#00B86B':'#FF2D78';}else if(diff){diff.textContent='';}"
+                onblur="const v=parseFloat(this.value.replace(/[^0-9.]/g,'')||0);if(!isNaN(v)&&this.value.trim()!=='')this.value=Math.round(v);">
+              <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#888;font-size:.7rem;font-family:'JetBrains Mono',monospace">$MXN</span>
+            </div>
+            <label style="${lblStyle}">Monto IVA Acreditable según tu comprobación</label>
+            <div style="position:relative;margin-bottom:6px">
+              <input type="text" id="swal-acred-comp" inputmode="decimal" placeholder="0" value="${defAcredComp}" style="${inpEntero.replace('#FFD600','#7AAAFF')}"
+                oninput="const sat=Math.round(parseFloat(document.getElementById('swal-acred-sat')?.value.replace(/[^0-9.]/g,'')||0));const comp=Math.round(parseFloat(this.value.replace(/[^0-9.]/g,'')||0));const diff=document.getElementById('acred-diff');if(diff&&this.value.trim()!==''){const d=sat-comp;diff.textContent=d===0?'✅ Coinciden':'⚠️ Diferencia: '+(d>0?'+':'')+d;diff.style.color=d===0?'#00B86B':'#FF2D78';}else if(diff){diff.textContent='';}"
+                onblur="const v=parseFloat(this.value.replace(/[^0-9.]/g,'')||0);if(!isNaN(v)&&this.value.trim()!=='')this.value=Math.round(v);">
+              <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#888;font-size:.7rem;font-family:'JetBrains Mono',monospace">$MXN</span>
+            </div>
+            <div id="acred-diff" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;min-height:20px;text-align:right;padding-right:4px;color:${(defAcredSAT!==''&&defAcredComp!==''&&defAcredSAT===defAcredComp)?'#00B86B':'#FF2D78'}">
+              ${defAcredSAT!==''&&defAcredComp!==''?(defAcredSAT===defAcredComp?'✅ Coinciden':'⚠️ Diferencia: '+(defAcredSAT-defAcredComp)):''}
+            </div>
+          </div>
+        </div>
+        ${existing?`<div style="font-size:.65rem;color:#666;font-family:'JetBrains Mono',monospace;margin-top:4px">✏️ Editando: ${existing.toLocaleString('es-MX')}</div>`:''}
+      </div>`,
+    showCancelButton: true,
+    confirmButtonText: '✅ Guardar Declaración',
+    cancelButtonText: '✖ Cancelar',
+    focusConfirm: false,
+    width: '490px',
+    didOpen: () => {
+      const inp = document.getElementById('swal-noop');
+      const ctr = document.getElementById('noop-counter');
+      if (inp && defNoOp.length > 0) {
+        if (defNoOp.length === 12) {
+          inp.style.borderColor='#00B86B'; inp.style.boxShadow='0 0 0 3px rgba(0,184,107,.2)';
+          const ok = document.getElementById('noop-ok');
+          if (ok) ok.style.display='inline';
+          if (ctr) { ctr.textContent='12/12'; ctr.style.color='#00B86B'; }
+        } else {
+          inp.style.borderColor='#FF2D78';
+          if (ctr) ctr.style.color='#FF2D78';
+        }
+      }
+      const sat=parseInt(defAcredSAT||0), comp=parseInt(defAcredComp||0);
+      const diff=document.getElementById('acred-diff');
+      if (diff && defAcredSAT!==''&&defAcredComp!=='') {
+        const d=sat-comp; diff.textContent=d===0?'✅ Coinciden':'⚠️ Diferencia: '+(d>0?'+':'')+d; diff.style.color=d===0?'#00B86B':'#FF2D78';
+      }
+      inp?.focus();
+    },
+    preConfirm: () => {
+      const noop  = document.getElementById('swal-noop')?.value?.trim() || '';
+      const fecha = document.getElementById('swal-fecha')?.value || '';
+      const hora  = document.getElementById('swal-hora')?.value  || '';
+      const tieneAcredStr = document.getElementById('swal-tiene-acred')?.value || '';
+      const tieneAcred = tieneAcredStr==='si' ? true : tieneAcredStr==='no' ? false : null;
+      let acredSAT=null, acredComp=null;
+      if (tieneAcred === true) {
+        acredSAT  = Math.round(parseFloat((document.getElementById('swal-acred-sat')?.value  || '0').replace(/[^0-9.]/g,''))||0);
+        acredComp = Math.round(parseFloat((document.getElementById('swal-acred-comp')?.value || '0').replace(/[^0-9.]/g,''))||0);
+        if (acredSAT <= 0) { Swal.showValidationMessage('⚠️ Ingresa el monto del SAT mayor a 0.'); return false; }
+      }
+      if (noop.length > 0 && !/^\d{12}$/.test(noop)) {
+        const inp = document.getElementById('swal-noop');
+        if (inp) { inp.style.borderColor='#FF2D78'; inp.style.boxShadow='0 0 0 4px rgba(255,45,120,.25)'; inp.focus(); }
+        Swal.showValidationMessage(`❌ El número de operación debe tener exactamente 12 dígitos. Tiene ${noop.length}.`);
+        return false;
+      }
+      if (!fecha) { Swal.showValidationMessage('⚠️ La fecha de presentación es obligatoria.'); return false; }
+      if (!hora)  { Swal.showValidationMessage('⚠️ La hora de presentación es obligatoria.'); return false; }
+      return { noop, fecha, hora, tieneAcred, acredSAT, acredComp };
+    }
+  });
+
+  if (!isConfirmed || !fv) return;
+
+  // ── PRESERVACIÓN ABSOLUTA: actualizar SOLO estos campos ──
+  const isoStr = new Date(`${fv.fecha}T${fv.hora}:00`).toISOString();
+  getDB().years[year].meses[idx].presentadoEn      = isoStr;
+  getDB().years[year].meses[idx].noOp               = fv.noop;
+  getDB().years[year].meses[idx].tieneIvaAcreditable = fv.tieneAcred;
+  getDB().years[year].meses[idx].ivaAcreditableSAT  = fv.acredSAT;
+  getDB().years[year].meses[idx].ivaAcreditableComp = fv.acredComp;
+  // Guardar inmediatamente al localStorage con estructura multi-cliente
+  MC.datos[MC.clienteActivo] = getDB();
+  localStorage.setItem(MC_KEY, JSON.stringify(MC));
+  renderAll();
+
+  const d = new Date(isoStr);
+  const fmtD = d.toLocaleDateString('es-MX',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  const fmtH = d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  let acredInfo = '';
+  if (fv.tieneAcred === true) {
+    const coincide = fv.acredSAT === fv.acredComp;
+    acredInfo = `<br>IVA Acred: $${fv.acredSAT.toLocaleString('es-MX')} SAT / $${fv.acredComp.toLocaleString('es-MX')} comp ${coincide?'✅':'⚠️'}`;
+  } else if (fv.tieneAcred === false) {
+    acredInfo = '<br>Sin IVA acreditable este mes';
+  }
+  Swal.fire({
+    toast:true, position:'bottom-right', icon:'success',
+    title:'✅ Declaración registrada',
+    html:`<span style="font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.5">${mesLargo} ${year}<br>${fmtD}, ${fmtH}${fv.noop?`<br>No. Op: ${fv.noop}`:''}${acredInfo}</span>`,
+    showConfirmButton:false, timer:4500, timerProgressBar:true,
+    background:'#111', color:'#FFD600', customClass:{popup:'sinergia-popup'}
+  });
+}
+
+// ── ARRANQUE ──
+renderClienteSelect();
+renderAll();
+renderGuia();
+window.addEventListener('beforeunload', saveToMemory);
+</script>
+</body>
+</html>
